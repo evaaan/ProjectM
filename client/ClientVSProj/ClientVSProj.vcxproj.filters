@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="client/">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="common/">
+      <UniqueIdentifier>{073d7d0e-9b82-452d-91e8-17bb486aad3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="client/ClientVSProj">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="lib/imgui/">
+      <UniqueIdentifier>{68d0c853-e2fa-4173-8b58-7063b39ed956}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>client/ClientVSProj</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>client/ClientVSProj</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>client/ClientVSProj</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientVSProj.h">
+      <Filter>client/ClientVSProj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Animation.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\App.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Direct2D.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Direct3D.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GameEngine.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GameManager.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GraphicManager.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\InputManager.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\KeyMap.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\World.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AnimationSystem.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ImGuiSystem.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\InputSystem.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\OverlaySystem.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PhysicsSystem.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TemplateSystem.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\Component.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\ComponentHandle.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\ComponentManager.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\ComponentMask.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\Entity.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\EntityHandle.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\System.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\Timer.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imconfig.h">
+      <Filter>lib/imgui/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imgui.h">
+      <Filter>lib/imgui/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imgui_impl_dx11.h">
+      <Filter>lib/imgui/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imgui_impl_win32.h">
+      <Filter>lib/imgui/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imgui_internal.h">
+      <Filter>lib/imgui/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imstb_rectpack.h">
+      <Filter>lib/imgui/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imstb_textedit.h">
+      <Filter>lib/imgui/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\lib\imgui\imstb_truetype.h">
+      <Filter>lib/imgui/</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Animation.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\App.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Direct2D.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Direct3D.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GameEngine.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GameManager.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\GraphicManager.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\InputManager.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\KeyMap.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\main.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\World.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\AnimationSystem.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ImGuiSystem.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\InputSystem.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\OverlaySystem.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PhysicsSystem.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TemplateSystem.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\Component.cpp">
+      <Filter>common/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\Entity.cpp">
+      <Filter>common/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\System.cpp">
+      <Filter>common/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\Timer.cpp">
+      <Filter>common/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\imgui\imgui.cpp">
+      <Filter>lib/imgui/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\imgui\imgui_demo.cpp">
+      <Filter>lib/imgui/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\imgui\imgui_draw.cpp">
+      <Filter>lib/imgui/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\imgui\imgui_impl_dx11.cpp">
+      <Filter>lib/imgui/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\imgui\imgui_impl_win32.cpp">
+      <Filter>lib/imgui/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\imgui\imgui_tables.cpp">
+      <Filter>lib/imgui/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\lib\imgui\imgui_widgets.cpp">
+      <Filter>lib/imgui/</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ClientVSProj.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="ClientVSProj.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,7 @@
+bin/*
+test/client/ClientTestVsProj/x64/*
+test/server/ServerTestVsProj/x64/*
+.vs/*
+*.pfx
+packages/*
+x64/*

@@ -1,4 +1,6 @@
 bin/*
+server/ServerVsProj/x64/*
+client/ClientVsProj/x64/*
 test/client/ClientTestVsProj/x64/*
 test/server/ServerTestVsProj/x64/*
 .vs/*

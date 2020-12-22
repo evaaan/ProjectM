@@ -1,8 +1,8 @@
 #include <array>
 #include "pch.h"
-#include "../GameAppWin32/Component.h"
-#include "../GameAppWin32/ComponentManager.h"
-#include "../GameAppWin32/Entity.h"
+#include "Component.h"
+#include "ComponentManager.h"
+#include "Entity.h"
 
 class ComponentTest : public ::testing::Test
 {

@@ -57,12 +57,6 @@
     <ClInclude Include="..\InputManager.h">
       <Filter>client/</Filter>
     </ClInclude>
-    <ClInclude Include="..\KeyMap.h">
-      <Filter>client/</Filter>
-    </ClInclude>
-    <ClInclude Include="..\World.h">
-      <Filter>client/</Filter>
-    </ClInclude>
     <ClInclude Include="..\AnimationSystem.h">
       <Filter>client/</Filter>
     </ClInclude>
@@ -76,9 +70,6 @@
       <Filter>client/</Filter>
     </ClInclude>
     <ClInclude Include="..\PhysicsSystem.h">
-      <Filter>client/</Filter>
-    </ClInclude>
-    <ClInclude Include="..\TemplateSystem.h">
       <Filter>client/</Filter>
     </ClInclude>
     <ClInclude Include="..\..\common\Component.h">
@@ -129,6 +120,15 @@
     <ClInclude Include="..\..\lib\imgui\imstb_truetype.h">
       <Filter>lib/imgui/</Filter>
     </ClInclude>
+    <ClInclude Include="..\World.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\TemplateSystem.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\KeyMap.h">
+      <Filter>common/</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Animation.cpp">
@@ -155,13 +155,7 @@
     <ClCompile Include="..\InputManager.cpp">
       <Filter>client/</Filter>
     </ClCompile>
-    <ClCompile Include="..\KeyMap.cpp">
-      <Filter>client/</Filter>
-    </ClCompile>
     <ClCompile Include="..\main.cpp">
-      <Filter>client/</Filter>
-    </ClCompile>
-    <ClCompile Include="..\World.cpp">
       <Filter>client/</Filter>
     </ClCompile>
     <ClCompile Include="..\AnimationSystem.cpp">
@@ -177,9 +171,6 @@
       <Filter>client/</Filter>
     </ClCompile>
     <ClCompile Include="..\PhysicsSystem.cpp">
-      <Filter>client/</Filter>
-    </ClCompile>
-    <ClCompile Include="..\TemplateSystem.cpp">
       <Filter>client/</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\Component.cpp">
@@ -214,6 +205,15 @@
     </ClCompile>
     <ClCompile Include="..\..\lib\imgui\imgui_widgets.cpp">
       <Filter>lib/imgui/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\World.cpp">
+      <Filter>common/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TemplateSystem.cpp">
+      <Filter>common/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\KeyMap.cpp">
+      <Filter>common/</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

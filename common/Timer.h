@@ -3,7 +3,7 @@
 class Timer
 {
 private:
-    long long int startTime;                // start time
+    long long int startTime;                // start time (seconds)
     long long int currentTime;              // current time
     long long int pausedTime;               // time at the last pause
     long long int previousTime;             // time at the last inquiry before current

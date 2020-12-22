@@ -3,6 +3,7 @@
 #include "ServerEngine.h"
 
 
+/* Entry point */
 int main()
 {
     auto server = std::make_unique<ServerEngine>();

@@ -1,17 +1,84 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
+    <Filter Include="server/">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
+    <Filter Include="common/">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="server/ServerVsProj">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\main.cpp">
+      <Filter>server/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ServerEngine.cpp">
+      <Filter>server/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ServerManager.cpp">
+      <Filter>server/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\Component.cpp">
+      <Filter>common/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\Entity.cpp">
+      <Filter>common/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\System.cpp">
+      <Filter>common/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\Timer.cpp">
+      <Filter>common/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\World.cpp">
+      <Filter>common/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\KeyMap.cpp">
+      <Filter>common/</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ServerEngine.h">
+      <Filter>server/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ServerManager.h">
+      <Filter>server/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\Component.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\ComponentHandle.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\ComponentManager.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\ComponentMask.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\Entity.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\EntityHandle.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\System.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\Timer.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\World.h">
+      <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\KeyMap.h">
+      <Filter>common/</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

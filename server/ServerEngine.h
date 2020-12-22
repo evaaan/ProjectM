@@ -1,4 +1,6 @@
 #pragma once
+#include <memory>
+
 
 
 // Server states
@@ -6,11 +8,15 @@ namespace ServerControl
 {
     enum class EngineState
     {
-        WaitingForResources,
+        Startup,
         Active,
         Terminate,
     };
 };
+
+// Forward declarations
+class Timer;
+class ServerManager;
 
 class ServerEngine
 {
@@ -23,7 +29,10 @@ public:
     void Shutdown();
 
 
+
 private:
     ServerControl::EngineState m_engineState;
+    std::shared_ptr<Timer> m_timer;
+    std::unique_ptr<ServerManager> m_server;
 };
 

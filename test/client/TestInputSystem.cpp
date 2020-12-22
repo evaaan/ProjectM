@@ -1,15 +1,15 @@
 #include <array>
 #include <memory>
 #include "pch.h"
-#include "../GameAppWin32/System.h"
-#include "../GameAppWin32/ComponentHandle.h"
-#include "../GameAppWin32/EntityHandle.h"
-#include "../GameAppWin32/Entity.h"
-#include "../GameAppWin32/World.h"
-#include "../GameAppWin32/InputSystem.h"
-#include "../GameAppWin32/InputManager.h"
-#include "../GameAppWin32/Timer.h"
-#include "../GameAppWin32/KeyMap.h"
+#include "System.h"
+#include "ComponentHandle.h"
+#include "EntityHandle.h"
+#include "Entity.h"
+#include "World.h"
+#include "InputSystem.h"
+#include "InputManager.h"
+#include "Timer.h"
+#include "KeyMap.h"
 
 class InputSystemTest : public ::testing::Test
 {

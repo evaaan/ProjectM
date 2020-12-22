@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "../GameAppWin32/Entity.h"
+#include "Entity.h"
 
 class EntityTest : public ::testing::Test
 {

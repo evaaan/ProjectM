@@ -1,10 +1,10 @@
 #include <memory>
 #include "pch.h"
-#include "../GameAppWin32/System.h"
-#include "../GameAppWin32/ComponentHandle.h"
-#include "../GameAppWin32/EntityHandle.h"
-#include "../GameAppWin32/Entity.h"
-#include "../GameAppWin32/World.h"
+#include "System.h"
+#include "ComponentHandle.h"
+#include "EntityHandle.h"
+#include "Entity.h"
+#include "World.h"
 
 class SystemTest : public ::testing::Test
 {

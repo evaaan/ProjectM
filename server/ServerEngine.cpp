@@ -39,11 +39,15 @@ void ServerEngine::Run()
             case EngineState::Active:
             {
                 /* Read user input */
-                m_server->ReadClients();
                 m_server->Process();
-                m_server->UpdateClients();
                 break;
             }
+
+            case EngineState::OneShot:
+                m_server->Process();
+                m_engineState == EngineState::Terminate;
+                break;
+
         }
     }
 }

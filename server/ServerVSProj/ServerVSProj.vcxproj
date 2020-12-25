@@ -121,7 +121,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)server\$(ProjectName);$(SolutionDir)server;$(SolutionDir)common;$(SolutionDir)lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Evan\source\repos\GameNetworkingSockets\vcpkg\installed\x86-windows\include\GameNetworkingSockets;$(SolutionDir)server\$(ProjectName);$(SolutionDir)server;$(SolutionDir)common;C:\vcpkg\installed\x86-windows\include\;$(SolutionDir)lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,7 +137,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)server\$(ProjectName);$(SolutionDir)server;$(SolutionDir)common;$(SolutionDir)lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Evan\source\repos\GameNetworkingSockets\vcpkg\installed\x86-windows\include\GameNetworkingSockets;$(SolutionDir)server\$(ProjectName);$(SolutionDir)server;$(SolutionDir)common;C:\vcpkg\installed\x86-windows\include\;$(SolutionDir)lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -164,6 +164,7 @@
     <ClInclude Include="..\..\common\ComponentMask.h" />
     <ClInclude Include="..\..\common\Entity.h" />
     <ClInclude Include="..\..\common\EntityHandle.h" />
+    <ClInclude Include="..\..\common\fbs\monster_generated.h" />
     <ClInclude Include="..\..\common\KeyMap.h" />
     <ClInclude Include="..\..\common\System.h" />
     <ClInclude Include="..\..\common\Timer.h" />

@@ -93,7 +93,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(SolutionDir)test\client\$(ProjectName);$(SolutionDir)client;$(SolutionDir)common;$(SolutionDir)lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Evan\source\repos\GameNetworkingSockets\vcpkg\installed\x86-windows\include\GameNetworkingSockets;C:\vcpkg\installed\x86-windows\include\;$(SolutionDir)test\client\$(ProjectName);$(SolutionDir)client;$(SolutionDir)common;$(SolutionDir)lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -124,7 +124,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(SolutionDir)test\client\$(ProjectName);$(SolutionDir)client;$(SolutionDir)common;$(SolutionDir)lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Evan\source\repos\GameNetworkingSockets\vcpkg\installed\x86-windows\include\GameNetworkingSockets;C:\vcpkg\installed\x86-windows\include\;$(SolutionDir)test\client\$(ProjectName);$(SolutionDir)client;$(SolutionDir)common;$(SolutionDir)lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -3,6 +3,8 @@ server/ServerVsProj/x64/*
 client/ClientVsProj/x64/*
 test/client/ClientTestVsProj/x64/*
 test/server/ServerTestVsProj/x64/*
+test/ClientTestVsProj/x64/*
+test/ServerTestVsProj/x64/*
 .vs/*
 *.pfx
 packages/*

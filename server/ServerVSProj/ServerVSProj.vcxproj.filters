@@ -13,6 +13,9 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="common/fbs/">
+      <UniqueIdentifier>{7b45a636-5ded-43d2-b615-2f1a1c187790}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\main.cpp">
@@ -79,6 +82,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\KeyMap.h">
       <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\fbs\monster_generated.h">
+      <Filter>common/fbs/</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

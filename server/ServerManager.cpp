@@ -8,6 +8,8 @@
 #include "Component.h"
 #include "ComponentHandle.h"
 #include "System.h"
+#include "flatbuffers/flatbuffers.h"
+#include "steam/steamnetworkingtypes.h"
 
 ServerManager::ServerManager(std::shared_ptr<Timer> timer) :
     m_timer(timer),
@@ -37,10 +39,6 @@ void ServerManager::AddSystems()
 
 }
 
-void ServerManager::ReadClients()
-{
-
-}
 
 void printFrameInfo(double totalTime, double deltaTime)
 {
@@ -64,10 +62,6 @@ void ServerManager::Process()
     m_timer->tick();
     m_world->update(m_timer->getDeltaTime());
     printFrameInfo(m_timer->getTotalTime(), m_timer->getDeltaTime());
-}
-
-void ServerManager::UpdateClients()
-{
 }
 
 World* ServerManager::getWorld()

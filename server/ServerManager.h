@@ -13,9 +13,7 @@ public:
     ~ServerManager();
 
     void Init();               // Initialize ECS
-    void ReadClients();        // Read user inputs
     void Process();            // Process world tick
-    void UpdateClients();      // Send updates to clients
 
     World* getWorld();         // Get reference to world
 

@@ -11,6 +11,7 @@ namespace ServerControl
         Startup,
         Active,
         Terminate,
+        OneShot,
     };
 };
 

@@ -153,9 +153,14 @@
     <ClCompile Include="..\..\common\System.cpp" />
     <ClCompile Include="..\..\common\Timer.cpp" />
     <ClCompile Include="..\..\common\World.cpp" />
+    <ClCompile Include="..\ClientInputSystem.cpp" />
+    <ClCompile Include="..\CombatSystem.cpp" />
     <ClCompile Include="..\main.cpp" />
+    <ClCompile Include="..\PhysicsSystem.cpp" />
+    <ClCompile Include="..\PlayerSystem.cpp" />
     <ClCompile Include="..\ServerEngine.cpp" />
     <ClCompile Include="..\ServerManager.cpp" />
+    <ClCompile Include="..\UpdateClientSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\Component.h" />
@@ -169,8 +174,13 @@
     <ClInclude Include="..\..\common\System.h" />
     <ClInclude Include="..\..\common\Timer.h" />
     <ClInclude Include="..\..\common\World.h" />
+    <ClInclude Include="..\ClientInputSystem.h" />
+    <ClInclude Include="..\CombatSystem.h" />
+    <ClInclude Include="..\PhysicsSystem.h" />
+    <ClInclude Include="..\PlayerSystem.h" />
     <ClInclude Include="..\ServerEngine.h" />
     <ClInclude Include="..\ServerManager.h" />
+    <ClInclude Include="..\UpdateClientSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

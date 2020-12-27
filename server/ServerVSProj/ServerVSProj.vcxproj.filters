@@ -45,6 +45,21 @@
     <ClCompile Include="..\..\common\KeyMap.cpp">
       <Filter>common/</Filter>
     </ClCompile>
+    <ClCompile Include="..\ClientInputSystem.cpp">
+      <Filter>server/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CombatSystem.cpp">
+      <Filter>server/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PhysicsSystem.cpp">
+      <Filter>server/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PlayerSystem.cpp">
+      <Filter>server/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\UpdateClientSystem.cpp">
+      <Filter>server/</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ServerEngine.h">
@@ -85,6 +100,21 @@
     </ClInclude>
     <ClInclude Include="..\..\common\fbs\monster_generated.h">
       <Filter>common/fbs/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ClientInputSystem.h">
+      <Filter>server/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CombatSystem.h">
+      <Filter>server/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PhysicsSystem.h">
+      <Filter>server/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PlayerSystem.h">
+      <Filter>server/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\UpdateClientSystem.h">
+      <Filter>server/</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

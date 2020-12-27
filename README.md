@@ -6,9 +6,11 @@ Directory structure is as follows:
 * The [client/](client/) folder has the Client code
 * The [server/](server/) folder has the Server code
 * The [tests/](tests/) folder has unit tests for both client and server
-  * Note: Each of these folders have their own Visual Studio Project ``.vcxproj`` file(s), under the [``ProjectM.sln``](ProjectM.sln) Solution file in the root directory.
+  * 
 * The [common/](common/) folder has shared code used by both Client and Server
 * The [lib/](lib/) folder has third party dependencies
+
+Note: The client, server, and tests folders have their own Visual Studio ``.vcxproj`` 'Project' file(s), under the [``ProjectM.sln``](ProjectM.sln) 'Solution' file in the root directory.
 
 Tasks are tracked on a [Trello Board](https://trello.com/invite/b/cWteNm74/bf64646388becf6430bf7d5b8bd4df55/projectm).
 

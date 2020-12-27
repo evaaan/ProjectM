@@ -132,3 +132,32 @@ struct Outline : public Component<Outline>
     Color color;
     int width;
 };
+
+/* Connection from Server to Client */
+struct ClientConnection
+{
+};
+
+/* Input from a Client */
+struct ClientInput
+{
+    std::bitset<NUM_KEYBINDINGS> keyDownState;
+};
+
+/* Polling group for Clients */
+struct PollGroup
+{
+
+};
+
+/* List of entities to update for the player */
+struct PlayerDelta
+{
+
+};
+
+/* List of entities to update for ALL players */
+struct WorldDeltaSingleton
+{
+
+};

@@ -1,18 +1,22 @@
 #include "Entity.h"
 #include "System.h"
 #include "World.h"
-#include "TemplateSystem.h"
+#include "ClientInputSystem.h"
+#include "Component.h"
 
-TemplateSystem::TemplateSystem()
+ClientInputSystem::ClientInputSystem()
 {
     // Add ComponentTypes the System acts on
     // signature.addComponent<ComponentType>();
+    signature.addComponent<ClientConnection>();
+    signature.addComponent<ClientInput>();
+    signature.addComponent<PollGroup>();
 }
 
-void TemplateSystem::init() {}
+void ClientInputSystem::init() {}
 
 /* System behaviors */
-void TemplateSystem::update(double dt)
+void ClientInputSystem::update(double dt)
 {
     for (auto& entity : registeredEntities)
     {
@@ -23,4 +27,4 @@ void TemplateSystem::update(double dt)
 }
 
 /* System rendering */
-void TemplateSystem::render() {}
+void ClientInputSystem::render() {}

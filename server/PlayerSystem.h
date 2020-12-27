@@ -3,10 +3,11 @@
 // Forward declarations
 class System;
 
-class TemplateSystem : public System {
+class PlayerSystem : public System {
 public:
-    TemplateSystem();
+    PlayerSystem();
     void init();
     void update(double dt);
     void render();
+
 };

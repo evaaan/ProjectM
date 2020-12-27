@@ -1,11 +1,11 @@
 #pragma once
 
 // Forward declarations
-class System;
+class ClientInputSystem;
 
-class TemplateSystem : public System {
+class ClientInputSystem : public System {
 public:
-    TemplateSystem();
+    ClientInputSystem();
     void init();
     void update(double dt);
     void render();

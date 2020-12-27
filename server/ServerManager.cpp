@@ -1,4 +1,6 @@
 #include <iostream>
+#include "flatbuffers/flatbuffers.h"
+#include "steam/steamnetworkingtypes.h"
 #include "Timer.h"
 #include "World.h"
 #include "EntityHandle.h"
@@ -8,8 +10,11 @@
 #include "Component.h"
 #include "ComponentHandle.h"
 #include "System.h"
-#include "flatbuffers/flatbuffers.h"
-#include "steam/steamnetworkingtypes.h"
+#include "ClientInputSystem.h"
+#include "PhysicsSystem.h"
+#include "CombatSystem.h"
+#include "PlayerSystem.h"
+#include "UpdateClientSystem.h"
 
 ServerManager::ServerManager(std::shared_ptr<Timer> timer) :
     m_timer(timer),
@@ -34,9 +39,30 @@ void ServerManager::Init()
     m_world->init();
 }
 
+/* Server runs in 3 steps:
+*  1. Reset RecentUpdate flags
+*  1. Read inputs from clients (key presses)
+*  2. Process world tick (bulk of systems run here). If an Entity component changed, set RecentUpdate flag
+*  3. Serialize and send Entity Components with RecentUpdate set to all clients
+* 
+* All client-server communication is done over SteamNetworkingSockets. 
+* Clients map their keypresses into actions (such as "move left"), encode it
+* in a 128-bit map, and send it to the client every tick. On the server, the
+* ClientInputSystem reads the bitmap from the socket and stores it in that
+* entity's InputState component. This component is accessible by any system
+* that needs to know the client's inputs.
+* 
+* When Systems change an Entity, the system MUST set the touched Component's RecentUpdate flag.
+* The UpdateClientSystem will serialize and send these Components to every client.
+*/
 void ServerManager::AddSystems()
 {
-
+    // m_world->addSystem(std::move(std::make_unique<System>()));
+    m_world->addSystem(std::move(std::make_unique<ClientInputSystem>()));
+    m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
+    m_world->addSystem(std::move(std::make_unique<PlayerSystem>()));
+    m_world->addSystem(std::move(std::make_unique<CombatSystem>()));
+    m_world->addSystem(std::move(std::make_unique<UpdateClientSystem>()));
 }
 
 

@@ -1,18 +1,18 @@
 #include "Entity.h"
 #include "System.h"
 #include "World.h"
-#include "TemplateSystem.h"
+#include "CombatSystem.h"
 
-TemplateSystem::TemplateSystem()
+CombatSystem::CombatSystem()
 {
     // Add ComponentTypes the System acts on
     // signature.addComponent<ComponentType>();
 }
 
-void TemplateSystem::init() {}
+void CombatSystem::init() {}
 
 /* System behaviors */
-void TemplateSystem::update(double dt)
+void CombatSystem::update(double dt)
 {
     for (auto& entity : registeredEntities)
     {
@@ -23,4 +23,4 @@ void TemplateSystem::update(double dt)
 }
 
 /* System rendering */
-void TemplateSystem::render() {}
+void CombatSystem::render() {}

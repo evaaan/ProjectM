@@ -3,9 +3,9 @@
 // Forward declarations
 class System;
 
-class TemplateSystem : public System {
+class CombatSystem : public System {
 public:
-    TemplateSystem();
+    CombatSystem();
     void init();
     void update(double dt);
     void render();

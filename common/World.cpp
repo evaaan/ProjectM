@@ -70,23 +70,13 @@ void World::init()
 void World::load()
 {
     // Input
-    EntityHandle input_entity = createEntity();
-    input_entity.addSingletonComponent(InputSingleton());
+    // EntityHandle input_entity = createEntity();
+    // input_entity.addSingletonComponent(InputSingleton());
 
-    // ImGui
-    EntityHandle imgui_entity = createEntity();
-    imgui_entity.addSingletonComponent(ImGuiSingleton());
 
     // Collisions
     createEntity().addSingletonComponent(CollisionSingleton());
 
-    // Character
-    addWolf(200, 400);
-
-    // Box
-    addBox(600, 900);
-    addBox(850, 900);
-    addBox(1100, 900);
 
 }
 

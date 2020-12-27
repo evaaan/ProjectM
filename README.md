@@ -6,7 +6,6 @@ Directory structure is as follows:
 * The [client/](client/) folder has the Client code
 * The [server/](server/) folder has the Server code
 * The [tests/](tests/) folder has unit tests for both client and server
-  * 
 * The [common/](common/) folder has shared code used by both Client and Server
 * The [lib/](lib/) folder has third party dependencies
 
@@ -26,26 +25,26 @@ git submodule init
 git submodule update
 ```
 
-2. Change to the [lib/](lib/) directory.
+2. Change to the [lib/](lib/) directory:
 
 ```
 cd lib
 ```
 
-2. Install [vcpkg](lib/vcpkg) with VS integration:
+2. Install [vcpkg](https://github.com/Microsoft/vcpkg) with VS integration:
 
 ```
 ./vcpkg/bootstrap-vcpkg.bat
 ./vcpkg/vcpkg integrate install
 ```
 
-3. Install [GameNetworkingSockets](lib/gamenetworkingsockets):
+3. Install [GameNetworkingSockets](https://github.com/ValveSoftware/GameNetworkingSockets):
 
 ```
 ./vcpkg/vcpkg --overlay-ports=./GameNetworkingSockets/vcpkg_ports install gamenetworkingsockets
 ```
 
-4. Install [flatbuffers](lib/flatbuffers):
+4. Install [flatbuffers](https://google.github.io/flatbuffers/index.html):
 
 ```
 ./vcpkg/vcpkg install flatbuffers

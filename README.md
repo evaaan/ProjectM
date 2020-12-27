@@ -31,20 +31,20 @@ git submodule update
 cd lib
 ```
 
-2. Install [vcpkg](https://github.com/Microsoft/vcpkg) with VS integration:
+2. Install [Microsoft/vcpkg](https://github.com/Microsoft/vcpkg) with VS integration:
 
 ```
 ./vcpkg/bootstrap-vcpkg.bat
 ./vcpkg/vcpkg integrate install
 ```
 
-3. Install [GameNetworkingSockets](https://github.com/ValveSoftware/GameNetworkingSockets):
+3. Install [ValveSoftware/GameNetworkingSockets](https://github.com/ValveSoftware/GameNetworkingSockets):
 
 ```
 ./vcpkg/vcpkg --overlay-ports=./GameNetworkingSockets/vcpkg_ports install gamenetworkingsockets
 ```
 
-4. Install [flatbuffers](https://google.github.io/flatbuffers/index.html):
+4. Install [Google FlatBuffers](https://google.github.io/flatbuffers/index.html):
 
 ```
 ./vcpkg/vcpkg install flatbuffers

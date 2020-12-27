@@ -5,11 +5,11 @@ ProjectM is a 2D multiplayer game.
 Directory structure is as follows:
 * The [client/](client/) folder has the Client code
 * The [server/](server/) folder has the Server code
-* The [tests/](tests/) folder has unit tests for both client and server
+* The [test/](test/) folder has unit tests for both client and server
 * The [common/](common/) folder has shared code used by both Client and Server
 * The [lib/](lib/) folder has third party dependencies
 
-Note: The client, server, and tests folders have their own Visual Studio ``.vcxproj`` 'Project' file(s), under the [``ProjectM.sln``](ProjectM.sln) 'Solution' file in the root directory.
+Note: The client, server, and test folders have their own Visual Studio ``.vcxproj`` 'Project' file(s), under the [``ProjectM.sln``](ProjectM.sln) 'Solution' file in the root directory.
 
 Tasks are tracked on a [Trello Board](https://trello.com/invite/b/cWteNm74/bf64646388becf6430bf7d5b8bd4df55/projectm).
 
@@ -50,7 +50,7 @@ cd lib
 ./vcpkg/vcpkg install flatbuffers
 ```
 
-If everything worked, Visual Studio project should recognize header includes for all vcpkg-installed projects (under [/lib/vcpkg/installed/x86-windows/include](/lib/vcpkg/installed/x86-windows/include). If it didn't work, add the sub-directories of that path to the Additional Directories path in Visual Studio. The following should be recognized by VS intellisense:
+If everything worked, Visual Studio project should recognize header includes for all vcpkg-installed projects (under ``/lib/vcpkg/installed/x86-windows/include/``). If it didn't work, add the sub-directories of that path to the Additional Directories path in Visual Studio. The following should be recognized by VS intellisense:
 
 ```
 #include <steam/steamnetworkingsockets.h>

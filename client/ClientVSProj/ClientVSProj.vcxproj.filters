@@ -120,13 +120,13 @@
     <ClInclude Include="..\..\lib\imgui\imstb_truetype.h">
       <Filter>lib/imgui/</Filter>
     </ClInclude>
-    <ClInclude Include="..\World.h">
+    <ClInclude Include="..\..\common\TemplateSystem.h">
       <Filter>common/</Filter>
     </ClInclude>
-    <ClInclude Include="..\TemplateSystem.h">
+    <ClInclude Include="..\..\common\World.h">
       <Filter>common/</Filter>
     </ClInclude>
-    <ClInclude Include="..\KeyMap.h">
+    <ClInclude Include="..\..\common\KeyMap.h">
       <Filter>common/</Filter>
     </ClInclude>
   </ItemGroup>
@@ -206,13 +206,13 @@
     <ClCompile Include="..\..\lib\imgui\imgui_widgets.cpp">
       <Filter>lib/imgui/</Filter>
     </ClCompile>
-    <ClCompile Include="..\World.cpp">
+    <ClCompile Include="..\..\common\TemplateSystem.cpp">
       <Filter>common/</Filter>
     </ClCompile>
-    <ClCompile Include="..\TemplateSystem.cpp">
+    <ClCompile Include="..\..\common\World.cpp">
       <Filter>common/</Filter>
     </ClCompile>
-    <ClCompile Include="..\KeyMap.cpp">
+    <ClCompile Include="..\..\common\KeyMap.cpp">
       <Filter>common/</Filter>
     </ClCompile>
   </ItemGroup>

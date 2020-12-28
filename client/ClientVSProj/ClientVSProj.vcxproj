@@ -153,8 +153,11 @@
     <ClInclude Include="..\..\common\ComponentMask.h" />
     <ClInclude Include="..\..\common\Entity.h" />
     <ClInclude Include="..\..\common\EntityHandle.h" />
+    <ClInclude Include="..\..\common\KeyMap.h" />
     <ClInclude Include="..\..\common\System.h" />
+    <ClInclude Include="..\..\common\TemplateSystem.h" />
     <ClInclude Include="..\..\common\Timer.h" />
+    <ClInclude Include="..\..\common\World.h" />
     <ClInclude Include="..\..\lib\imgui\imconfig.h" />
     <ClInclude Include="..\..\lib\imgui\imgui.h" />
     <ClInclude Include="..\..\lib\imgui\imgui_impl_dx11.h" />
@@ -174,11 +177,8 @@
     <ClInclude Include="..\ImGuiSystem.h" />
     <ClInclude Include="..\InputManager.h" />
     <ClInclude Include="..\InputSystem.h" />
-    <ClInclude Include="..\KeyMap.h" />
     <ClInclude Include="..\OverlaySystem.h" />
     <ClInclude Include="..\PhysicsSystem.h" />
-    <ClInclude Include="..\TemplateSystem.h" />
-    <ClInclude Include="..\World.h" />
     <ClInclude Include="ClientVSProj.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
@@ -187,8 +187,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\common\Component.cpp" />
     <ClCompile Include="..\..\common\Entity.cpp" />
+    <ClCompile Include="..\..\common\KeyMap.cpp" />
     <ClCompile Include="..\..\common\System.cpp" />
+    <ClCompile Include="..\..\common\TemplateSystem.cpp" />
     <ClCompile Include="..\..\common\Timer.cpp" />
+    <ClCompile Include="..\..\common\World.cpp" />
     <ClCompile Include="..\..\lib\imgui\imgui.cpp" />
     <ClCompile Include="..\..\lib\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\..\lib\imgui\imgui_draw.cpp" />
@@ -207,12 +210,9 @@
     <ClCompile Include="..\ImGuiSystem.cpp" />
     <ClCompile Include="..\InputManager.cpp" />
     <ClCompile Include="..\InputSystem.cpp" />
-    <ClCompile Include="..\KeyMap.cpp" />
     <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\OverlaySystem.cpp" />
     <ClCompile Include="..\PhysicsSystem.cpp" />
-    <ClCompile Include="..\TemplateSystem.cpp" />
-    <ClCompile Include="..\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ClientVSProj.rc" />

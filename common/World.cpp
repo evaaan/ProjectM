@@ -59,7 +59,7 @@ void World::addBox(int x, int y)
 void World::init()
 {
     /* Load initial state */
-    // load();
+    load();
 
     /* Initialize Systems */
     for (auto& system : m_systems)
@@ -70,12 +70,18 @@ void World::init()
 void World::load()
 {
     // Input
-    // EntityHandle input_entity = createEntity();
-    // input_entity.addSingletonComponent(InputSingleton());
+    EntityHandle input_entity = createEntity();
+    input_entity.addSingletonComponent(InputSingleton());
 
 
     // Collisions
     createEntity().addSingletonComponent(CollisionSingleton());
+
+    addWolf(400, 400);
+    addBox(400, 900);
+    addBox(700, 900);
+    addBox(1000, 900);
+    addBox(1300, 800);
 
 
 }

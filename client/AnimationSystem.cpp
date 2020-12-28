@@ -25,7 +25,7 @@ void AnimationSystem::init()
         ComponentHandle<Animation> animation;
         ComponentHandle<Transform> transform;
         parentWorld->unpack(entity, animation, transform);
-        m_graphicManager->loadAnimation(L"C:/Users/Evan/source/repos/GameAppWin32/Art/nakedManMirror.png", animation);
+        m_graphicManager->loadAnimation(L"C:/Users/Evan/ProjectM/assets/sprites/nakedManMirror.png", animation);
     }
 }
 

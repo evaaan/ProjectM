@@ -1,3 +1,5 @@
+#include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
+#include "fbs/entity_generated.h"
 #include "Entity.h"
 #include "System.h"
 #include "UpdateClientSystem.h"

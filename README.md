@@ -21,8 +21,8 @@ Tasks are tracked on a [Trello Board](https://trello.com/invite/b/cWteNm74/bf646
 ```
 git clone https://github.com/evaaan/ProjectM.git
 cd ProjectM
-git submodule init
-git submodule update
+git submodule update --init lib/GameNetworkingSockets
+git submodule update --init lib/vcpkg
 ```
 
 2. Change to the [lib/](lib/) directory:
@@ -41,7 +41,7 @@ cd lib
 3. Install [ValveSoftware/GameNetworkingSockets](https://github.com/ValveSoftware/GameNetworkingSockets):
 
 ```
-./vcpkg/vcpkg --overlay-ports=./GameNetworkingSockets/vcpkg_ports install gamenetworkingsockets
+./vcpkg/vcpkg --overlay-ports=GameNetworkingSockets/vcpkg_ports install gamenetworkingsockets
 ```
 
 4. Install [Google FlatBuffers](https://google.github.io/flatbuffers/index.html):

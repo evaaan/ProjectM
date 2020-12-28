@@ -13,8 +13,7 @@ Note: The client, server, and test folders have their own Visual Studio ``.vcxpr
 
 Tasks are tracked on a [Trello Board](https://trello.com/invite/b/cWteNm74/bf64646388becf6430bf7d5b8bd4df55/projectm).
 
-# Build Instructions
-
+# Build Instructions (Windows / Visual Studio)
 
 1. Clone this project and update submodules:
 
@@ -41,17 +40,18 @@ cd lib
 3. Install [ValveSoftware/GameNetworkingSockets](https://github.com/ValveSoftware/GameNetworkingSockets):
 
 ```
-./vcpkg/vcpkg --overlay-ports=GameNetworkingSockets/vcpkg_ports install gamenetworkingsockets
+./vcpkg/vcpkg --overlay-ports=GameNetworkingSockets/vcpkg_ports --triplet x64-windows install gamenetworkingsockets
 ```
 
 4. Install [Google FlatBuffers](https://google.github.io/flatbuffers/index.html):
 
 ```
-./vcpkg/vcpkg install flatbuffers
+./vcpkg/vcpkg install --triplet x64-windows flatbuffers
 ```
 
-If everything worked, Visual Studio project should recognize header includes for all vcpkg-installed projects (under ``/lib/vcpkg/installed/x86-windows/include/``). If it didn't work, add the sub-directories of that path to the Additional Directories path in Visual Studio. The following should be recognized by VS intellisense:
+Visual Studio should recognize header includes for all vcpkg-installed projects (under ``/lib/vcpkg/installed/x86-windows/include/``).
 
 ```
-#include <steam/steamnetworkingsockets.h>
+#include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
+#include <flatbuffers/flatbuffers.h>
 ```

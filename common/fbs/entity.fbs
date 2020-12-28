@@ -1,0 +1,28 @@
+namespace EntityBuffer;
+
+struct Vec2{
+  x:float;
+  y:float;
+}
+
+table TransformComponent {
+  pos:Vec2;
+  size:Vec2;
+}
+
+table PlayerComponent {
+  hp:short;
+  mana:short;
+}
+
+enum Animation: byte { default=1, walking, attack, damaged, falling }
+
+table AnimationComponent {
+  anim:Animation = default;
+} 
+
+table Entity {
+  id:short;
+  transform:TransformComponent;
+  animation:AnimationComponent;
+}

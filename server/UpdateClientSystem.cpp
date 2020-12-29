@@ -25,6 +25,8 @@ void UpdateClientSystem::init()
     serverLocalAddr.m_port = LISTEN_PORT;
     SteamNetworkingConfigValue_t opt;
     opt.SetPtr(k_ESteamNetworkingConfig_Callback_ConnectionStatusChanged, (void*)ConnStatusChangedCallback);
+    m_hListenSock = m_pInterface->CreateListenSocketIP(serverLocalAddr, 1, &opt);
+    m_hPollGroup = m_pInterface->CreatePollGroup();
 }
 
 void UpdateClientSystem::ConnStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo)

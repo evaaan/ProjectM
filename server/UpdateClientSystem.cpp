@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
 #include "fbs/entity_generated.h"
 #include "Entity.h"
@@ -26,7 +27,14 @@ void UpdateClientSystem::init()
     SteamNetworkingConfigValue_t opt;
     opt.SetPtr(k_ESteamNetworkingConfig_Callback_ConnectionStatusChanged, (void*)ConnStatusChangedCallback);
     m_hListenSock = m_pInterface->CreateListenSocketIP(serverLocalAddr, 1, &opt);
+    if (m_hListenSock == k_HSteamListenSocket_Invalid)
+        throw std::runtime_error(std::string("Unable to listen on port ") + std::to_string(LISTEN_PORT));
     m_hPollGroup = m_pInterface->CreatePollGroup();
+    if (m_hPollGroup == k_HSteamNetPollGroup_Invalid)
+        throw std::runtime_error(std::string("Unable to poll on port ") + std::to_string(LISTEN_PORT));
+
+    OutputDebugStringA("Server has started listening.");
+
 }
 
 void UpdateClientSystem::ConnStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo)

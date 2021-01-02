@@ -6,7 +6,8 @@
 #include <array>
 #include <map>
 #include <set>
-
+#include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
+#include <GameNetworkingSockets/steam/isteamnetworkingutils.h>
 #include "KeyMap.h"
 
 /* This is the base Component class. To create your own component:
@@ -133,9 +134,16 @@ struct Outline : public Component<Outline>
     int width;
 };
 
-/* Connection from Server to Client */
-struct ClientConnection
+/* Server State */
+struct ServerSingleton
 {
+    int listen_port = 35656;
+    ISteamNetworkingSockets* m_pInterface;  // SteamNetworkingSockets() returns raw pointer
+    std::unique_ptr<SteamNetworkingIPAddr> serverLocalAddr;
+    std::unique_ptr<SteamNetworkingConfigValue_t> opt;
+    HSteamListenSocket m_hListenSock;  // uint32 handle
+    HSteamNetPollGroup m_hPollGroup;  // uint32 handle
+    std::map<HSteamNetConnection, std::string> m_clientMap;  // Map connections to user clients
 };
 
 /* Input from a Client */

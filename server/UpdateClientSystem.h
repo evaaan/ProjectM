@@ -1,6 +1,4 @@
 #pragma once
-#include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
-#include <GameNetworkingSockets/steam/isteamnetworkingutils.h>
 
 #define LISTEN_PORT 35656
 
@@ -15,9 +13,9 @@ public:
     void render();
 
 private:
-    static void ConnStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo);
-    HSteamListenSocket m_hListenSock;
-    HSteamNetPollGroup m_hPollGroup;
-    ISteamNetworkingSockets* m_pInterface;
+    void ConnStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo);
+    void OnConnStatusChange(SteamNetConnectionStatusChangedCallback_t* pInfo, ComponentHandle<ServerSingleton> server);
+    void UpdateAllClients();
+    void PollConnectionStateChanges();
 
 };

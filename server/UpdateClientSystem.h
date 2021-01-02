@@ -4,6 +4,7 @@
 
 // Forward declarations
 class System;
+struct ServerSingleton;
 
 class UpdateClientSystem : public System {
 public:
@@ -13,9 +14,12 @@ public:
     void render();
 
 private:
-    void ConnStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo);
-    void OnConnStatusChange(SteamNetConnectionStatusChangedCallback_t* pInfo, ComponentHandle<ServerSingleton> server);
+    static void ConnStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo);
+    void OnConnStatusChange(SteamNetConnectionStatusChangedCallback_t* pInfo);
     void UpdateAllClients();
     void PollConnectionStateChanges();
+
+    static UpdateClientSystem* s_pCallbackInstance;
+    ComponentHandle<ServerSingleton> server;
 
 };

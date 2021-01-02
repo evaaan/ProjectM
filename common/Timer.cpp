@@ -28,13 +28,13 @@ Timer::~Timer()
 
 }
 
-/* Returns the time elapsed between two frames. This is regularly updated during the game loop. */
+/* Returns the time elapsed between two frames in seconds. This is regularly updated during the game loop. */
 double Timer::getDeltaTime() const
 {
     return deltaTime;
 }
 
-/* Returns the time elapsed since starting the Timer */
+/* Returns the time elapsed since starting the Timer in seconds. */
 double Timer::getTotalTime() const
 {
     if (isStopped)
@@ -122,5 +122,16 @@ void Timer::stop()
         else
             throw std::runtime_error("Unable to query performance counter!");
     }
+
+}
+
+/* Sleep until the specified time has passed since the last tick. */
+void Timer::sleep_until(int period_ms)
+{
+    int time_to_sleep = period_ms - std::round(deltaTime * 1000);
+
+    if (time_to_sleep > 0.0)
+        std::this_thread::sleep_for(std::chrono::milliseconds(time_to_sleep));
+
 
 }

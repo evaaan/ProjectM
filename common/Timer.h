@@ -1,4 +1,7 @@
 #pragma once
+#include <chrono>
+#include <cmath>
+#include <thread>
 
 class Timer
 {
@@ -25,4 +28,5 @@ public:
     void reset();
     void tick();
     void stop();
+    void sleep_until(int period_microseconds);
 };

@@ -88,6 +88,7 @@ void ServerManager::Process()
     m_timer->tick();
     m_world->update(m_timer->getDeltaTime());
     printFrameInfo(m_timer->getTotalTime(), m_timer->getDeltaTime());
+    m_timer->sleep_until(20); // ms
 }
 
 World* ServerManager::getWorld()

@@ -167,7 +167,7 @@ void UpdateClientSystem::PollConnectionStateChanges()
 
 }
 
-/// isteamnetworkingsockets.h :
+/// copied from isteamnetworkingsockets.h :
 /// This callback is posted whenever a connection is created, destroyed, or changes state.
 /// The m_info field will contain a complete description of the connection at the time the
 /// change occurred and the callback was posted.  In particular, m_eState will have the

@@ -140,8 +140,8 @@ struct ServerSingleton : public Component<ServerSingleton>
 {
     int listen_port = 35656;
     ISteamNetworkingSockets* m_pInterface;  // SteamNetworkingSockets() returns raw pointer
-    std::shared_ptr<SteamNetworkingIPAddr> serverLocalAddr;
-    std::shared_ptr<SteamNetworkingConfigValue_t> opt;
+    std::shared_ptr<SteamNetworkingIPAddr> serverLocalAddr;  // Use shared_ptr for copy constructor
+    std::shared_ptr<SteamNetworkingConfigValue_t> opt;  // Use shared_ptr for copy constructor
     HSteamListenSocket m_hListenSock;  // uint32 handle
     HSteamNetPollGroup m_hPollGroup;  // uint32 handle
     std::map<HSteamNetConnection, std::string> m_clientMap;  // Map connections to user clients

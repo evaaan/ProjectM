@@ -132,6 +132,9 @@
     <ClInclude Include="..\..\common\Utilities.h">
       <Filter>common/</Filter>
     </ClInclude>
+    <ClInclude Include="..\ServerInputSystem.h">
+      <Filter>client/</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Animation.cpp">
@@ -217,6 +220,9 @@
     </ClCompile>
     <ClCompile Include="..\..\common\KeyMap.cpp">
       <Filter>common/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ServerInputSystem.cpp">
+      <Filter>client/</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

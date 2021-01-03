@@ -180,6 +180,7 @@
     <ClInclude Include="..\InputSystem.h" />
     <ClInclude Include="..\OverlaySystem.h" />
     <ClInclude Include="..\PhysicsSystem.h" />
+    <ClInclude Include="..\ServerInputSystem.h" />
     <ClInclude Include="ClientVSProj.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\OverlaySystem.cpp" />
     <ClCompile Include="..\PhysicsSystem.cpp" />
+    <ClCompile Include="..\ServerInputSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ClientVSProj.rc" />

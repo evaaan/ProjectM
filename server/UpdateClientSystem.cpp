@@ -289,8 +289,6 @@ void UpdateClientSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCallb
     }
 }
 
-
-
 void UpdateClientSystem::UpdateAllClients()
 {
 }

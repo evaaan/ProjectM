@@ -147,6 +147,15 @@ struct ServerSingleton : public Component<ServerSingleton>
     std::map<HSteamNetConnection, std::string> m_clientMap;  // Map connections to user clients
 };
 
+/* Client State */
+struct ClientSingleton : public Component<ClientSingleton>
+{
+    ISteamNetworkingSockets* m_pInterface;
+    std::shared_ptr<SteamNetworkingIPAddr> serverLocalAddr;  // Use shared_ptr for copy constructor
+    std::shared_ptr<SteamNetworkingConfigValue_t> opt;  // Use shared_ptr for copy constructor
+    HSteamListenSocket m_hListenSocket;
+};
+
 /* Input from a Client */
 struct ClientInput : public Component<ClientInput>
 {

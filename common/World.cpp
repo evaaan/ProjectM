@@ -58,7 +58,7 @@ void World::addBox(int x, int y)
 
 void World::init()
 {
-    /* Load initial state */
+    /* Load world state (entities and components) */
     load();
 
     /* Initialize Systems */
@@ -69,19 +69,18 @@ void World::init()
 /* Load initial world state. Hard coded for now. */
 void World::load()
 {
-    // Input
-    EntityHandle input_entity = createEntity();
-    input_entity.addSingletonComponent(InputSingleton());
+    createEntity().addSingletonComponent(InputSingleton()); // Input
+    createEntity().addSingletonComponent(CollisionSingleton()); // Collision Data
+    createEntity().addSingletonComponent(ServerSingleton());  // Server Connection Data
 
+    
+    
 
-    // Collisions
-    createEntity().addSingletonComponent(CollisionSingleton());
-
-    addWolf(400, 400);
-    addBox(400, 900);
-    addBox(700, 900);
-    addBox(1000, 900);
-    addBox(1300, 800);
+    //addWolf(400, 400);
+    //addBox(400, 900);
+    //addBox(700, 900);
+    //addBox(1000, 900);
+    //addBox(1300, 800);
 
 
 }

@@ -116,5 +116,8 @@
     <ClInclude Include="..\UpdateClientSystem.h">
       <Filter>server/</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\common\Utilities.h">
+      <Filter>common/</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -5,6 +5,7 @@
 #include <d2d1_3.h>
 #include <array>
 #include <map>
+#include <memory>
 #include <set>
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
 #include <GameNetworkingSockets/steam/isteamnetworkingutils.h>
@@ -135,28 +136,23 @@ struct Outline : public Component<Outline>
 };
 
 /* Server State */
-struct ServerSingleton
+struct ServerSingleton : public Component<ServerSingleton>
 {
     int listen_port = 35656;
     ISteamNetworkingSockets* m_pInterface;  // SteamNetworkingSockets() returns raw pointer
-    std::unique_ptr<SteamNetworkingIPAddr> serverLocalAddr;
-    std::unique_ptr<SteamNetworkingConfigValue_t> opt;
+    std::shared_ptr<SteamNetworkingIPAddr> serverLocalAddr;
+    std::shared_ptr<SteamNetworkingConfigValue_t> opt;
     HSteamListenSocket m_hListenSock;  // uint32 handle
     HSteamNetPollGroup m_hPollGroup;  // uint32 handle
     std::map<HSteamNetConnection, std::string> m_clientMap;  // Map connections to user clients
 };
 
 /* Input from a Client */
-struct ClientInput
+struct ClientInput : public Component<ClientInput>
 {
     std::bitset<NUM_KEYBINDINGS> keyDownState;
 };
 
-/* Polling group for Clients */
-struct PollGroup
-{
-
-};
 
 /* List of entities to update for the player */
 struct PlayerDelta

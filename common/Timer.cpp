@@ -122,16 +122,15 @@ void Timer::stop()
         else
             throw std::runtime_error("Unable to query performance counter!");
     }
-
 }
 
-/* Sleep until the specified time has passed since the last tick. */
+/* Sleep until the given time has passed since the last tick. */
 void Timer::sleep_until(int period_ms)
 {
-    int time_to_sleep = period_ms - std::round(deltaTime * 1000);
+    int sleep_ms = period_ms - (int)std::round(deltaTime) * 1000;
 
-    if (time_to_sleep > 0.0)
-        std::this_thread::sleep_for(std::chrono::milliseconds(time_to_sleep));
+    if (sleep_ms > 0.0)
+        std::this_thread::sleep_for(std::chrono::milliseconds(sleep_ms));
 
 
 }

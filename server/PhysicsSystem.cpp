@@ -32,7 +32,6 @@ void PhysicsSystem::update(double dt)
 /* Return true if one and two overlap.  */
 bool PhysicsSystem::checkCollision(ComponentHandle<Dynamic> one, ComponentHandle<Dynamic> two)
 {
-    int one_left, one_right, two_left, two_right;
     bool collisionX = one->pos.x + one->width > two->pos.x && two->pos.x + two->width > one->pos.x;
     bool collisionY = one->pos.y + one->height > two->pos.y && two->pos.y + two->height > one->pos.y;
     return collisionX && collisionY;

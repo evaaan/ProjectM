@@ -8,9 +8,8 @@ ClientInputSystem::ClientInputSystem()
 {
     // Add ComponentTypes the System acts on
     // signature.addComponent<ComponentType>();
-    signature.addComponent<ClientConnection>();
-    signature.addComponent<ClientInput>();
-    signature.addComponent<PollGroup>();
+    // signature.addComponent<ClientConnection>();
+    // signature.addComponent<ClientInput>();
 }
 
 void ClientInputSystem::init() {}

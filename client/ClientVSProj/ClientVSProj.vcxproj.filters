@@ -129,6 +129,9 @@
     <ClInclude Include="..\..\common\KeyMap.h">
       <Filter>common/</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\common\Utilities.h">
+      <Filter>common/</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Animation.cpp">

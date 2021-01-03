@@ -1,6 +1,4 @@
 #include <iostream>
-#include "flatbuffers/flatbuffers.h"
-#include "steam/steamnetworkingtypes.h"
 #include "Timer.h"
 #include "World.h"
 #include "EntityHandle.h"
@@ -48,7 +46,7 @@ void ServerManager::Init()
 * All client-server communication is done over SteamNetworkingSockets. 
 * Clients map their keypresses into actions (such as "move left"), encode it
 * in a 128-bit map, and send it to the client every tick. On the server, the
-* ClientInputSystem reads the bitmap from the socket and stores it in that
+* ClientInputSystem reads the bitmap from the 'Steam Socket' and stores it in that
 * entity's InputState component. This component is accessible by any system
 * that needs to know the client's inputs.
 * 
@@ -57,11 +55,11 @@ void ServerManager::Init()
 */
 void ServerManager::AddSystems()
 {
-    // m_world->addSystem(std::move(std::make_unique<System>()));
-    m_world->addSystem(std::move(std::make_unique<ClientInputSystem>()));
-    m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
-    m_world->addSystem(std::move(std::make_unique<PlayerSystem>()));
-    m_world->addSystem(std::move(std::make_unique<CombatSystem>()));
+    //// m_world->addSystem(std::move(std::make_unique<System>())); <-- example code
+    //m_world->addSystem(std::move(std::make_unique<ClientInputSystem>()));
+    //m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
+    //m_world->addSystem(std::move(std::make_unique<PlayerSystem>()));
+    //m_world->addSystem(std::move(std::make_unique<CombatSystem>()));
     m_world->addSystem(std::move(std::make_unique<UpdateClientSystem>()));
 }
 

@@ -4,8 +4,8 @@
 class System;
 template <typename T>
 struct ComponentHandle;
-class Dynamic;
-class Entity;
+struct Dynamic;
+struct Entity;
 
 class PhysicsSystem : public System {
 public:

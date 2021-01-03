@@ -157,6 +157,7 @@
     <ClInclude Include="..\..\common\System.h" />
     <ClInclude Include="..\..\common\TemplateSystem.h" />
     <ClInclude Include="..\..\common\Timer.h" />
+    <ClInclude Include="..\..\common\Utilities.h" />
     <ClInclude Include="..\..\common\World.h" />
     <ClInclude Include="..\..\lib\imgui\imconfig.h" />
     <ClInclude Include="..\..\lib\imgui\imgui.h" />

@@ -22,18 +22,16 @@ class ServerManager;
 class ServerEngine
 {
 public:
-    ServerEngine();
+    ServerEngine(int port_num, int tick_ms);
     ~ServerEngine();
 
-    void Init();
     void Run();
     void Shutdown();
 
-
-
 private:
-    ServerControl::EngineState m_engineState;
-    std::shared_ptr<Timer> m_timer;
+    // ServerControl::EngineState m_engineState;
     std::unique_ptr<ServerManager> m_server;
+    int m_port; // port number
+    int m_tick; // tick ms
 };
 

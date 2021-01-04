@@ -272,7 +272,7 @@ void UpdateClientSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCallb
 
         // Give em a nickname. 
         char nick[64];
-        sprintf(nick, "Peasant%d", 10000 + (rand() % 100000));
+        sprintf_s(nick, "Peasant%d", 10000 + (rand() % 100000));
 
         // Add them to our list and set the connection name.
         server->m_clientMap[pInfo->m_hConn] = nick;

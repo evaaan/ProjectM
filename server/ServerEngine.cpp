@@ -1,38 +1,65 @@
+#include <windows.h>
+#include <stdio.h>
 #include "ServerEngine.h"
 #include "ServerManager.h"
 #include "Timer.h"
+#include "Utilities.h"
 
 using namespace ServerControl;
 
-ServerEngine::ServerEngine() : m_engineState(EngineState::Startup)
-{
-    /* Create and start the timer */
-    m_timer = std::make_shared<Timer>();
-    m_timer->start();
+ServerControl::EngineState engineState = EngineState::Startup;
 
-    m_server = std::make_unique<ServerManager>(m_timer);
+
+/* Handle Ctrl-C signal and CTRL-CLOSE (console exit) gracefully on Windows */
+BOOL WINAPI CtrlHandler(DWORD fdwCtrlType)
+{
+    switch (fdwCtrlType)
+    {
+        // Handle the CTRL-C signal.
+    case CTRL_C_EVENT:
+        printf("Ctrl-C event\n");
+        engineState = EngineState::Terminate;
+        return TRUE;
+
+        // CTRL-CLOSE: confirm that the user wants to exit.
+    case CTRL_CLOSE_EVENT:
+        printf("Ctrl-Close event\n");
+        engineState = EngineState::Terminate;
+        return TRUE;
+
+    default:
+        return FALSE;
+    }
+}
+
+ServerEngine::ServerEngine(int port_num, int tick_ms) : m_port(port_num), m_tick(tick_ms)
+{
+    m_server = std::make_unique<ServerManager>(port_num, tick_ms);
 }
 
 ServerEngine::~ServerEngine()
 {
 }
 
-void ServerEngine::Init()
-{
-}
-
 void ServerEngine::Run()
 {
-    while (m_engineState != EngineState::Terminate)
+    /* Setup Control Handler for console exit signals */
+    if (!SetConsoleCtrlHandler(CtrlHandler, TRUE))
     {
-        switch (m_engineState)
+        odslog("ERROR: Could not set control handler\n");
+        engineState = EngineState::Terminate;
+    }
+
+    while (engineState != EngineState::Terminate)
+    {
+        switch (engineState)
         {
             case EngineState::Startup:
             {
                 /* Initialize worlds */
                 m_server->Init();
 
-                m_engineState = EngineState::Active;
+                engineState = EngineState::Active;
                 break;
             }
 
@@ -45,7 +72,7 @@ void ServerEngine::Run()
 
             case EngineState::OneShot:
                 m_server->Process();
-                m_engineState == EngineState::Terminate;
+                engineState = EngineState::Terminate;
                 break;
 
         }

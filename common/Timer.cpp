@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <stdexcept>
 #include "Timer.h"
+#include "Utilities.h"
 
 Timer::Timer() :
     startTime(0),
@@ -25,7 +26,6 @@ Timer::Timer() :
 
 Timer::~Timer()
 {
-
 }
 
 /* Returns the time elapsed between two frames in seconds. This is regularly updated during the game loop. */
@@ -41,6 +41,18 @@ double Timer::getTotalTime() const
         return (pausedTime - startTime - totalIdleTime) * secondsPerCount;
     else
         return (currentTime - startTime - totalIdleTime) * secondsPerCount;
+}
+
+/* Returns */
+double Timer::getCurrentTime() const
+{
+    if (QueryPerformanceCounter((LARGE_INTEGER*)&currentTime))
+    {
+        return currentTime * secondsPerCount;
+    }
+    else
+        throw std::runtime_error("Unable to query performance counter!");
+
 }
 
 /* Start the timer (if not already running) */
@@ -95,6 +107,8 @@ void Timer::tick()
 
         previousTime = currentTime;
 
+        //printf("deltaTime: ( %f ) sec\n", deltaTime);
+
         // deltaTime can be negative if processor goes idle, apparently
         if (deltaTime < 0.0)
             deltaTime = 0.0;
@@ -127,10 +141,16 @@ void Timer::stop()
 /* Sleep until the given time has passed since the last tick. */
 void Timer::sleep_until(int period_ms)
 {
-    int sleep_ms = period_ms - (int)std::round(deltaTime) * 1000;
+    if (QueryPerformanceCounter((LARGE_INTEGER*)&currentTime))
+    {
+        int sleep_ms = period_ms - (int)std::round((currentTime - previousTime) * secondsPerCount * 1000);
+        //printf("sleep_ms: ( %d )ms\n", sleep_ms);
 
-    if (sleep_ms > 0.0)
-        std::this_thread::sleep_for(std::chrono::milliseconds(sleep_ms));
+        if (sleep_ms > 0)
+            std::this_thread::sleep_for(std::chrono::milliseconds(sleep_ms));
+    }
+    else
+        throw std::runtime_error("Unable to query performance counter!");
 
 
 }

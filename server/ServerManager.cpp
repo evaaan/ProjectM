@@ -13,11 +13,17 @@
 #include "CombatSystem.h"
 #include "PlayerSystem.h"
 #include "UpdateClientSystem.h"
+#include "Utilities.h"
 
-ServerManager::ServerManager(std::shared_ptr<Timer> timer) :
-    m_timer(timer),
+ServerManager::ServerManager(int port_num, int tick_ms) :
+    m_port(port_num),
+    m_tick(tick_ms),
     m_world(nullptr)
 {
+
+    /* Create and start the timer */
+    m_timer = std::make_shared<Timer>();
+    m_timer->start();
 }
 
 
@@ -63,30 +69,47 @@ void ServerManager::AddSystems()
     m_world->addSystem(std::move(std::make_unique<UpdateClientSystem>()));
 }
 
+long numFrames = 0;
 
-void printFrameInfo(double totalTime, double deltaTime)
+void printFrameInfo(double totalTime, double deltaTime, double updateTime)
 {
-    static long numFrames = 0;
+    // static long numFrames = 0;
     static double lastUpdate = 0;
-    if (totalTime - lastUpdate > 0.5)
+    if (totalTime - lastUpdate > 1.0)
     {
         lastUpdate = totalTime;
-        std::cout << "Frame num: " << numFrames++;
+        std::cout << "Frame num: " << numFrames;
+
+        std::cout << ", update: " << std::fixed << updateTime * 1000.0 << " ms";
         
         double usTime = deltaTime * 1000.0;
-        std::cout << ", time: " << std::fixed << usTime << " ms" << std::endl;
+        std::cout << ", tick: " << std::fixed << usTime << " ms" << std::endl;
     }
-
-    numFrames++;
 }
 
 /* Tick the world */
 void ServerManager::Process()
 {
+    double startTime;
+    double updateTime;
+
+    /* Tick the timer */
+    numFrames++;
     m_timer->tick();
+
+    /* Update the world */
+    startTime = m_timer->getCurrentTime();
     m_world->update(m_timer->getDeltaTime());
-    printFrameInfo(m_timer->getTotalTime(), m_timer->getDeltaTime());
-    m_timer->sleep_until(20); // ms
+    updateTime = m_timer->getCurrentTime() - startTime;
+
+    /* Print debug info */
+    m_timer->sleep_until(m_tick); // ms
+    printFrameInfo(m_timer->getTotalTime(), m_timer->getDeltaTime(), updateTime);
+}
+
+/* Shut it down */
+void ServerManager::Shutdown()
+{
 }
 
 World* ServerManager::getWorld()

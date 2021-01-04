@@ -23,6 +23,7 @@ public:
 
     double getTotalTime() const;
     double getDeltaTime() const;
+    double getCurrentTime() const;
 
     void start();
     void reset();

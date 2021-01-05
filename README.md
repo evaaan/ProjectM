@@ -1,6 +1,6 @@
 # ProjectM
 
-ProjectM is a 2D multiplayer game.
+ProjectM is a 2D multiplayer game work-in-progress.
 
 Directory structure is as follows:
 * The [client/](client/) folder has the Client code

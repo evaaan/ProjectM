@@ -9,4 +9,6 @@ public:
     void init();
     void update(double dt);
     void render();
+
+    void updateServer();
 };

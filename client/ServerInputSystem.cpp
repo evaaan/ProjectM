@@ -19,6 +19,10 @@ void ServerInputSystem::update(double dt)
         ComponentHandle<InputSingleton> input;
         parentWorld->unpack(entity, input);
     }
+}
+
+void ServerInputSystem::updateServer()
+{
 
 }
 

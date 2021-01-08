@@ -14,7 +14,8 @@ public:
     void update(double dt);
     void render();
 
-    void updateServer();
+    static ServerInputSystem* s_pCallbackInstance;  // Pointer to 'this' for CreateListenSocketIP callback
+
 
 private:
     static void ConnStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo);

@@ -135,7 +135,7 @@ struct Outline : public Component<Outline>
     int width;
 };
 
-/* Server State */
+/* Server Steam Socket */
 struct ServerSingleton : public Component<ServerSingleton>
 {
     int listen_port = 35656;
@@ -147,21 +147,14 @@ struct ServerSingleton : public Component<ServerSingleton>
     std::map<HSteamNetConnection, std::string> m_clientMap;  // Map connections to user clients
 };
 
+/* Client Steam Socket */
 struct ClientSocketSingleton : public Component<ClientSocketSingleton>
 {
     ISteamNetworkingSockets* m_pInterface;  // SteamNetworkingSockets() returns raw pointer
     std::shared_ptr<SteamNetworkingConfigValue_t> opt;  // Use shared_ptr for copy constructor
     HSteamListenSocket m_hListenSock;  // uint32 handle
-    SteamNetworkingIPAddr m_addrServer;
-};
-
-/* Client State */
-struct ClientSingleton : public Component<ClientSingleton>
-{
-    ISteamNetworkingSockets* m_pInterface;
-    std::shared_ptr<SteamNetworkingIPAddr> serverLocalAddr;  // Use shared_ptr for copy constructor
-    std::shared_ptr<SteamNetworkingConfigValue_t> opt;  // Use shared_ptr for copy constructor
-    HSteamListenSocket m_hListenSocket;
+    HSteamNetConnection m_hConnection;  // uint32 handle
+    std::shared_ptr<SteamNetworkingIPAddr> m_addrServer;
 };
 
 /* Input from a Client */

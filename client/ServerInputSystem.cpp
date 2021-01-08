@@ -72,6 +72,8 @@ static void ShutdownSteamDatagramConnectionSockets()
 #endif
 }
 
+ServerInputSystem* ServerInputSystem::s_pCallbackInstance = nullptr;  // static member definition must be in translation unit
+
 
 ServerInputSystem::ServerInputSystem(const char *server_addr) : m_server_addr(server_addr)
 {
@@ -103,8 +105,6 @@ ServerInputSystem::~ServerInputSystem()
 
 void ServerInputSystem::init()
 {
-    InitSteamDatagramConnectionSockets();
-
 
     /* Only one client socket component exists */
     for (auto& entity : registeredEntities)
@@ -116,15 +116,20 @@ void ServerInputSystem::init()
         client = client_component;
     }
 
+    InitSteamDatagramConnectionSockets();
+
     // Initialize SteamNetworking Interface
     client->m_pInterface = SteamNetworkingSockets();
-    if (!client->m_addrServer.ParseString(m_server_addr))
+
+    client->m_addrServer = std::make_shared<SteamNetworkingIPAddr>();
+    if (!client->m_addrServer->ParseString(m_server_addr))
         throw std::runtime_error(std::string("Invalid server address: ") + std::string(m_server_addr));
     odslog("Connecting to server at " << m_server_addr);
     SteamNetworkingConfigValue_t opt;
-    client->opt->SetPtr(k_ESteamNetworkingConfig_Callback_ConnectionStatusChanged, (void*)ConnStatusChangedCallback); // void *
-
-
+    client->opt->SetPtr(k_ESteamNetworkingConfig_Callback_ConnectionStatusChanged, (void*)ConnStatusChangedCallback);
+    client->m_hConnection = client->m_pInterface->ConnectByIPAddress(*client->m_addrServer, 1, &opt);
+    if (client->m_hConnection == k_HSteamNetConnection_Invalid)
+        throw std::runtime_error(std::string("Failed to connect to server!"));
 }
 
 /* System behaviors */
@@ -137,10 +142,19 @@ void ServerInputSystem::update(double dt)
     }
 }
 
-void ServerInputSystem::updateServer()
-{
 
+void ServerInputSystem::ConnStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo)
+{
+    /* This static callback function is passed as type void* to SetPtr,
+    but we need to call a member function to access server connection information. */
+    s_pCallbackInstance->OnConnStatusChange(pInfo);
 }
+
+
+void ServerInputSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCallback_t* pInfo)
+{
+}
+
 
 /* System rendering */
 void ServerInputSystem::render() {}

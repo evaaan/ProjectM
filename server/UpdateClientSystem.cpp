@@ -106,7 +106,6 @@ UpdateClientSystem::~UpdateClientSystem()
             }
         }
     }
-
     ShutdownSteamDatagramConnectionSockets();
 }
 

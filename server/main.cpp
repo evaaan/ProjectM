@@ -1,5 +1,7 @@
 #include <iostream>
 #include <memory>
+#include <chrono>
+#include <thread>
 #include "ServerEngine.h"
 
 const int DEFAULT_SERVER_PORT = 35656;
@@ -21,7 +23,7 @@ void PrintUsageAndExit()
 int main(int argc, char *argv[])
 {
     int port_num = 35656;
-    int tick_ms = 1000;
+    int tick_ms = 50;
 
     for (int i = 1; i < argc; ++i)
     {
@@ -51,6 +53,10 @@ int main(int argc, char *argv[])
             }
             continue;
         }
+        if (!strcmp(argv[i], "--help") || !strcmp(argv[i], "-h"))
+        {
+            PrintUsageAndExit();
+        }
     }
     printf("Creating ServerEngine..\n");
     auto server = std::make_unique<ServerEngine>(port_num, tick_ms);
@@ -58,4 +64,5 @@ int main(int argc, char *argv[])
     server->Run();
     printf("Shutting down.\n");
     server->Shutdown();
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 }

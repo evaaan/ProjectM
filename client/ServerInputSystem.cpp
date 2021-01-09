@@ -4,7 +4,6 @@
 #include <thread>
 #include <windows.h>
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
-
 #include "Entity.h"
 #include "System.h"
 #include "World.h"
@@ -85,19 +84,12 @@ ServerInputSystem::ServerInputSystem(const char *server_addr) : m_server_addr(se
 /* Cleanup client connections */
 ServerInputSystem::~ServerInputSystem()
 {
-    for (auto& entity : registeredEntities)
+    if (client->m_pInterface)
     {
-        ComponentHandle<ClientSocketSingleton> client;
-        parentWorld->unpack(entity, client);
-
-
-        if (client->m_pInterface)
+        if (client->m_hListenSock)
         {
-            if (client->m_hListenSock)
-            {
-                client->m_pInterface->CloseListenSocket(client->m_hListenSock);
-                client->m_hListenSock = k_HSteamListenSocket_Invalid;
-            }
+            client->m_pInterface->CloseListenSocket(client->m_hListenSock);
+            client->m_hListenSock = k_HSteamListenSocket_Invalid;
         }
     }
     ShutdownSteamDatagramConnectionSockets();

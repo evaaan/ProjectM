@@ -86,24 +86,18 @@ UpdateClientSystem::UpdateClientSystem()
 /* Cleanup server connections */
 UpdateClientSystem::~UpdateClientSystem()
 {
-    for (auto& entity : registeredEntities)
+
+    if (server->m_pInterface)
     {
-        ComponentHandle<ServerSingleton> server;
-        parentWorld->unpack(entity, server);
-
-
-        if (server->m_pInterface)
+        if (server->m_hListenSock)
         {
-            if (server->m_hListenSock)
-            {
-                server->m_pInterface->CloseListenSocket(server->m_hListenSock);
-                server->m_hListenSock = k_HSteamListenSocket_Invalid;
-            }
-            if (server->m_hPollGroup)
-            {
-                server->m_pInterface->DestroyPollGroup(server->m_hPollGroup);
-                server->m_hPollGroup = k_HSteamNetPollGroup_Invalid;
-            }
+            server->m_pInterface->CloseListenSocket(server->m_hListenSock);
+            server->m_hListenSock = k_HSteamListenSocket_Invalid;
+        }
+        if (server->m_hPollGroup)
+        {
+            server->m_pInterface->DestroyPollGroup(server->m_hPollGroup);
+            server->m_hPollGroup = k_HSteamNetPollGroup_Invalid;
         }
     }
     ShutdownSteamDatagramConnectionSockets();
@@ -111,7 +105,6 @@ UpdateClientSystem::~UpdateClientSystem()
 
 void UpdateClientSystem::init()
 {
-    InitSteamDatagramConnectionSockets();
 
     /* Only one server per World */
     for (auto& entity : registeredEntities)
@@ -122,6 +115,7 @@ void UpdateClientSystem::init()
         /* Store a reference directly to the server singleton component. */
         server = server_component;
     }
+    InitSteamDatagramConnectionSockets();
 
 
     // Initialize SteamNetworking interface

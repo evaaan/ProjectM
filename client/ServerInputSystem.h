@@ -20,6 +20,8 @@ public:
 private:
     static void ConnStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo);
     void OnConnStatusChange(SteamNetConnectionStatusChangedCallback_t* pInfo);
+    void PollConnectionStateChanges();
+    void UpdateServer();
 
     ComponentHandle<ClientSocketSingleton> client;
     const char* m_server_addr;

@@ -127,11 +127,9 @@ void ServerInputSystem::init()
 /* System behaviors */
 void ServerInputSystem::update(double dt)
 {
-    for (auto& entity : registeredEntities)
-    {
-        ComponentHandle<InputSingleton> input;
-        parentWorld->unpack(entity, input);
-    }
+
+    UpdateServer();
+    PollConnectionStateChanges();
 }
 
 
@@ -145,8 +143,60 @@ void ServerInputSystem::ConnStatusChangedCallback(SteamNetConnectionStatusChange
 
 void ServerInputSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCallback_t* pInfo)
 {
+    if (pInfo->m_hConn != client->m_hConnection || client->m_hConnection != k_HSteamNetConnection_Invalid)
+        throw std::runtime_error(std::string("Invalid HSteamNetConnection!"));
+
+    switch (pInfo->m_info.m_eState)
+    {
+    case k_ESteamNetworkingConnectionState_None:
+        // ignore the callback generated when we destroy connections
+        break;
+
+    case k_ESteamNetworkingConnectionState_ClosedByPeer:
+    case k_ESteamNetworkingConnectionState_ProblemDetectedLocally:
+    {
+        if (pInfo->m_eOldState == k_ESteamNetworkingConnectionState_Connecting)
+        {
+            odslog("Unable to connect to remote host: " << pInfo->m_info.m_szEndDebug << "\n");
+        }
+        else if (pInfo->m_info.m_eState == k_ESteamNetworkingConnectionState_ProblemDetectedLocally)
+        {
+            odslog("Problem detected locally, lost contact to remote host: " << pInfo->m_info.m_szEndDebug << "\n");
+        }
+        else
+            odslog("Server ended the connection.\n");
+
+        // Clean up the connection
+        client->m_pInterface->CloseConnection(pInfo->m_hConn, 0, nullptr, false);
+        client->m_hConnection = k_HSteamNetConnection_Invalid;
+        break;
+    }
+    case k_ESteamNetworkingConnectionState_Connecting:
+    {
+        odslog("Connecting to server...\n");
+        break;
+    }
+    case k_ESteamNetworkingConnectionState_Connected:
+    {
+        odslog("Connected to server!\n");
+        break;
+    }
+    default:
+        break;
+    }
 }
 
+/* Poll for connection status changes */
+void ServerInputSystem::PollConnectionStateChanges()
+{
+    s_pCallbackInstance = this;
+    client->m_pInterface->RunCallbacks();
+}
+
+/* Send server the client inputs */
+void ServerInputSystem::UpdateServer()
+{
+}
 
 /* System rendering */
 void ServerInputSystem::render() {}

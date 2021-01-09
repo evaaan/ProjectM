@@ -286,6 +286,7 @@ void UpdateClientSystem::UpdateAllClients()
 {
 }
 
+
 /* System rendering */
 void UpdateClientSystem::render() {}
 

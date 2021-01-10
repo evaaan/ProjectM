@@ -6,15 +6,15 @@ struct ClientSocketSingleton;
 template <typename T>
 struct ComponentHandle;
 
-class ServerInputSystem : public System {
+class ServerConnectSystem : public System {
 public:
-    ServerInputSystem(const char *server_addr);  // IPv4 (or IPv6?) server address
-    ~ServerInputSystem();
+    ServerConnectSystem(const char *server_addr);  // IPv4 (or IPv6?) server address
+    ~ServerConnectSystem();
     void init();
     void update(double dt);
     void render();
 
-    static ServerInputSystem* s_pCallbackInstance;  // Pointer to 'this' for CreateListenSocketIP callback
+    static ServerConnectSystem* s_pCallbackInstance;  // Pointer to 'this' for CreateListenSocketIP callback
 
 
 private:

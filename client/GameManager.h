@@ -23,4 +23,9 @@ private:
     std::shared_ptr<World> m_world;      // Systems must have shared ownership of the World
     InputManager* m_inputManager;
     GraphicManager* m_graphicManager;
+
+
+    /* Create entities */
+    void addWolf(int x, int y);
+    void addBox(int x, int y);
 };

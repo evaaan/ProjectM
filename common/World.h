@@ -62,18 +62,12 @@ public:
     /* Add a new system */
     void addSystem(std::unique_ptr<System> system);
 
-    /* Load initial world state */
-    void load();
-
     /* Tick world behavior */
     void update(double dt);
 
     /* Render world */
     void render();
 
-    /* Create entities */
-    void addWolf(int x, int y);
-    void addBox(int x, int y);
 
     /* Unpack Entity and Components from the World*/
     template <typename ComponentType, typename... Args>

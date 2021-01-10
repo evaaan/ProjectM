@@ -7,7 +7,7 @@ class World;
 
 class ImGuiSystem : public System {
 public:
-    ImGuiSystem(GraphicManager* graphicManager, World* world);
+    ImGuiSystem(GraphicManager* graphicManager);
     void init();
     void update(double dt);
     void render();
@@ -16,5 +16,4 @@ public:
 private:
     GraphicManager* m_graphicManager;
     bool is_updated;
-    World* m_world;
 };

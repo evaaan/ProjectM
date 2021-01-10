@@ -180,7 +180,8 @@
     <ClInclude Include="..\InputSystem.h" />
     <ClInclude Include="..\OverlaySystem.h" />
     <ClInclude Include="..\PhysicsSystem.h" />
-    <ClInclude Include="..\ServerInputSystem.h" />
+    <ClInclude Include="..\ServerConnectSystem.h" />
+    <ClInclude Include="..\ServerUpdateSystem.h" />
     <ClInclude Include="ClientVSProj.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
@@ -215,7 +216,8 @@
     <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\OverlaySystem.cpp" />
     <ClCompile Include="..\PhysicsSystem.cpp" />
-    <ClCompile Include="..\ServerInputSystem.cpp" />
+    <ClCompile Include="..\ServerConnectSystem.cpp" />
+    <ClCompile Include="..\ServerUpdateSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ClientVSProj.rc" />

@@ -129,11 +129,14 @@
     <ClInclude Include="..\..\common\Utilities.h">
       <Filter>common/</Filter>
     </ClInclude>
-    <ClInclude Include="..\ServerInputSystem.h">
-      <Filter>client/</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\World.h">
       <Filter>common/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ServerConnectSystem.h">
+      <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ServerUpdateSystem.h">
+      <Filter>client/</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -218,11 +221,14 @@
     <ClCompile Include="..\..\common\KeyMap.cpp">
       <Filter>common/</Filter>
     </ClCompile>
-    <ClCompile Include="..\ServerInputSystem.cpp">
-      <Filter>client/</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\World.cpp">
       <Filter>common/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ServerConnectSystem.cpp">
+      <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ServerUpdateSystem.cpp">
+      <Filter>client/</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -7,7 +7,7 @@
 #include "Entity.h"
 #include "System.h"
 #include "World.h"
-#include "ServerInputSystem.h"
+#include "ServerConnectSystem.h"
 #include "Utilities.h"
 
 /* Steam Sockets init and shutdown helpers */
@@ -71,10 +71,10 @@ static void ShutdownSteamDatagramConnectionSockets()
 #endif
 }
 
-ServerInputSystem* ServerInputSystem::s_pCallbackInstance = nullptr;  // static member definition must be in translation unit
+ServerConnectSystem* ServerConnectSystem::s_pCallbackInstance = nullptr;  // static member definition must be in translation unit
 
 
-ServerInputSystem::ServerInputSystem(const char *server_addr) : m_server_addr(server_addr)
+ServerConnectSystem::ServerConnectSystem(const char *server_addr) : m_server_addr(server_addr)
 {
     // Add ComponentTypes the System acts on
     // signature.addComponent<ComponentType>();
@@ -82,7 +82,7 @@ ServerInputSystem::ServerInputSystem(const char *server_addr) : m_server_addr(se
 }
 
 /* Cleanup client connections */
-ServerInputSystem::~ServerInputSystem()
+ServerConnectSystem::~ServerConnectSystem()
 {
     if (client->m_pInterface)
     {
@@ -95,7 +95,7 @@ ServerInputSystem::~ServerInputSystem()
     ShutdownSteamDatagramConnectionSockets();
 }
 
-void ServerInputSystem::init()
+void ServerConnectSystem::init()
 {
 
     /* Only one client socket component exists */
@@ -126,7 +126,7 @@ void ServerInputSystem::init()
 }
 
 /* System behaviors */
-void ServerInputSystem::update(double dt)
+void ServerConnectSystem::update(double dt)
 {
 
     UpdateServer();
@@ -134,7 +134,7 @@ void ServerInputSystem::update(double dt)
 }
 
 
-void ServerInputSystem::ConnStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo)
+void ServerConnectSystem::ConnStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo)
 {
     /* This static callback function is passed as type void* to SetPtr,
     but we need to call a member function to access server connection information. */
@@ -142,7 +142,7 @@ void ServerInputSystem::ConnStatusChangedCallback(SteamNetConnectionStatusChange
 }
 
 
-void ServerInputSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCallback_t* pInfo)
+void ServerConnectSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCallback_t* pInfo)
 {
     if (pInfo->m_hConn != client->m_hConnection && client->m_hConnection != k_HSteamNetConnection_Invalid)
         throw std::runtime_error(std::string("Invalid HSteamNetConnection!"));
@@ -188,16 +188,16 @@ void ServerInputSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCallba
 }
 
 /* Poll for connection status changes */
-void ServerInputSystem::PollConnectionStateChanges()
+void ServerConnectSystem::PollConnectionStateChanges()
 {
     s_pCallbackInstance = this;
     client->m_pInterface->RunCallbacks();
 }
 
 /* Send server the client inputs */
-void ServerInputSystem::UpdateServer()
+void ServerConnectSystem::UpdateServer()
 {
 }
 
 /* System rendering */
-void ServerInputSystem::render() {}
+void ServerConnectSystem::render() {}

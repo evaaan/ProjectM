@@ -18,7 +18,7 @@ SteamNetworkingMicroseconds g_logTimeZero;
 static void DebugOutput(ESteamNetworkingSocketsDebugOutputType eType, const char* pszMsg)
 {
     SteamNetworkingMicroseconds time = SteamNetworkingUtils()->GetLocalTimestamp() - g_logTimeZero;
-    odslog("%10.6f %s\n", time * 1e-6, pszMsg);
+    odslog("[SteamNetworkingSockets Debug] " << pszMsg << "\n");
     if (eType == k_ESteamNetworkingSocketsDebugOutputType_Bug)
     {
         fflush(stdout);
@@ -126,7 +126,7 @@ void UpdateClientSystem::init()
     // Start listening
     server->serverLocalAddr->Clear();
     server->serverLocalAddr->m_port = server->listen_port;
-    server->opt->SetPtr(k_ESteamNetworkingConfig_Callback_ConnectionStatusChanged, (void *)ConnStatusChangedCallback); // void *
+    server->opt->SetPtr(k_ESteamNetworkingConfig_Callback_ConnectionStatusChanged, (void *)ConnStatusChangedCallback);
     server->m_hListenSock = server->m_pInterface->CreateListenSocketIP(*server->serverLocalAddr, 1, server->opt.get());
     if (server->m_hListenSock == k_HSteamListenSocket_Invalid)
         throw std::runtime_error(std::string("Unable to listen on port ") + std::to_string(server->listen_port));
@@ -270,6 +270,7 @@ void UpdateClientSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCallb
         // Add them to our list and set the connection name.
         server->m_clientMap[pInfo->m_hConn] = nick;
         server->m_pInterface->SetConnectionName(pInfo->m_hConn, nick);
+        odslog("New user connected: " << nick << "\n");
         break;
     }
 

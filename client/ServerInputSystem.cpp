@@ -116,10 +116,11 @@ void ServerInputSystem::init()
     client->m_addrServer = std::make_shared<SteamNetworkingIPAddr>();
     if (!client->m_addrServer->ParseString(m_server_addr))
         throw std::runtime_error(std::string("Invalid server address: ") + std::string(m_server_addr));
-    odslog("Connecting to server at " << m_server_addr);
-    SteamNetworkingConfigValue_t opt;
+
+    client->opt = std::make_shared<SteamNetworkingConfigValue_t>();
+    odslog("Attempting to connect to " << m_server_addr << "\n");
     client->opt->SetPtr(k_ESteamNetworkingConfig_Callback_ConnectionStatusChanged, (void*)ConnStatusChangedCallback);
-    client->m_hConnection = client->m_pInterface->ConnectByIPAddress(*client->m_addrServer, 1, &opt);
+    client->m_hConnection = client->m_pInterface->ConnectByIPAddress(*client->m_addrServer, 1, client->opt.get());
     if (client->m_hConnection == k_HSteamNetConnection_Invalid)
         throw std::runtime_error(std::string("Failed to connect to server!"));
 }
@@ -143,7 +144,7 @@ void ServerInputSystem::ConnStatusChangedCallback(SteamNetConnectionStatusChange
 
 void ServerInputSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCallback_t* pInfo)
 {
-    if (pInfo->m_hConn != client->m_hConnection || client->m_hConnection != k_HSteamNetConnection_Invalid)
+    if (pInfo->m_hConn != client->m_hConnection && client->m_hConnection != k_HSteamNetConnection_Invalid)
         throw std::runtime_error(std::string("Invalid HSteamNetConnection!"));
 
     switch (pInfo->m_info.m_eState)
@@ -157,7 +158,7 @@ void ServerInputSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCallba
     {
         if (pInfo->m_eOldState == k_ESteamNetworkingConnectionState_Connecting)
         {
-            odslog("Unable to connect to remote host: " << pInfo->m_info.m_szEndDebug << "\n");
+            odslog("Connection failed: " << pInfo->m_info.m_szEndDebug << "\n");
         }
         else if (pInfo->m_info.m_eState == k_ESteamNetworkingConnectionState_ProblemDetectedLocally)
         {

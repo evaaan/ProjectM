@@ -2,7 +2,7 @@
 
 // Forward declarations
 class System;
-struct ServerSingleton;
+struct ServerSocketSingleton;
 template <typename T>
 struct ComponentHandle;
 
@@ -22,6 +22,6 @@ private:
     void UpdateAllClients();
     void PollConnectionStateChanges();
 
-    ComponentHandle<ServerSingleton> server;
+    ComponentHandle<ServerSocketSingleton> server;
 
 };

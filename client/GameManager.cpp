@@ -13,6 +13,7 @@
 #include "PhysicsSystem.h"
 #include "OverlaySystem.h"
 #include "ImGuiSystem.h"
+#include "ServerInputSystem.h"
 
 GameManager::GameManager(std::shared_ptr<Timer> timer, InputManager* input, GraphicManager* graphic) :
     m_timer(timer), m_inputManager(input), m_graphicManager(graphic), m_world(nullptr) {}
@@ -29,7 +30,10 @@ void GameManager::Init()
     /* Add game systems */
     AddSystems();
 
-    /* Initialize the World */
+    /* Add game entities */
+    AddEntities();
+
+    /* World initializes all systems */
     m_world->init();
 
     /* Pass the World reference to GraphicManager to render it*/
@@ -45,6 +49,16 @@ void GameManager::AddSystems()
     m_world->addSystem(std::move(std::make_unique<OverlaySystem>(m_graphicManager)));
     m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
 
+    const char* serverAddr = "127.0.0.1:35656";
+    m_world->addSystem(std::move(std::make_unique<ServerInputSystem>(serverAddr)));
+
+}
+
+void GameManager::AddEntities()
+{
+    m_world->createEntity().addSingletonComponent(InputSingleton()); // Input
+    m_world->createEntity().addSingletonComponent(CollisionSingleton()); // Collision Data
+    m_world->createEntity().addSingletonComponent(ClientSocketSingleton());  // Client Connection Data
 }
 
 /* Tick the world */
@@ -62,3 +76,4 @@ World* GameManager::getWorld()
 {
     return m_world.get();
 }
+

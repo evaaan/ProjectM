@@ -68,21 +68,13 @@ void World::init()
 
 /* Load initial world state. Hard coded for now. */
 void World::load()
-{
-    createEntity().addSingletonComponent(InputSingleton()); // Input
-    createEntity().addSingletonComponent(CollisionSingleton()); // Collision Data
-    createEntity().addSingletonComponent(ServerSingleton());  // Server Connection Data
-
-    
-    
+{    
 
     //addWolf(400, 400);
     //addBox(400, 900);
-    //addBox(700, 900);
-    //addBox(1000, 900);
-    //addBox(1300, 800);
-
-
+    addBox(700, 900);
+    addBox(1000, 900);
+    addBox(1300, 800);
 }
 
 /* Update Systems */

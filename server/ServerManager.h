@@ -20,6 +20,7 @@ public:
 
 private:
     void AddSystems();
+    void AddEntities();
     std::shared_ptr<Timer> m_timer;
     std::shared_ptr<World> m_world;      // Systems must have shared ownership of the World(s)
     int m_port;

@@ -123,9 +123,6 @@
     <ClInclude Include="..\..\common\TemplateSystem.h">
       <Filter>common/</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\World.h">
-      <Filter>common/</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\KeyMap.h">
       <Filter>common/</Filter>
     </ClInclude>
@@ -134,6 +131,9 @@
     </ClInclude>
     <ClInclude Include="..\ServerInputSystem.h">
       <Filter>client/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\World.h">
+      <Filter>common/</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -215,14 +215,14 @@
     <ClCompile Include="..\..\common\TemplateSystem.cpp">
       <Filter>common/</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\World.cpp">
-      <Filter>common/</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\KeyMap.cpp">
       <Filter>common/</Filter>
     </ClCompile>
     <ClCompile Include="..\ServerInputSystem.cpp">
       <Filter>client/</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\World.cpp">
+      <Filter>common/</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

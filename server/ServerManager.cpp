@@ -39,6 +39,9 @@ void ServerManager::Init()
     /* Add game systems */
     AddSystems();
 
+    /* Add game entities */
+    AddEntities();
+
     /* Initialize the World */
     m_world->init();
 }
@@ -67,6 +70,12 @@ void ServerManager::AddSystems()
     //m_world->addSystem(std::move(std::make_unique<PlayerSystem>()));
     //m_world->addSystem(std::move(std::make_unique<CombatSystem>()));
     m_world->addSystem(std::move(std::make_unique<UpdateClientSystem>()));
+}
+
+void ServerManager::AddEntities()
+{
+    m_world->createEntity().addSingletonComponent(CollisionSingleton()); // Collision Data
+    m_world->createEntity().addSingletonComponent(ServerSocketSingleton());  // Server Connection Data
 }
 
 long numFrames = 0;

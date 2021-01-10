@@ -77,7 +77,7 @@ UpdateClientSystem::UpdateClientSystem()
 {
     // Add ComponentTypes the System acts on
     // signature.addComponent<ComponentType>();
-    signature.addComponent<ServerSingleton>();
+    signature.addComponent<ServerSocketSingleton>();
     // signature.addComponent<PlayerDelta>();
     // signature.addComponent<WorldDeltaSingleton>();
 }
@@ -109,7 +109,7 @@ void UpdateClientSystem::init()
     /* Only one server per World */
     for (auto& entity : registeredEntities)
     {
-        ComponentHandle<ServerSingleton> server_component;
+        ComponentHandle<ServerSocketSingleton> server_component;
         parentWorld->unpack(entity, server_component);
 
         /* Store a reference directly to the server singleton component. */

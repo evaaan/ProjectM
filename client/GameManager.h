@@ -14,6 +14,7 @@ public:
 	~GameManager();
     void Init();                         // Initialize ECS and World
     void AddSystems();
+    void AddEntities();
 	void Update();                       // Tick timer and update world
     World* getWorld();                   // Get reference to world
 

@@ -16,7 +16,7 @@ SteamNetworkingMicroseconds g_logTimeZero;
 static void DebugOutput(ESteamNetworkingSocketsDebugOutputType eType, const char* pszMsg)
 {
     SteamNetworkingMicroseconds time = SteamNetworkingUtils()->GetLocalTimestamp() - g_logTimeZero;
-    odslog("%10.6f %s\n", time * 1e-6, pszMsg);
+    odslog(time * 1e-6 << pszMsg << "\n");
     if (eType == k_ESteamNetworkingSocketsDebugOutputType_Bug)
     {
         fflush(stdout);

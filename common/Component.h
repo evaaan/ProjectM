@@ -136,7 +136,7 @@ struct Outline : public Component<Outline>
 };
 
 /* Server Steam Socket */
-struct ServerSingleton : public Component<ServerSingleton>
+struct ServerSocketSingleton : public Component<ServerSocketSingleton>
 {
     int listen_port = 35656;
     ISteamNetworkingSockets* m_pInterface;  // SteamNetworkingSockets() returns raw pointer

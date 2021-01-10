@@ -70,11 +70,11 @@ void World::init()
 void World::load()
 {    
 
-    //addWolf(400, 400);
-    //addBox(400, 900);
-    addBox(700, 900);
-    addBox(1000, 900);
-    addBox(1300, 800);
+    addWolf(400, 400);
+    addBox(400, 900);
+    addBox(400, 600);
+    addBox(700, 600);
+    addBox(1000, 500);
 }
 
 /* Update Systems */

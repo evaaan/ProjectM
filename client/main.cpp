@@ -57,8 +57,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     RegisterClassExW(&wcex);
 
     // Show Window
-    HWND hWnd = CreateWindowW(szWindowClass,szTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0,
-                              CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+    HWND hWnd = CreateWindowW(
+        szWindowClass,          // class name
+        szTitle,                // window name
+        WS_OVERLAPPEDWINDOW,    // style
+        CW_USEDEFAULT,          // x
+        CW_USEDEFAULT,          // y
+        1600,          // width
+        900,                      // height
+        nullptr,                // window parent
+        nullptr,                // menu
+        hInstance,              // hInstance
+        nullptr                 // lpParam
+    );
     if (!hWnd)
     {
         return 1;

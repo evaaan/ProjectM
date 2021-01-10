@@ -193,6 +193,8 @@ void PhysicsSystem::demoRunTick(double dt)
         bool falling = false;
         double walking_speed = 300.0;
         double max_vel = -800.0;
+        int floor_height = 600;
+        int wall_length = 1600;
 
         /* Save last position */
         if (dynamic->prev_pos.y != dynamic->pos.y)
@@ -238,9 +240,9 @@ void PhysicsSystem::demoRunTick(double dt)
                 dynamic->vel.y = 0;
             }
             /* Floor */
-            if (dynamic->pos.y > 900)
+            if (dynamic->pos.y > floor_height)
             {
-                dynamic->pos.y = 900;
+                dynamic->pos.y = floor_height;
                 dynamic->vel.y = 0;
                 falling = false;
             }
@@ -248,8 +250,8 @@ void PhysicsSystem::demoRunTick(double dt)
             /* Walls */
             if (dynamic->pos.x < 0)
                 dynamic->pos.x = 0;
-            if (dynamic->pos.x > 1600)
-                dynamic->pos.x = 1600;
+            if (dynamic->pos.x > wall_length)
+                dynamic->pos.x = wall_length;
 
             /* Limit fall speed */
             if (dynamic->vel.y < max_vel)

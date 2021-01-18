@@ -3,7 +3,7 @@
 #include <windows.h>
 #include <unordered_map>
 
-#define NUM_KEYBINDINGS 128
+#define NUM_KEYBINDINGS 64
 
 enum Action
 {

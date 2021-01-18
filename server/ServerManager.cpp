@@ -8,6 +8,7 @@
 #include "Component.h"
 #include "ComponentHandle.h"
 #include "System.h"
+#include "ClientConnectSystem.h"
 #include "ClientInputSystem.h"
 #include "PhysicsSystem.h"
 #include "CombatSystem.h"
@@ -64,11 +65,16 @@ void ServerManager::Init()
 */
 void ServerManager::AddSystems()
 {
-    //// m_world->addSystem(std::move(std::make_unique<System>())); <-- example code
+    /* Maintain client connections */
+    m_world->addSystem(std::move(std::make_unique<ClientConnectSystem>()));
+
+    /* Read and parse client messages */
     //m_world->addSystem(std::move(std::make_unique<ClientInputSystem>()));
+    //m_world->addSystem(std::move(std::make_unique<CombatSystem>()));
     //m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
     //m_world->addSystem(std::move(std::make_unique<PlayerSystem>()));
-    //m_world->addSystem(std::move(std::make_unique<CombatSystem>()));
+
+    /* Send entity updates to clients */
     m_world->addSystem(std::move(std::make_unique<UpdateClientSystem>()));
 }
 

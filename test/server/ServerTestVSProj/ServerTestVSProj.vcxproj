@@ -76,7 +76,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>C:\Users\Evan\source\repos\GameNetworkingSockets\vcpkg\installed\x86-windows\include\GameNetworkingSockets;C:\vcpkg\installed\x86-windows\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost\boost_1_75_0\;C:\Users\Evan\source\repos\GameNetworkingSockets\vcpkg\installed\x86-windows\include\GameNetworkingSockets;C:\vcpkg\installed\x86-windows\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -128,8 +128,6 @@ void ServerConnectSystem::init()
 /* System behaviors */
 void ServerConnectSystem::update(double dt)
 {
-
-    UpdateServer();
     PollConnectionStateChanges();
 }
 
@@ -194,10 +192,6 @@ void ServerConnectSystem::PollConnectionStateChanges()
     client->m_pInterface->RunCallbacks();
 }
 
-/* Send server the client inputs */
-void ServerConnectSystem::UpdateServer()
-{
-}
 
 /* System rendering */
 void ServerConnectSystem::render() {}

@@ -121,12 +121,16 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\Evan\source\repos\GameNetworkingSockets\vcpkg\installed\x86-windows\include\GameNetworkingSockets;$(SolutionDir)server\$(ProjectName);$(SolutionDir)server;$(SolutionDir)common;C:\vcpkg\installed\x86-windows\include\;$(SolutionDir)lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Evan\source\repos\GameNetworkingSockets\vcpkg\installed\x86-windows\include\GameNetworkingSockets;$(SolutionDir)server\$(ProjectName);$(SolutionDir)server;$(SolutionDir)common;C:\vcpkg\installed\x86-windows\include\;C:\boost\boost_1_75_0\;$(SolutionDir)lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Message>Compile flatbuffer</Message>
+      <Command>flatc -o $(SolutionDir)common\fbs\ -c $(SolutionDir)common\fbs\entity.fbs </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -153,6 +157,7 @@
     <ClCompile Include="..\..\common\System.cpp" />
     <ClCompile Include="..\..\common\Timer.cpp" />
     <ClCompile Include="..\..\common\World.cpp" />
+    <ClCompile Include="..\ClientConnectSystem.cpp" />
     <ClCompile Include="..\ClientInputSystem.cpp" />
     <ClCompile Include="..\CombatSystem.cpp" />
     <ClCompile Include="..\main.cpp" />
@@ -169,12 +174,13 @@
     <ClInclude Include="..\..\common\ComponentMask.h" />
     <ClInclude Include="..\..\common\Entity.h" />
     <ClInclude Include="..\..\common\EntityHandle.h" />
-    <ClInclude Include="..\..\common\fbs\monster_generated.h" />
+    <ClInclude Include="..\..\common\fbs\entity_generated.h" />
     <ClInclude Include="..\..\common\KeyMap.h" />
     <ClInclude Include="..\..\common\System.h" />
     <ClInclude Include="..\..\common\Timer.h" />
     <ClInclude Include="..\..\common\Utilities.h" />
     <ClInclude Include="..\..\common\World.h" />
+    <ClInclude Include="..\ClientConnectSystem.h" />
     <ClInclude Include="..\ClientInputSystem.h" />
     <ClInclude Include="..\CombatSystem.h" />
     <ClInclude Include="..\PhysicsSystem.h" />
@@ -182,6 +188,9 @@
     <ClInclude Include="..\ServerEngine.h" />
     <ClInclude Include="..\ServerManager.h" />
     <ClInclude Include="..\UpdateClientSystem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\common\fbs\entity.fbs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -9,4 +9,7 @@ public:
     void init();
     void update(double dt);
     void render();
+
+private:
+    ComponentHandle<ClientSocketSingleton> client;
 };

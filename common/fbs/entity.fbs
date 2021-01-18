@@ -5,24 +5,39 @@ struct Vec2{
   y:float;
 }
 
-table TransformComponent {
-  pos:Vec2;
-  size:Vec2;
+enum BodyType : byte { Player=0, Transparent, Ledge, Solid }
+
+table Transform {
+  x:int;
+  y:int;
+  width:int;
+  height:int;
 }
 
-table PlayerComponent {
+table Dynamic {
+  width:float;
+  height:float;
+  pos:Vec2;
+  prev_pos:Vec2;
+  vel:Vec2;
+  accel:Vec2;
+}
+
+table Input {
+  bitset:uint64;
+}
+
+table Player {
   hp:short;
   mana:short;
 }
 
-enum Animation: byte { default=1, walking, attack, damaged, falling }
-
-table AnimationComponent {
-  anim:Animation = default;
-} 
-
 table Entity {
-  id:short;
-  transform:TransformComponent;
-  animation:AnimationComponent;
+  id:int;
+  transform:Transform;
+  dynamic:Dynamic;
+  input:Input;
+  player:Player;
 }
+
+root_type Entity;

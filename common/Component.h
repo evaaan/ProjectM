@@ -9,6 +9,10 @@
 #include <set>
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
 #include <GameNetworkingSockets/steam/isteamnetworkingutils.h>
+#include <Windows.h>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <iostream>
 #include "KeyMap.h"
 
 /* This is the base Component class. To create your own component:
@@ -99,7 +103,7 @@ public:
     int startFrame;		// the index of the first frame of an animation
     int numberOfFrames;	// the total numbers of frames in the animation
     int	width,			// the width of each frame
-        height,					// the height of each frame
+        height,					// the height of each frame+
         destWidth,              // width of each frame in render target
         destHeight,             // height of each frame in render targe
         paddingWidth,			// width of the padding
@@ -144,7 +148,9 @@ struct ServerSocketSingleton : public Component<ServerSocketSingleton>
     std::shared_ptr<SteamNetworkingConfigValue_t> opt;  // Use shared_ptr for copy constructor
     HSteamListenSocket m_hListenSock;  // uint32 handle
     HSteamNetPollGroup m_hPollGroup;  // uint32 handle
-    std::map<HSteamNetConnection, std::string> m_clientMap;  // Map connections to user clients
+    std::map<HSteamNetConnection, boost::uuids::uuid> m_uuidMap;  // Map Steam connections to user UUID
+    std::map<boost::uuids::uuid, HSteamNetConnection> m_hConnMap;  // Map user UUIDs to Steam connection
+    std::map<boost::uuids::uuid, std::string> m_nickMap;  // Map user UUIDs to username
 };
 
 /* Client Steam Socket */

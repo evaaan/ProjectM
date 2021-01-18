@@ -2,26 +2,27 @@
 
 // Forward declarations
 class System;
-struct ClientSocketSingleton;
+struct ServerSocketSingleton;
 template <typename T>
 struct ComponentHandle;
 
-class ServerConnectSystem : public System {
+class ClientConnectSystem : public System {
 public:
-    ServerConnectSystem(const char *server_addr);  // IPv4 (or IPv6?) server address
-    ~ServerConnectSystem();
+    ClientConnectSystem();
+    ~ClientConnectSystem();
     void init();
     void update(double dt);
     void render();
 
-    static ServerConnectSystem* s_pCallbackInstance;  // Pointer to 'this' for CreateListenSocketIP callback
-
+    static ClientConnectSystem* s_pCallbackInstance;  // Pointer to 'this' for CreateListenSocketIP callback
 
 private:
     static void ConnStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo);
     void OnConnStatusChange(SteamNetConnectionStatusChangedCallback_t* pInfo);
     void PollConnectionStateChanges();
 
-    ComponentHandle<ClientSocketSingleton> client;
-    const char* m_server_addr;
+    void SendStringToClient(HSteamNetConnection conn, const char* str);
+
+
+    ComponentHandle<ServerSocketSingleton> server;
 };

@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="server/">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="common/">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -15,6 +11,10 @@
     </Filter>
     <Filter Include="common/fbs/">
       <UniqueIdentifier>{7b45a636-5ded-43d2-b615-2f1a1c187790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="server/">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +60,9 @@
     <ClCompile Include="..\UpdateClientSystem.cpp">
       <Filter>server/</Filter>
     </ClCompile>
+    <ClCompile Include="..\ClientConnectSystem.cpp">
+      <Filter>server/</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ServerEngine.h">
@@ -98,9 +101,6 @@
     <ClInclude Include="..\..\common\KeyMap.h">
       <Filter>common/</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\fbs\monster_generated.h">
-      <Filter>common/fbs/</Filter>
-    </ClInclude>
     <ClInclude Include="..\ClientInputSystem.h">
       <Filter>server/</Filter>
     </ClInclude>
@@ -119,5 +119,16 @@
     <ClInclude Include="..\..\common\Utilities.h">
       <Filter>common/</Filter>
     </ClInclude>
+    <ClInclude Include="..\ClientConnectSystem.h">
+      <Filter>server/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\fbs\entity_generated.h">
+      <Filter>common/fbs/</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\common\fbs\entity.fbs">
+      <Filter>common/fbs/</Filter>
+    </None>
   </ItemGroup>
 </Project>

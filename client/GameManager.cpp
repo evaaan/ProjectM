@@ -14,6 +14,7 @@
 #include "OverlaySystem.h"
 #include "ImGuiSystem.h"
 #include "ServerConnectSystem.h"
+#include "ServerUpdateSystem.h"
 #include "Direct2D.h"
 
 GameManager::GameManager(std::shared_ptr<Timer> timer, InputManager* input, GraphicManager* graphic) :
@@ -45,14 +46,21 @@ void GameManager::Init()
 void GameManager::AddSystems()
 {
     m_world->addSystem(std::move(std::make_unique<ImGuiSystem>(m_graphicManager)));
+
+    /* Maintain connection to Server */
     const char* serverAddr = "127.0.0.1:35656";
     m_world->addSystem(std::move(std::make_unique<ServerConnectSystem>(serverAddr)));
 
+    /* Receive updates from server */
+    m_world->addSystem(std::move(std::make_unique<ServerUpdateSystem>()));
+
+    /* Poll inputs and send to server */
     m_world->addSystem(std::move(std::make_unique<InputSystem>(m_inputManager)));
-    m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
+
+    /* Run physics, animation, and overlays */
+    // m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
     m_world->addSystem(std::move(std::make_unique<AnimationSystem>(m_graphicManager)));
     m_world->addSystem(std::move(std::make_unique<OverlaySystem>(m_graphicManager)));
-
 
 }
 

@@ -38,8 +38,8 @@ void ServerUpdateSystem::update(double dt)
     {
         if (pIncomingMsg != nullptr && pIncomingMsg[num] != nullptr)
         {
-            std::string nick((char*)pIncomingMsg[num]->m_pData, pIncomingMsg[num]->m_cbSize);
-            odsloga("Received message: " << nick << "\n");
+            // std::string nick((char*)pIncomingMsg[num]->m_pData, pIncomingMsg[num]->m_cbSize);
+            odsloga("Received message \n");
 
             pIncomingMsg[num]->Release();
         }

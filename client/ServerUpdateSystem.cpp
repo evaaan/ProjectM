@@ -5,6 +5,9 @@
 #include "World.h"
 #include "ServerUpdateSystem.h"
 #include "Utilities.h"
+#include "fbs/entity_generated.h"
+
+using namespace EntityBuffer;  // FlatBuffer
 
 ServerUpdateSystem::ServerUpdateSystem()
 {
@@ -40,6 +43,31 @@ void ServerUpdateSystem::update(double dt)
         {
             // std::string nick((char*)pIncomingMsg[num]->m_pData, pIncomingMsg[num]->m_cbSize);
             odsloga("Received message \n");
+
+            // Read data from the Socket
+            uint8_t* buffer_pointer = (uint8_t *)pIncomingMsg[num]->m_pData;
+
+            // Get a pointer to the root object inside the buffer
+            auto entity = GetEntityFbs(buffer_pointer);
+
+            // Access member variables
+            auto id = entity->id();
+            auto union_type = entity->data_type();
+            if (union_type == Data_TransformFbs)
+            {
+                auto transform = static_cast<const TransformFbs*>(entity->data());
+                auto x = transform->x();
+                auto y = transform->y();
+                auto width = transform->width();
+                auto height = transform->height();
+                odsloga("id: " << id << ", x: " << x << ", y: " << y << ", width: " << width << ", height: " << height << "\n");
+
+                ComponentHandle<Dynamic> dynamic_component;
+                Entity e;
+                e.uuid = id;
+                parentWorld->unpack(e, dynamic_component);
+                dynamic_component->pos.y = y;
+            }
 
             pIncomingMsg[num]->Release();
         }

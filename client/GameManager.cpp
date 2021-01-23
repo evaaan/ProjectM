@@ -16,6 +16,7 @@
 #include "ServerConnectSystem.h"
 #include "ServerUpdateSystem.h"
 #include "Direct2D.h"
+#include "Utilities.h"
 
 GameManager::GameManager(std::shared_ptr<Timer> timer, InputManager* input, GraphicManager* graphic) :
     m_timer(timer), m_inputManager(input), m_graphicManager(graphic), m_world(nullptr) {}
@@ -111,6 +112,7 @@ void GameManager::addWolf(int x, int y)
     dynamic->accel.x = 0.0;
     dynamic->accel.y = 3000.0;
     dynamic->type = BodyType::Player;
+    odsloga("Added wolf, id: " << wolf_entity.entity.uuid << "\n");
 }
 
 void GameManager::addBox(int x, int y)

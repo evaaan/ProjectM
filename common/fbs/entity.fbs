@@ -7,16 +7,16 @@ struct Vec2{
 
 enum BodyType : byte { Player=0, Transparent, Ledge, Solid }
 
-union Component { Transform, Dynamic, Input, Player}
+union Data { TransformFbs, DynamicFbs, InputFbs, PlayerFbs}
 
-table Transform {
+table TransformFbs {
   x:int;
   y:int;
   width:int;
   height:int;
 }
 
-table Dynamic {
+table DynamicFbs {
   width:float;
   height:float;
   pos:Vec2;
@@ -25,18 +25,18 @@ table Dynamic {
   accel:Vec2;
 }
 
-table Input {
+table InputFbs {
   bitset:uint64;
 }
 
-table Player {
+table PlayerFbs {
   hp:short;
   mana:short;
 }
 
-table Entity {
+table EntityFbs {
   id:int;
-  data:Component;  // Union
+  data:Data;  // Union
 }
 
-root_type Entity;
+root_type EntityFbs;

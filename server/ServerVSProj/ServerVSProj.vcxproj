@@ -159,13 +159,13 @@
     <ClCompile Include="..\..\common\World.cpp" />
     <ClCompile Include="..\ClientConnectSystem.cpp" />
     <ClCompile Include="..\ClientInputSystem.cpp" />
+    <ClCompile Include="..\ClientUpdateSystem.cpp" />
     <ClCompile Include="..\CombatSystem.cpp" />
     <ClCompile Include="..\main.cpp" />
     <ClCompile Include="..\PhysicsSystem.cpp" />
     <ClCompile Include="..\PlayerSystem.cpp" />
     <ClCompile Include="..\ServerEngine.cpp" />
     <ClCompile Include="..\ServerManager.cpp" />
-    <ClCompile Include="..\UpdateClientSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\common\Component.h" />
@@ -182,12 +182,12 @@
     <ClInclude Include="..\..\common\World.h" />
     <ClInclude Include="..\ClientConnectSystem.h" />
     <ClInclude Include="..\ClientInputSystem.h" />
+    <ClInclude Include="..\ClientUpdateSystem.h" />
     <ClInclude Include="..\CombatSystem.h" />
     <ClInclude Include="..\PhysicsSystem.h" />
     <ClInclude Include="..\PlayerSystem.h" />
     <ClInclude Include="..\ServerEngine.h" />
     <ClInclude Include="..\ServerManager.h" />
-    <ClInclude Include="..\UpdateClientSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\common\fbs\entity.fbs" />

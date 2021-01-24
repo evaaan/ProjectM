@@ -55,8 +55,8 @@ struct Vector2
     double y;
 };
 
-/* Keyboard and mouse state */
-struct InputSingleton : public Component<InputSingleton>
+/* Keyboard state. See enum Action in KeyMap.cpp */
+struct KeyState : public Component<KeyState>
 {
     std::bitset<NUM_KEYBINDINGS> keyDownState;
 };

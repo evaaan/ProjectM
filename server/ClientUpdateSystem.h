@@ -6,9 +6,9 @@ struct ServerSocketSingleton;
 template <typename T>
 struct ComponentHandle;
 
-class UpdateClientSystem : public System {
+class ClientUpdateSystem : public System {
 public:
-    UpdateClientSystem();
+    ClientUpdateSystem();
     void init();
     void update(double dt);
     void render();

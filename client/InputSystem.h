@@ -13,4 +13,7 @@ public:
 
 private:
     InputManager* m_inputManager;
+    ComponentHandle<KeyState> keyState;
+    void pollKeys();
+    void sendKeyStateToServer();
 };

@@ -67,7 +67,7 @@ void GameManager::AddSystems()
 
 void GameManager::AddEntities()
 {
-    m_world->createEntity().addSingletonComponent(InputSingleton()); // Input
+    m_world->createEntity().addSingletonComponent(KeyState()); // Input
     m_world->createEntity().addSingletonComponent(CollisionSingleton()); // Collision Data
     m_world->createEntity().addSingletonComponent(ClientSocketSingleton());  // Client Connection Data
 

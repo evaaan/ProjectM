@@ -57,10 +57,10 @@
     <ClCompile Include="..\PlayerSystem.cpp">
       <Filter>server/</Filter>
     </ClCompile>
-    <ClCompile Include="..\UpdateClientSystem.cpp">
+    <ClCompile Include="..\ClientConnectSystem.cpp">
       <Filter>server/</Filter>
     </ClCompile>
-    <ClCompile Include="..\ClientConnectSystem.cpp">
+    <ClCompile Include="..\ClientUpdateSystem.cpp">
       <Filter>server/</Filter>
     </ClCompile>
   </ItemGroup>
@@ -113,9 +113,6 @@
     <ClInclude Include="..\PlayerSystem.h">
       <Filter>server/</Filter>
     </ClInclude>
-    <ClInclude Include="..\UpdateClientSystem.h">
-      <Filter>server/</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\common\Utilities.h">
       <Filter>common/</Filter>
     </ClInclude>
@@ -124,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="..\..\common\fbs\entity_generated.h">
       <Filter>common/fbs/</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ClientUpdateSystem.h">
+      <Filter>server/</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

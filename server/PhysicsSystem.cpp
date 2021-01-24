@@ -90,7 +90,7 @@ std::set<int> PhysicsSystem::getSolidCollisions(Entity entity)
 /* Advance physics simulation */
 void PhysicsSystem::advanceTick(double dt)
 {
-    ComponentHandle<InputSingleton> input = parentWorld->getSingletonComponent<InputSingleton>();
+    ComponentHandle<KeyState> input = parentWorld->getSingletonComponent<KeyState>();
 
     for (auto& entity : registeredEntities)
     {
@@ -106,7 +106,7 @@ void PhysicsSystem::advanceTick(double dt)
 void PhysicsSystem::demoRunTick(double dt)
 {
 
-    ComponentHandle<InputSingleton> input = parentWorld->getSingletonComponent<InputSingleton>();
+    ComponentHandle<KeyState> input = parentWorld->getSingletonComponent<KeyState>();
 
     for (auto& entity : registeredEntities)
     {

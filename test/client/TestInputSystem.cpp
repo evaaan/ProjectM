@@ -28,7 +28,7 @@ protected:
         /* Add System, Entity, and Component to World */
         world->addSystem(std::move(inputSystem));
         input_entity = std::make_shared<EntityHandle>(world->createEntity());
-        input_entity->addComponent(InputSingleton());  // 128 bitset
+        input_entity->addComponent(KeyState());  // 128 bitset
         world->init();
     }
 

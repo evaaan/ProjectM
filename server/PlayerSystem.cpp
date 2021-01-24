@@ -16,7 +16,7 @@ void PlayerSystem::update(double dt)
 {
     for (auto& entity : registeredEntities)
     {
-        ComponentHandle<InputSingleton> input;
+        ComponentHandle<KeyState> input;
         parentWorld->unpack(entity, input);
     }
 

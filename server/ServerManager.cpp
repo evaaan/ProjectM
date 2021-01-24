@@ -13,7 +13,7 @@
 #include "PhysicsSystem.h"
 #include "CombatSystem.h"
 #include "PlayerSystem.h"
-#include "UpdateClientSystem.h"
+#include "ClientUpdateSystem.h"
 #include "Utilities.h"
 
 ServerManager::ServerManager(int port_num, int tick_ms) :
@@ -61,7 +61,7 @@ void ServerManager::Init()
 * that needs to know the client's inputs.
 * 
 * When Systems change an Entity, the system MUST set the touched Component's RecentUpdate flag.
-* The UpdateClientSystem will serialize and send these Components to every client.
+* The ClientUpdateSystem will serialize and send these Components to every client.
 */
 void ServerManager::AddSystems()
 {
@@ -69,13 +69,13 @@ void ServerManager::AddSystems()
     m_world->addSystem(std::move(std::make_unique<ClientConnectSystem>()));
 
     /* Read and parse client messages */
-    //m_world->addSystem(std::move(std::make_unique<ClientInputSystem>()));
+    m_world->addSystem(std::move(std::make_unique<ClientInputSystem>()));
     //m_world->addSystem(std::move(std::make_unique<CombatSystem>()));
     //m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
     //m_world->addSystem(std::move(std::make_unique<PlayerSystem>()));
 
     /* Send entity updates to clients */
-    m_world->addSystem(std::move(std::make_unique<UpdateClientSystem>()));
+    m_world->addSystem(std::move(std::make_unique<ClientUpdateSystem>()));
 }
 
 void ServerManager::AddEntities()

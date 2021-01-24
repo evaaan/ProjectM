@@ -4,12 +4,11 @@
 #include "ClientInputSystem.h"
 #include "Component.h"
 
+/* Receive input messages from Client */
 ClientInputSystem::ClientInputSystem()
 {
-    // Add ComponentTypes the System acts on
-    // signature.addComponent<ComponentType>();
-    // signature.addComponent<ClientConnection>();
-    // signature.addComponent<ClientInput>();
+    signature.addComponent<ClientSocketSingleton>();
+    signature.addComponent<KeyState>();
 }
 
 void ClientInputSystem::init() {}
@@ -19,7 +18,7 @@ void ClientInputSystem::update(double dt)
 {
     for (auto& entity : registeredEntities)
     {
-        ComponentHandle<InputSingleton> input;
+        ComponentHandle<KeyState> input;
         parentWorld->unpack(entity, input);
     }
 

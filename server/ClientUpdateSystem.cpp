@@ -10,19 +10,19 @@
 #include "Entity.h"
 #include "System.h"
 #include "World.h"
-#include "UpdateClientSystem.h"
+#include "ClientUpdateSystem.h"
 #include "Utilities.h"
 
 using namespace EntityBuffer;  // FlatBuffer
 
-UpdateClientSystem::UpdateClientSystem()
+ClientUpdateSystem::ClientUpdateSystem()
 {
     // Add ComponentTypes the System acts on
     signature.addComponent<ServerSocketSingleton>();
 }
 
 
-void UpdateClientSystem::init()
+void ClientUpdateSystem::init()
 {
 
     /* Only one server per World */
@@ -38,13 +38,13 @@ void UpdateClientSystem::init()
 
 
 /* Poll new connections and broadcast units to users */
-void UpdateClientSystem::update(double dt)
+void ClientUpdateSystem::update(double dt)
 {
     UpdateAllClients();
 }
 
 /* Loop over player connections, package and send a message for each WorldDelta entity update */
-void UpdateClientSystem::UpdateAllClients()
+void ClientUpdateSystem::UpdateAllClients()
 {
     flatbuffers::FlatBufferBuilder builder(1024);
 
@@ -83,6 +83,6 @@ void UpdateClientSystem::UpdateAllClients()
 
 
 /* System rendering */
-void UpdateClientSystem::render() {}
+void ClientUpdateSystem::render() {}
 
 

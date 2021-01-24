@@ -9,6 +9,7 @@
 
 using namespace EntityBuffer;  // FlatBuffer
 
+/* Receive entity updates from Server */
 ServerUpdateSystem::ServerUpdateSystem()
 {
     // Add ComponentTypes the System acts on

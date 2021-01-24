@@ -17,13 +17,14 @@ struct winMsg
 class InputManager
 {
 public:
-	InputManager(std::shared_ptr<Timer> timer, bool &paused);
+	InputManager(std::shared_ptr<Timer> timer, bool &active);
 	~InputManager();
 	bool ProcessInput();
     virtual LRESULT CALLBACK msgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     INT_PTR About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
     std::deque<winMsg> m_msgQueue;
     KeyMap keymap;
+    bool& isActive;
 
 private:
     void onKeyDown(WPARAM wParam, LPARAM lParam);
@@ -33,6 +34,5 @@ private:
     bool isResizing;
     bool isMinimized;
     bool isMaximized;
-    bool &isPaused;
 
 };

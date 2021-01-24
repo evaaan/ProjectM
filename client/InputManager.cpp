@@ -8,13 +8,13 @@
 #include "System.h"
 #include "World.h"
 
-InputManager::InputManager(std::shared_ptr<Timer> timer, bool &paused) :
+InputManager::InputManager(std::shared_ptr<Timer> timer, bool &active) :
     m_timer(timer),
     isMinimized(false),
     isMaximized(false),
     isResizing(false),
     msg({ 0 }),
-    isPaused(paused),
+    isActive(active),
     keymap()
 {
 	// Constructor
@@ -43,11 +43,11 @@ LRESULT CALLBACK InputManager::msgProc(HWND hWnd, UINT message, WPARAM wParam, L
     {
         if (LOWORD(wParam) == WA_INACTIVE)
         {
-            isPaused = true;
+            isActive = false;
         }
         else
         {
-            isPaused = false;
+            isActive = true;
         }
     }
     break;

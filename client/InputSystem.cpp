@@ -12,7 +12,7 @@ InputSystem::InputSystem(InputManager* inputManager) : m_inputManager(inputManag
 
 void InputSystem::init() {}
 
-/* Read onKeyDown messages from InputManager, translate to Actions, and update Input component */
+/*Read onKeyDown messages from InputManager, translate to Actions, and update Input component. */
 void InputSystem::update(double dt)
 {
     for (auto& entity : registeredEntities)
@@ -22,11 +22,16 @@ void InputSystem::update(double dt)
 
         input->keyDownState.reset();
 
-        /* Read keyboard state asynchronously, map to Actions, and upate component */
-        for (const auto & [ keyCode, action ] : m_inputManager->keymap.keyCodeMap)
+        /* Ignore input when inactive*/
+        if (m_inputManager->isActive)
         {
-            if (GetAsyncKeyState((int)keyCode) & 0x8000)
-                input->keyDownState.set(action);
+
+            /* Read keyboard state asynchronously, map to Actions, and upate component */
+            for (const auto& [keyCode, action] : m_inputManager->keymap.keyCodeMap)
+            {
+                if (GetAsyncKeyState((int)keyCode) & 0x8000)
+                    input->keyDownState.set(action);
+            }
         }
 
     }

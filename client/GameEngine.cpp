@@ -13,10 +13,10 @@ GameEngine::GameEngine(HINSTANCE hInstance, HWND hWindow, std::shared_ptr<Timer>
     m_timer(timer),
 	m_engineState(EngineState::WaitingForResources),
     hasStarted(false),
-    isPaused(false)
+    isActive(false)
 {
     m_graphic = std::make_unique<GraphicManager>(appWindow, m_timer);     // Graphics
-    m_input = std::make_unique<InputManager>(m_timer, isPaused);                    // Input
+    m_input = std::make_unique<InputManager>(m_timer, isActive);                    // Input
     m_game = std::make_unique<GameManager>(m_timer, m_input.get(), m_graphic.get());  // Game
 
 }
@@ -41,31 +41,28 @@ void GameEngine::Run()
 			m_engineState = EngineState::Terminate;
 			continue;
 		}
-        if (!isPaused)
+        switch (m_engineState)
         {
-            switch (m_engineState)
+                /* Transition to dynamic after resources load */
+            case EngineState::WaitingForResources:
             {
-                    /* Transition to dynamic after resources load */
-                case EngineState::WaitingForResources:
-                {
-                    /* Initialize game world. */
-                    m_game->Init();
-                    m_engineState = EngineState::Dynamics;
-                    break;
-                }
-
-                /* Update world */
-                case EngineState::Dynamics:
-                {
-                    m_game->Update();
-                    break;
-                }
+                /* Initialize game world. */
+                m_game->Init();
+                m_engineState = EngineState::Dynamics;
+                break;
             }
 
-            /* Render and present */
-            m_graphic->Render();
-            m_graphic->Present();
+            /* Update world */
+            case EngineState::Dynamics:
+            {
+                m_game->Update();
+                break;
+            }
         }
+
+        /* Render and present */
+        m_graphic->Render();
+        m_graphic->Present();
 	}
 }
 

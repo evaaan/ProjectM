@@ -32,7 +32,7 @@ public:
 	void Shutdown();
 
     // game state
-    bool isPaused;
+    bool isActive;
     bool hasStarted;
 
     /* Accessible by main window */

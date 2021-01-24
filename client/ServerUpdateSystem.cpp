@@ -50,8 +50,27 @@ void ServerUpdateSystem::update(double dt)
             // Get a pointer to the root object inside the buffer
             auto entity = GetEntityFbs(buffer_pointer);
 
-            // Access member variables
             auto id = entity->id();
+            auto components = entity->data_type();
+            auto num_components = components->size();
+
+            // Unpack components
+            for (int idx = 0; idx < num_components; idx++)
+            {
+                auto type = components->GetEnum<Data>(idx);
+
+                switch (type)
+                {
+                case Data_TransformFbs:
+
+                    break;
+
+                }
+
+
+            }
+
+            // Access member variables
             auto union_type = entity->data_type();
             if (union_type == Data_TransformFbs)
             {

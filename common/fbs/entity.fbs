@@ -34,9 +34,10 @@ table PlayerFbs {
   mana:short;
 }
 
+// Entity ID and vector of Components to update 
 table EntityFbs {
   id:int;
-  data:Data;  // Union
+  data:[Data];  // Vector of Unions
 }
 
 root_type EntityFbs;

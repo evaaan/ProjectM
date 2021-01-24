@@ -413,50 +413,23 @@ struct EntityFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   int32_t id() const {
     return GetField<int32_t>(VT_ID, 0);
   }
-  EntityBuffer::Data data_type() const {
-    return static_cast<EntityBuffer::Data>(GetField<uint8_t>(VT_DATA_TYPE, 0));
+  const flatbuffers::Vector<uint8_t> *data_type() const {
+    return GetPointer<const flatbuffers::Vector<uint8_t> *>(VT_DATA_TYPE);
   }
-  const void *data() const {
-    return GetPointer<const void *>(VT_DATA);
-  }
-  template<typename T> const T *data_as() const;
-  const EntityBuffer::TransformFbs *data_as_TransformFbs() const {
-    return data_type() == EntityBuffer::Data_TransformFbs ? static_cast<const EntityBuffer::TransformFbs *>(data()) : nullptr;
-  }
-  const EntityBuffer::DynamicFbs *data_as_DynamicFbs() const {
-    return data_type() == EntityBuffer::Data_DynamicFbs ? static_cast<const EntityBuffer::DynamicFbs *>(data()) : nullptr;
-  }
-  const EntityBuffer::InputFbs *data_as_InputFbs() const {
-    return data_type() == EntityBuffer::Data_InputFbs ? static_cast<const EntityBuffer::InputFbs *>(data()) : nullptr;
-  }
-  const EntityBuffer::PlayerFbs *data_as_PlayerFbs() const {
-    return data_type() == EntityBuffer::Data_PlayerFbs ? static_cast<const EntityBuffer::PlayerFbs *>(data()) : nullptr;
+  const flatbuffers::Vector<flatbuffers::Offset<void>> *data() const {
+    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<void>> *>(VT_DATA);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_ID) &&
-           VerifyField<uint8_t>(verifier, VT_DATA_TYPE) &&
+           VerifyOffset(verifier, VT_DATA_TYPE) &&
+           verifier.VerifyVector(data_type()) &&
            VerifyOffset(verifier, VT_DATA) &&
-           VerifyData(verifier, data(), data_type()) &&
+           verifier.VerifyVector(data()) &&
+           VerifyDataVector(verifier, data(), data_type()) &&
            verifier.EndTable();
   }
 };
-
-template<> inline const EntityBuffer::TransformFbs *EntityFbs::data_as<EntityBuffer::TransformFbs>() const {
-  return data_as_TransformFbs();
-}
-
-template<> inline const EntityBuffer::DynamicFbs *EntityFbs::data_as<EntityBuffer::DynamicFbs>() const {
-  return data_as_DynamicFbs();
-}
-
-template<> inline const EntityBuffer::InputFbs *EntityFbs::data_as<EntityBuffer::InputFbs>() const {
-  return data_as_InputFbs();
-}
-
-template<> inline const EntityBuffer::PlayerFbs *EntityFbs::data_as<EntityBuffer::PlayerFbs>() const {
-  return data_as_PlayerFbs();
-}
 
 struct EntityFbsBuilder {
   typedef EntityFbs Table;
@@ -465,10 +438,10 @@ struct EntityFbsBuilder {
   void add_id(int32_t id) {
     fbb_.AddElement<int32_t>(EntityFbs::VT_ID, id, 0);
   }
-  void add_data_type(EntityBuffer::Data data_type) {
-    fbb_.AddElement<uint8_t>(EntityFbs::VT_DATA_TYPE, static_cast<uint8_t>(data_type), 0);
+  void add_data_type(flatbuffers::Offset<flatbuffers::Vector<uint8_t>> data_type) {
+    fbb_.AddOffset(EntityFbs::VT_DATA_TYPE, data_type);
   }
-  void add_data(flatbuffers::Offset<void> data) {
+  void add_data(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<void>>> data) {
     fbb_.AddOffset(EntityFbs::VT_DATA, data);
   }
   explicit EntityFbsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
@@ -486,13 +459,27 @@ struct EntityFbsBuilder {
 inline flatbuffers::Offset<EntityFbs> CreateEntityFbs(
     flatbuffers::FlatBufferBuilder &_fbb,
     int32_t id = 0,
-    EntityBuffer::Data data_type = EntityBuffer::Data_NONE,
-    flatbuffers::Offset<void> data = 0) {
+    flatbuffers::Offset<flatbuffers::Vector<uint8_t>> data_type = 0,
+    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<void>>> data = 0) {
   EntityFbsBuilder builder_(_fbb);
   builder_.add_data(data);
-  builder_.add_id(id);
   builder_.add_data_type(data_type);
+  builder_.add_id(id);
   return builder_.Finish();
+}
+
+inline flatbuffers::Offset<EntityFbs> CreateEntityFbsDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    int32_t id = 0,
+    const std::vector<uint8_t> *data_type = nullptr,
+    const std::vector<flatbuffers::Offset<void>> *data = nullptr) {
+  auto data_type__ = data_type ? _fbb.CreateVector<uint8_t>(*data_type) : 0;
+  auto data__ = data ? _fbb.CreateVector<flatbuffers::Offset<void>>(*data) : 0;
+  return EntityBuffer::CreateEntityFbs(
+      _fbb,
+      id,
+      data_type__,
+      data__);
 }
 
 inline bool VerifyData(flatbuffers::Verifier &verifier, const void *obj, Data type) {

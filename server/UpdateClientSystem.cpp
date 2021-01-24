@@ -2,6 +2,7 @@
 #include <random>
 #include <stdexcept>
 #include <thread>
+#include <vector>
 #include <windows.h>
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
 
@@ -42,22 +43,34 @@ void UpdateClientSystem::update(double dt)
     UpdateAllClients();
 }
 
-
+/* Loop over player connections, package and send a message for each WorldDelta entity update */
 void UpdateClientSystem::UpdateAllClients()
 {
-    // Create a buffer
     flatbuffers::FlatBufferBuilder builder(1024);
+
+    // Components
     int x = 600;
     int y = 400;
     int width = 300;
     int height = 200;
-    auto transform = CreateTransformFbs(builder, x, y, width, height);  // Component
-    EntityFbsBuilder entity_builder(builder);
-    entity_builder.add_id(4); // entity id
-    entity_builder.add_data_type(Data_TransformFbs);
-    entity_builder.add_data(transform.Union());
-    auto entity = entity_builder.Finish();
-    builder.Finish(entity);
+    auto transform = CreateTransformFbs(builder, x, y, width, height);
+
+    // Example Vector of Union code: https://github.com/google/flatbuffers/blob/master/tests/test.cpp#L2651-L2674 
+    // union types
+    std::vector<uint8_t> types;
+    types.push_back(static_cast<uint8_t>(Data_TransformFbs));
+
+    // union values
+    std::vector<flatbuffers::Offset<void>> components;
+    components.push_back(transform.Union());
+
+    // create EntityFbs
+    int id = 4;
+    auto entity_offset = CreateEntityFbs(builder, id,
+                                  builder.CreateVector(types),
+                                  builder.CreateVector(components));
+
+    FinishEntityFbsBuffer(builder, entity_offset);
 
     uint8_t* buf = builder.GetBufferPointer();
     int buf_size = builder.GetSize();

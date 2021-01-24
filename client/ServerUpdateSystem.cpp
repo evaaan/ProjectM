@@ -50,42 +50,34 @@ void ServerUpdateSystem::update(double dt)
             // Get a pointer to the root object inside the buffer
             auto entity = GetEntityFbs(buffer_pointer);
 
+            // Get entity to update
             auto id = entity->id();
-            auto components = entity->data_type();
-            auto num_components = components->size();
 
-            // Unpack components
-            for (int idx = 0; idx < num_components; idx++)
+            // Unpack message components
+            auto cs = entity->data();        // components
+            auto cts = entity->data_type();  // component types
+            auto num_cts = cts->size();      // number of components
+
+            for (int idx = 0; idx < num_cts; idx++)
             {
-                auto type = components->GetEnum<Data>(idx);
-
+                auto type = cts->GetEnum<Data>(idx);
                 switch (type)
                 {
                 case Data_TransformFbs:
+                    auto transform = cs->GetAs<TransformFbs>(idx);
+                    auto x = transform->x();
+                    auto y = transform->y();
+                    auto width = transform->width();
+                    auto height = transform->height();
+                    odsloga("id: " << id << ", x: " << x << ", y: " << y << ", width: " << width << ", height: " << height << "\n");
 
+                    ComponentHandle<Dynamic> dynamic_component;
+                    Entity e;
+                    e.uuid = id;
+                    parentWorld->unpack(e, dynamic_component);
+                    dynamic_component->pos.y = y;
                     break;
-
                 }
-
-
-            }
-
-            // Access member variables
-            auto union_type = entity->data_type();
-            if (union_type == Data_TransformFbs)
-            {
-                auto transform = static_cast<const TransformFbs*>(entity->data());
-                auto x = transform->x();
-                auto y = transform->y();
-                auto width = transform->width();
-                auto height = transform->height();
-                odsloga("id: " << id << ", x: " << x << ", y: " << y << ", width: " << width << ", height: " << height << "\n");
-
-                ComponentHandle<Dynamic> dynamic_component;
-                Entity e;
-                e.uuid = id;
-                parentWorld->unpack(e, dynamic_component);
-                dynamic_component->pos.y = y;
             }
 
             pIncomingMsg[num]->Release();

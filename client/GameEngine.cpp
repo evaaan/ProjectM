@@ -13,7 +13,7 @@ GameEngine::GameEngine(HINSTANCE hInstance, HWND hWindow, std::shared_ptr<Timer>
     m_timer(timer),
 	m_engineState(EngineState::WaitingForResources),
     hasStarted(false),
-    isActive(false)
+    isActive(true)
 {
     m_graphic = std::make_unique<GraphicManager>(appWindow, m_timer);     // Graphics
     m_input = std::make_unique<InputManager>(m_timer, isActive);                    // Input

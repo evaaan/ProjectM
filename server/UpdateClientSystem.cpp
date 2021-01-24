@@ -67,8 +67,8 @@ void UpdateClientSystem::UpdateAllClients()
     // create EntityFbs
     int id = 4;
     auto entity_offset = CreateEntityFbs(builder, id,
-                                  builder.CreateVector(types),
-                                  builder.CreateVector(components));
+                                         builder.CreateVector(types),
+                                         builder.CreateVector(components));
 
     FinishEntityFbsBuffer(builder, entity_offset);
 

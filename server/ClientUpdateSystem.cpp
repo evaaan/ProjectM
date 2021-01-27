@@ -43,6 +43,7 @@ void ClientUpdateSystem::update(double dt)
     UpdateAllClients();
 }
 
+
 /* Loop over player connections, package and send a message for each WorldDelta entity update */
 void ClientUpdateSystem::UpdateAllClients()
 {

@@ -153,6 +153,7 @@
     <ClInclude Include="..\..\common\ComponentMask.h" />
     <ClInclude Include="..\..\common\Entity.h" />
     <ClInclude Include="..\..\common\EntityHandle.h" />
+    <ClInclude Include="..\..\common\fbs\entity_generated.h" />
     <ClInclude Include="..\..\common\KeyMap.h" />
     <ClInclude Include="..\..\common\System.h" />
     <ClInclude Include="..\..\common\TemplateSystem.h" />
@@ -225,6 +226,9 @@
   <ItemGroup>
     <Image Include="ClientVSProj.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\common\fbs\entity.fbs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

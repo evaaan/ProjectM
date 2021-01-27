@@ -7,7 +7,7 @@ struct Vec2{
 
 enum BodyType : byte { Player=0, Transparent, Ledge, Solid }
 
-union Data { TransformFbs, DynamicFbs, InputFbs, PlayerFbs}
+union Data { TransformFbs, DynamicFbs, KeyStateFbs, PlayerFbs, ConnectionFbs}
 
 table TransformFbs {
   x:int;
@@ -25,13 +25,18 @@ table DynamicFbs {
   accel:Vec2;
 }
 
-table InputFbs {
+table KeyStateFbs {
   bitset:uint64;
 }
 
 table PlayerFbs {
-  hp:short;
-  mana:short;
+  id:int;
+  owner:bool = false;
+}
+
+table ConnectionFbs {
+  id:int;
+  username:string;
 }
 
 // Entity ID and vector of Components to update 

@@ -19,6 +19,9 @@
     <Filter Include="lib/imgui/">
       <UniqueIdentifier>{68d0c853-e2fa-4173-8b58-7063b39ed956}</UniqueIdentifier>
     </Filter>
+    <Filter Include="common/fbs/">
+      <UniqueIdentifier>{af6b9fb5-0624-4bd0-9fb8-15666b3ba0ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -138,6 +141,9 @@
     <ClInclude Include="..\ServerUpdateSystem.h">
       <Filter>client/</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\common\fbs\entity_generated.h">
+      <Filter>common/fbs/</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Animation.cpp">
@@ -243,5 +249,10 @@
     <Image Include="ClientVSProj.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\common\fbs\entity.fbs">
+      <Filter>common/fbs/</Filter>
+    </None>
   </ItemGroup>
 </Project>

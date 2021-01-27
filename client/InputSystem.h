@@ -3,6 +3,9 @@
 // Forward declarations
 class System;
 class InputManager;
+struct KeyState;
+template <typename T>
+struct ComponentHandle;
 
 class InputSystem : public System {
 public:

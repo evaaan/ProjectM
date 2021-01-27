@@ -1,4 +1,4 @@
-
+#include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
 #include "World.h"
 #include "InputManager.h"
 #include "System.h"
@@ -6,6 +6,8 @@
 #include "Entity.h"
 #include "KeyMap.h"
 #include "fbs/entity_generated.h"
+
+using namespace EntityBuffer;  // FlatBuffer
 
 /* Poll keyboard state and send to server */
 InputSystem::InputSystem(InputManager* inputManager) : m_inputManager(inputManager)
@@ -53,7 +55,11 @@ void InputSystem::pollKeys()
 
 void InputSystem::sendKeyStateToServer()
 {
+    flatbuffers::FlatBufferBuilder builder(1024);
+    uint64_t keys = keyState->keyDownState.to_ullong();
+    auto keyState = CreateKeyStateFbs(builder, keys);
 
+    // Need to know my own ID
 }
 
 void InputSystem::render() {}

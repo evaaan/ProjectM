@@ -22,6 +22,11 @@ struct EntityHandle
 
     EntityHandle(Entity e, std::shared_ptr<World> w) : entity(e), world(w) {};
 
+    int id()
+    {
+        return entity.uuid;
+    }
+
     void destroy()
     {
         world->destroyEntity(entity);

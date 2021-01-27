@@ -16,11 +16,14 @@ struct TransformFbsBuilder;
 struct DynamicFbs;
 struct DynamicFbsBuilder;
 
-struct InputFbs;
-struct InputFbsBuilder;
+struct KeyStateFbs;
+struct KeyStateFbsBuilder;
 
 struct PlayerFbs;
 struct PlayerFbsBuilder;
+
+struct ConnectionFbs;
+struct ConnectionFbsBuilder;
 
 struct EntityFbs;
 struct EntityFbsBuilder;
@@ -65,37 +68,40 @@ enum Data {
   Data_NONE = 0,
   Data_TransformFbs = 1,
   Data_DynamicFbs = 2,
-  Data_InputFbs = 3,
+  Data_KeyStateFbs = 3,
   Data_PlayerFbs = 4,
+  Data_ConnectionFbs = 5,
   Data_MIN = Data_NONE,
-  Data_MAX = Data_PlayerFbs
+  Data_MAX = Data_ConnectionFbs
 };
 
-inline const Data (&EnumValuesData())[5] {
+inline const Data (&EnumValuesData())[6] {
   static const Data values[] = {
     Data_NONE,
     Data_TransformFbs,
     Data_DynamicFbs,
-    Data_InputFbs,
-    Data_PlayerFbs
+    Data_KeyStateFbs,
+    Data_PlayerFbs,
+    Data_ConnectionFbs
   };
   return values;
 }
 
 inline const char * const *EnumNamesData() {
-  static const char * const names[6] = {
+  static const char * const names[7] = {
     "NONE",
     "TransformFbs",
     "DynamicFbs",
-    "InputFbs",
+    "KeyStateFbs",
     "PlayerFbs",
+    "ConnectionFbs",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameData(Data e) {
-  if (flatbuffers::IsOutRange(e, Data_NONE, Data_PlayerFbs)) return "";
+  if (flatbuffers::IsOutRange(e, Data_NONE, Data_ConnectionFbs)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesData()[index];
 }
@@ -112,12 +118,16 @@ template<> struct DataTraits<EntityBuffer::DynamicFbs> {
   static const Data enum_value = Data_DynamicFbs;
 };
 
-template<> struct DataTraits<EntityBuffer::InputFbs> {
-  static const Data enum_value = Data_InputFbs;
+template<> struct DataTraits<EntityBuffer::KeyStateFbs> {
+  static const Data enum_value = Data_KeyStateFbs;
 };
 
 template<> struct DataTraits<EntityBuffer::PlayerFbs> {
   static const Data enum_value = Data_PlayerFbs;
+};
+
+template<> struct DataTraits<EntityBuffer::ConnectionFbs> {
+  static const Data enum_value = Data_ConnectionFbs;
 };
 
 bool VerifyData(flatbuffers::Verifier &verifier, const void *obj, Data type);
@@ -309,8 +319,8 @@ inline flatbuffers::Offset<DynamicFbs> CreateDynamicFbs(
   return builder_.Finish();
 }
 
-struct InputFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef InputFbsBuilder Builder;
+struct KeyStateFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef KeyStateFbsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_BITSET = 4
   };
@@ -324,29 +334,29 @@ struct InputFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
 };
 
-struct InputFbsBuilder {
-  typedef InputFbs Table;
+struct KeyStateFbsBuilder {
+  typedef KeyStateFbs Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_bitset(uint64_t bitset) {
-    fbb_.AddElement<uint64_t>(InputFbs::VT_BITSET, bitset, 0);
+    fbb_.AddElement<uint64_t>(KeyStateFbs::VT_BITSET, bitset, 0);
   }
-  explicit InputFbsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit KeyStateFbsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  InputFbsBuilder &operator=(const InputFbsBuilder &);
-  flatbuffers::Offset<InputFbs> Finish() {
+  KeyStateFbsBuilder &operator=(const KeyStateFbsBuilder &);
+  flatbuffers::Offset<KeyStateFbs> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<InputFbs>(end);
+    auto o = flatbuffers::Offset<KeyStateFbs>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<InputFbs> CreateInputFbs(
+inline flatbuffers::Offset<KeyStateFbs> CreateKeyStateFbs(
     flatbuffers::FlatBufferBuilder &_fbb,
     uint64_t bitset = 0) {
-  InputFbsBuilder builder_(_fbb);
+  KeyStateFbsBuilder builder_(_fbb);
   builder_.add_bitset(bitset);
   return builder_.Finish();
 }
@@ -354,19 +364,19 @@ inline flatbuffers::Offset<InputFbs> CreateInputFbs(
 struct PlayerFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   typedef PlayerFbsBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_HP = 4,
-    VT_MANA = 6
+    VT_ID = 4,
+    VT_OWNER = 6
   };
-  int16_t hp() const {
-    return GetField<int16_t>(VT_HP, 0);
+  int32_t id() const {
+    return GetField<int32_t>(VT_ID, 0);
   }
-  int16_t mana() const {
-    return GetField<int16_t>(VT_MANA, 0);
+  bool owner() const {
+    return GetField<uint8_t>(VT_OWNER, 0) != 0;
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyField<int16_t>(verifier, VT_HP) &&
-           VerifyField<int16_t>(verifier, VT_MANA) &&
+           VerifyField<int32_t>(verifier, VT_ID) &&
+           VerifyField<uint8_t>(verifier, VT_OWNER) &&
            verifier.EndTable();
   }
 };
@@ -375,11 +385,11 @@ struct PlayerFbsBuilder {
   typedef PlayerFbs Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_hp(int16_t hp) {
-    fbb_.AddElement<int16_t>(PlayerFbs::VT_HP, hp, 0);
+  void add_id(int32_t id) {
+    fbb_.AddElement<int32_t>(PlayerFbs::VT_ID, id, 0);
   }
-  void add_mana(int16_t mana) {
-    fbb_.AddElement<int16_t>(PlayerFbs::VT_MANA, mana, 0);
+  void add_owner(bool owner) {
+    fbb_.AddElement<uint8_t>(PlayerFbs::VT_OWNER, static_cast<uint8_t>(owner), 0);
   }
   explicit PlayerFbsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
@@ -395,12 +405,76 @@ struct PlayerFbsBuilder {
 
 inline flatbuffers::Offset<PlayerFbs> CreatePlayerFbs(
     flatbuffers::FlatBufferBuilder &_fbb,
-    int16_t hp = 0,
-    int16_t mana = 0) {
+    int32_t id = 0,
+    bool owner = false) {
   PlayerFbsBuilder builder_(_fbb);
-  builder_.add_mana(mana);
-  builder_.add_hp(hp);
+  builder_.add_id(id);
+  builder_.add_owner(owner);
   return builder_.Finish();
+}
+
+struct ConnectionFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef ConnectionFbsBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_ID = 4,
+    VT_USERNAME = 6
+  };
+  int32_t id() const {
+    return GetField<int32_t>(VT_ID, 0);
+  }
+  const flatbuffers::String *username() const {
+    return GetPointer<const flatbuffers::String *>(VT_USERNAME);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<int32_t>(verifier, VT_ID) &&
+           VerifyOffset(verifier, VT_USERNAME) &&
+           verifier.VerifyString(username()) &&
+           verifier.EndTable();
+  }
+};
+
+struct ConnectionFbsBuilder {
+  typedef ConnectionFbs Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_id(int32_t id) {
+    fbb_.AddElement<int32_t>(ConnectionFbs::VT_ID, id, 0);
+  }
+  void add_username(flatbuffers::Offset<flatbuffers::String> username) {
+    fbb_.AddOffset(ConnectionFbs::VT_USERNAME, username);
+  }
+  explicit ConnectionFbsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ConnectionFbsBuilder &operator=(const ConnectionFbsBuilder &);
+  flatbuffers::Offset<ConnectionFbs> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<ConnectionFbs>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<ConnectionFbs> CreateConnectionFbs(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    int32_t id = 0,
+    flatbuffers::Offset<flatbuffers::String> username = 0) {
+  ConnectionFbsBuilder builder_(_fbb);
+  builder_.add_username(username);
+  builder_.add_id(id);
+  return builder_.Finish();
+}
+
+inline flatbuffers::Offset<ConnectionFbs> CreateConnectionFbsDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    int32_t id = 0,
+    const char *username = nullptr) {
+  auto username__ = username ? _fbb.CreateString(username) : 0;
+  return EntityBuffer::CreateConnectionFbs(
+      _fbb,
+      id,
+      username__);
 }
 
 struct EntityFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
@@ -495,12 +569,16 @@ inline bool VerifyData(flatbuffers::Verifier &verifier, const void *obj, Data ty
       auto ptr = reinterpret_cast<const EntityBuffer::DynamicFbs *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case Data_InputFbs: {
-      auto ptr = reinterpret_cast<const EntityBuffer::InputFbs *>(obj);
+    case Data_KeyStateFbs: {
+      auto ptr = reinterpret_cast<const EntityBuffer::KeyStateFbs *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case Data_PlayerFbs: {
       auto ptr = reinterpret_cast<const EntityBuffer::PlayerFbs *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case Data_ConnectionFbs: {
+      auto ptr = reinterpret_cast<const EntityBuffer::ConnectionFbs *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

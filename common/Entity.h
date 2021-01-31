@@ -22,7 +22,7 @@ inline bool operator == (const Entity& a, const Entity& b)
 class EntityManager
 {
 public:
-    EntityManager();
+    EntityManager(bool client=false);
     ~EntityManager();
     Entity create();
     Entity create(int uuid);
@@ -30,4 +30,5 @@ public:
 
 private:
     int lastEntity = 0;
+    bool isClient = false;
 };

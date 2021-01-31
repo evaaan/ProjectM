@@ -1,7 +1,12 @@
 #include <memory>
 #include "Entity.h"
 
-EntityManager::EntityManager() {}
+EntityManager::EntityManager(bool client) : isClient(client)
+{
+    // Prevent uuid conflicts between Client and Server
+    if (isClient)
+        lastEntity = 1 << 30;
+}
 
 EntityManager::~EntityManager() {}
 

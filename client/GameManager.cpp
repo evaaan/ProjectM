@@ -27,7 +27,7 @@ GameManager::~GameManager() {}
 void GameManager::Init()
 {
     // World
-    std::unique_ptr<EntityManager> em = std::make_unique<EntityManager>();
+    std::unique_ptr<EntityManager> em = std::make_unique<EntityManager>(true);
     m_world = std::make_shared<World>(std::move(em));  // Systems must have shared ownership of the World
 
     /* Add game systems */

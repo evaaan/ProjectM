@@ -279,7 +279,7 @@ void ClientConnectSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCall
         server->m_pInterface->SetConnectionName(pInfo->m_hConn, nick);
         odslog("New user connected: " << nick << "\n");
 
-        // Create an entity and tell the client about it
+        // Create an entity and send it to the client. or should we send uuid?
         auto new_entity = parentWorld->createEntity();
         auto id = new_entity.id();
         flatbuffers::FlatBufferBuilder builder(1024);

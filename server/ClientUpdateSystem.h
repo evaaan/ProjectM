@@ -3,6 +3,7 @@
 // Forward declarations
 class System;
 struct ServerSocketSingleton;
+struct WorldDeltaSingleton;
 template <typename T>
 struct ComponentHandle;
 
@@ -15,8 +16,10 @@ public:
 
 private:
     void UpdateAllClients();
-
+    void sendWorldUpdate();
+    void sendPlayerUpdates();
 
     ComponentHandle<ServerSocketSingleton> server;
+    ComponentHandle<WorldDeltaSingleton> worldDelta;
 
 };

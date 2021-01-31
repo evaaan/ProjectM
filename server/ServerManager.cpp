@@ -82,6 +82,7 @@ void ServerManager::AddEntities()
 {
     m_world->createEntity().addSingletonComponent(CollisionSingleton()); // Collision Data
     m_world->createEntity().addSingletonComponent(ServerSocketSingleton());  // Server Connection Data
+    m_world->createEntity().addSingletonComponent(WorldDeltaSingleton());  // Entity update data
 }
 
 long numFrames = 0;

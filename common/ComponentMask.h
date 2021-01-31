@@ -2,7 +2,8 @@
 #include "Component.h"
 
 /* ComponentMask is used by Systems to identify the tuple of Components
-* to iterate over. */
+* to iterate over, and by ClientUpdateSystem to track which Components
+ need to be broadcasted to clients. */
 
 struct ComponentMask
 {
@@ -38,6 +39,12 @@ struct ComponentMask
     bool matches(ComponentMask systemMask)
     {
         return ((mask & systemMask.mask) == systemMask.mask);
+    }
+
+    /* Reset the mask */
+    void reset()
+    {
+        mask = 0;
     }
 
 

@@ -26,6 +26,8 @@
 // Forward declarations
 class Direct2D;
 class SpriteSheet;
+struct Entity;
+struct ComponentMask;
 enum class Color;
 
 /* familyCounter tracks the ComponentManager the Component is assigned to.*/
@@ -179,5 +181,5 @@ struct PlayerDelta
 /* List of entities to update for ALL players */
 struct WorldDeltaSingleton
 {
-
+    std::map<Entity, ComponentMask> state;
 };

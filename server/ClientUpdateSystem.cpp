@@ -13,8 +13,8 @@
 #include "ClientUpdateSystem.h"
 #include "Utilities.h"
 
-using namespace EntityBuffer;  // FlatBuffer
 
+/* Convert uint32_t to a vector of set bit indices. */
 std::vector<int> uint_to_vec(unsigned int val)
 {
     std::vector<int> result;
@@ -65,7 +65,6 @@ void ClientUpdateSystem::init()
 /* Poll new connections and broadcast units to users */
 void ClientUpdateSystem::update(double dt)
 {
-    UpdateAllClients();
     sendWorldUpdate();
     sendPlayerUpdates();
 }
@@ -76,7 +75,8 @@ void ClientUpdateSystem::sendPlayerUpdates()
     // not implemented
 }
 
-/* Send all clients an update with the Entity data that changed this tick */
+/*Send all clients an update with the Entity data that changed this tick
+* Example Vector of Union code: https://github.com/google/flatbuffers/blob/master/tests/test.cpp#L2651-L2674 */
 void ClientUpdateSystem::sendWorldUpdate()
 {
     /*For every Entity that changed this tick (state->ComponentMask > 0),
@@ -88,38 +88,41 @@ void ClientUpdateSystem::sendWorldUpdate()
     std::vector<uint8_t> types;
     std::vector<flatbuffers::Offset<void>> components;
 
-    for (auto const& [entity, cm] : worldDelta->state)
+    for (auto& [id, componentMask] : worldDelta->state)
     {
-        int id = entity.uuid;
-        unsigned int mask = cm.mask;
+        unsigned int mask = componentMask.mask;
 
-        // Create an EntityFbs FlatBuffer with all components found in mask
-        // I have a uint32 0b0110. Player=2, Transform=3, so make those components.
+        // Skip if there are no Entity updates to send
+        if (mask == 0)
+            break;
+
+        // Get components set in the worldDelta update
         std::vector<int> families = uint_to_vec(mask);
 
-        for (auto const& family : families)
+        // For each component, create another FlatBuffer table
+        for (auto& family : families)
         {
             if (family == GetComponentFamily<Transform>())
             {
+                ComponentHandle<Transform> c;
+                parentWorld->unpack({ id }, c);
+                auto transform = EntityBuffer::CreateTransform(builder, c->x, c->y, c->width, c->height);
 
+                // Push back Component type and data to Union vector
+                types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Transform));
+                components.push_back(transform.Union());
             }
             else if (family == GetComponentFamily<Dynamic>())
             {
             }
         }
-
-        // Get all Component types from unint32 mask
-
-        // for each Component type, create a table and push it back
-
-
         // Create entity table and get offset
-        auto entity_offset = CreateEntityFbs(builder, id,
-            builder.CreateVector(types),
-            builder.CreateVector(components));
+        auto entity_offset = EntityBuffer::CreateEntity(builder, id,
+                                                        builder.CreateVector(types),
+                                                        builder.CreateVector(components));
 
         // Finish the buffer
-        FinishEntityFbsBuffer(builder, entity_offset);
+        EntityBuffer::FinishEntityBuffer(builder, entity_offset);
 
         // Get pointer and size
         uint8_t* buf = builder.GetBufferPointer();
@@ -135,44 +138,7 @@ void ClientUpdateSystem::sendWorldUpdate()
         builder.Clear();
         types.clear();
         components.clear();
-    }
-}
-
-/* Loop over player connections, package and send a message for each WorldDelta entity update */
-void ClientUpdateSystem::UpdateAllClients()
-{
-    flatbuffers::FlatBufferBuilder builder(1024);
-
-    // Components
-    int x = 600;
-    int y = 400;
-    int width = 300;
-    int height = 200;
-    auto transform = CreateTransformFbs(builder, x, y, width, height);
-
-    // Example Vector of Union code: https://github.com/google/flatbuffers/blob/master/tests/test.cpp#L2651-L2674 
-    // union types
-    std::vector<uint8_t> types;
-    types.push_back(static_cast<uint8_t>(Data_TransformFbs));
-
-    // union values
-    std::vector<flatbuffers::Offset<void>> components;
-    components.push_back(transform.Union());
-
-    // create EntityFbs
-    int id = 4;
-    auto entity_offset = CreateEntityFbs(builder, id,
-                                         builder.CreateVector(types),
-                                         builder.CreateVector(components));
-
-    FinishEntityFbsBuffer(builder, entity_offset);
-
-    uint8_t* buf = builder.GetBufferPointer();
-    int buf_size = builder.GetSize();
-
-    for (auto const& [hConn, uuid] : server->m_uuidMap)
-    {
-        server->m_pInterface->SendMessageToConnection(hConn, buf, buf_size, k_nSteamNetworkingSend_Reliable, nullptr);
+        // componentMask.clear();
     }
 }
 

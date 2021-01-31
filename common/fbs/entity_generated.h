@@ -10,23 +10,23 @@ namespace EntityBuffer {
 
 struct Vec2;
 
-struct TransformFbs;
-struct TransformFbsBuilder;
+struct Transform;
+struct TransformBuilder;
 
-struct DynamicFbs;
-struct DynamicFbsBuilder;
+struct Dynamic;
+struct DynamicBuilder;
 
-struct KeyStateFbs;
-struct KeyStateFbsBuilder;
+struct KeyState;
+struct KeyStateBuilder;
 
-struct PlayerFbs;
-struct PlayerFbsBuilder;
+struct Player;
+struct PlayerBuilder;
 
-struct ConnectionFbs;
-struct ConnectionFbsBuilder;
+struct Connection;
+struct ConnectionBuilder;
 
-struct EntityFbs;
-struct EntityFbsBuilder;
+struct Entity;
+struct EntityBuilder;
 
 enum BodyType {
   BodyType_Player = 0,
@@ -64,74 +64,74 @@ inline const char *EnumNameBodyType(BodyType e) {
   return EnumNamesBodyType()[index];
 }
 
-enum Data {
-  Data_NONE = 0,
-  Data_TransformFbs = 1,
-  Data_DynamicFbs = 2,
-  Data_KeyStateFbs = 3,
-  Data_PlayerFbs = 4,
-  Data_ConnectionFbs = 5,
-  Data_MIN = Data_NONE,
-  Data_MAX = Data_ConnectionFbs
+enum Component {
+  Component_NONE = 0,
+  Component_Transform = 1,
+  Component_Dynamic = 2,
+  Component_KeyState = 3,
+  Component_Player = 4,
+  Component_Connection = 5,
+  Component_MIN = Component_NONE,
+  Component_MAX = Component_Connection
 };
 
-inline const Data (&EnumValuesData())[6] {
-  static const Data values[] = {
-    Data_NONE,
-    Data_TransformFbs,
-    Data_DynamicFbs,
-    Data_KeyStateFbs,
-    Data_PlayerFbs,
-    Data_ConnectionFbs
+inline const Component (&EnumValuesComponent())[6] {
+  static const Component values[] = {
+    Component_NONE,
+    Component_Transform,
+    Component_Dynamic,
+    Component_KeyState,
+    Component_Player,
+    Component_Connection
   };
   return values;
 }
 
-inline const char * const *EnumNamesData() {
+inline const char * const *EnumNamesComponent() {
   static const char * const names[7] = {
     "NONE",
-    "TransformFbs",
-    "DynamicFbs",
-    "KeyStateFbs",
-    "PlayerFbs",
-    "ConnectionFbs",
+    "Transform",
+    "Dynamic",
+    "KeyState",
+    "Player",
+    "Connection",
     nullptr
   };
   return names;
 }
 
-inline const char *EnumNameData(Data e) {
-  if (flatbuffers::IsOutRange(e, Data_NONE, Data_ConnectionFbs)) return "";
+inline const char *EnumNameComponent(Component e) {
+  if (flatbuffers::IsOutRange(e, Component_NONE, Component_Connection)) return "";
   const size_t index = static_cast<size_t>(e);
-  return EnumNamesData()[index];
+  return EnumNamesComponent()[index];
 }
 
-template<typename T> struct DataTraits {
-  static const Data enum_value = Data_NONE;
+template<typename T> struct ComponentTraits {
+  static const Component enum_value = Component_NONE;
 };
 
-template<> struct DataTraits<EntityBuffer::TransformFbs> {
-  static const Data enum_value = Data_TransformFbs;
+template<> struct ComponentTraits<EntityBuffer::Transform> {
+  static const Component enum_value = Component_Transform;
 };
 
-template<> struct DataTraits<EntityBuffer::DynamicFbs> {
-  static const Data enum_value = Data_DynamicFbs;
+template<> struct ComponentTraits<EntityBuffer::Dynamic> {
+  static const Component enum_value = Component_Dynamic;
 };
 
-template<> struct DataTraits<EntityBuffer::KeyStateFbs> {
-  static const Data enum_value = Data_KeyStateFbs;
+template<> struct ComponentTraits<EntityBuffer::KeyState> {
+  static const Component enum_value = Component_KeyState;
 };
 
-template<> struct DataTraits<EntityBuffer::PlayerFbs> {
-  static const Data enum_value = Data_PlayerFbs;
+template<> struct ComponentTraits<EntityBuffer::Player> {
+  static const Component enum_value = Component_Player;
 };
 
-template<> struct DataTraits<EntityBuffer::ConnectionFbs> {
-  static const Data enum_value = Data_ConnectionFbs;
+template<> struct ComponentTraits<EntityBuffer::Connection> {
+  static const Component enum_value = Component_Connection;
 };
 
-bool VerifyData(flatbuffers::Verifier &verifier, const void *obj, Data type);
-bool VerifyDataVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
+bool VerifyComponent(flatbuffers::Verifier &verifier, const void *obj, Component type);
+bool VerifyComponentVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types);
 
 FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) Vec2 FLATBUFFERS_FINAL_CLASS {
  private:
@@ -155,8 +155,8 @@ FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) Vec2 FLATBUFFERS_FINAL_CLASS {
 };
 FLATBUFFERS_STRUCT_END(Vec2, 8);
 
-struct TransformFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef TransformFbsBuilder Builder;
+struct Transform FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef TransformBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_X = 4,
     VT_Y = 6,
@@ -185,41 +185,41 @@ struct TransformFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
 };
 
-struct TransformFbsBuilder {
-  typedef TransformFbs Table;
+struct TransformBuilder {
+  typedef Transform Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_x(int32_t x) {
-    fbb_.AddElement<int32_t>(TransformFbs::VT_X, x, 0);
+    fbb_.AddElement<int32_t>(Transform::VT_X, x, 0);
   }
   void add_y(int32_t y) {
-    fbb_.AddElement<int32_t>(TransformFbs::VT_Y, y, 0);
+    fbb_.AddElement<int32_t>(Transform::VT_Y, y, 0);
   }
   void add_width(int32_t width) {
-    fbb_.AddElement<int32_t>(TransformFbs::VT_WIDTH, width, 0);
+    fbb_.AddElement<int32_t>(Transform::VT_WIDTH, width, 0);
   }
   void add_height(int32_t height) {
-    fbb_.AddElement<int32_t>(TransformFbs::VT_HEIGHT, height, 0);
+    fbb_.AddElement<int32_t>(Transform::VT_HEIGHT, height, 0);
   }
-  explicit TransformFbsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit TransformBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  TransformFbsBuilder &operator=(const TransformFbsBuilder &);
-  flatbuffers::Offset<TransformFbs> Finish() {
+  TransformBuilder &operator=(const TransformBuilder &);
+  flatbuffers::Offset<Transform> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<TransformFbs>(end);
+    auto o = flatbuffers::Offset<Transform>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<TransformFbs> CreateTransformFbs(
+inline flatbuffers::Offset<Transform> CreateTransform(
     flatbuffers::FlatBufferBuilder &_fbb,
     int32_t x = 0,
     int32_t y = 0,
     int32_t width = 0,
     int32_t height = 0) {
-  TransformFbsBuilder builder_(_fbb);
+  TransformBuilder builder_(_fbb);
   builder_.add_height(height);
   builder_.add_width(width);
   builder_.add_y(y);
@@ -227,8 +227,8 @@ inline flatbuffers::Offset<TransformFbs> CreateTransformFbs(
   return builder_.Finish();
 }
 
-struct DynamicFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef DynamicFbsBuilder Builder;
+struct Dynamic FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef DynamicBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDTH = 4,
     VT_HEIGHT = 6,
@@ -267,41 +267,41 @@ struct DynamicFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
 };
 
-struct DynamicFbsBuilder {
-  typedef DynamicFbs Table;
+struct DynamicBuilder {
+  typedef Dynamic Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_width(float width) {
-    fbb_.AddElement<float>(DynamicFbs::VT_WIDTH, width, 0.0f);
+    fbb_.AddElement<float>(Dynamic::VT_WIDTH, width, 0.0f);
   }
   void add_height(float height) {
-    fbb_.AddElement<float>(DynamicFbs::VT_HEIGHT, height, 0.0f);
+    fbb_.AddElement<float>(Dynamic::VT_HEIGHT, height, 0.0f);
   }
   void add_pos(const EntityBuffer::Vec2 *pos) {
-    fbb_.AddStruct(DynamicFbs::VT_POS, pos);
+    fbb_.AddStruct(Dynamic::VT_POS, pos);
   }
   void add_prev_pos(const EntityBuffer::Vec2 *prev_pos) {
-    fbb_.AddStruct(DynamicFbs::VT_PREV_POS, prev_pos);
+    fbb_.AddStruct(Dynamic::VT_PREV_POS, prev_pos);
   }
   void add_vel(const EntityBuffer::Vec2 *vel) {
-    fbb_.AddStruct(DynamicFbs::VT_VEL, vel);
+    fbb_.AddStruct(Dynamic::VT_VEL, vel);
   }
   void add_accel(const EntityBuffer::Vec2 *accel) {
-    fbb_.AddStruct(DynamicFbs::VT_ACCEL, accel);
+    fbb_.AddStruct(Dynamic::VT_ACCEL, accel);
   }
-  explicit DynamicFbsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit DynamicBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  DynamicFbsBuilder &operator=(const DynamicFbsBuilder &);
-  flatbuffers::Offset<DynamicFbs> Finish() {
+  DynamicBuilder &operator=(const DynamicBuilder &);
+  flatbuffers::Offset<Dynamic> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<DynamicFbs>(end);
+    auto o = flatbuffers::Offset<Dynamic>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<DynamicFbs> CreateDynamicFbs(
+inline flatbuffers::Offset<Dynamic> CreateDynamic(
     flatbuffers::FlatBufferBuilder &_fbb,
     float width = 0.0f,
     float height = 0.0f,
@@ -309,7 +309,7 @@ inline flatbuffers::Offset<DynamicFbs> CreateDynamicFbs(
     const EntityBuffer::Vec2 *prev_pos = 0,
     const EntityBuffer::Vec2 *vel = 0,
     const EntityBuffer::Vec2 *accel = 0) {
-  DynamicFbsBuilder builder_(_fbb);
+  DynamicBuilder builder_(_fbb);
   builder_.add_accel(accel);
   builder_.add_vel(vel);
   builder_.add_prev_pos(prev_pos);
@@ -319,8 +319,8 @@ inline flatbuffers::Offset<DynamicFbs> CreateDynamicFbs(
   return builder_.Finish();
 }
 
-struct KeyStateFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef KeyStateFbsBuilder Builder;
+struct KeyState FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef KeyStateBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_BITSET = 4
   };
@@ -334,35 +334,35 @@ struct KeyStateFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
 };
 
-struct KeyStateFbsBuilder {
-  typedef KeyStateFbs Table;
+struct KeyStateBuilder {
+  typedef KeyState Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_bitset(uint64_t bitset) {
-    fbb_.AddElement<uint64_t>(KeyStateFbs::VT_BITSET, bitset, 0);
+    fbb_.AddElement<uint64_t>(KeyState::VT_BITSET, bitset, 0);
   }
-  explicit KeyStateFbsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit KeyStateBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  KeyStateFbsBuilder &operator=(const KeyStateFbsBuilder &);
-  flatbuffers::Offset<KeyStateFbs> Finish() {
+  KeyStateBuilder &operator=(const KeyStateBuilder &);
+  flatbuffers::Offset<KeyState> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<KeyStateFbs>(end);
+    auto o = flatbuffers::Offset<KeyState>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<KeyStateFbs> CreateKeyStateFbs(
+inline flatbuffers::Offset<KeyState> CreateKeyState(
     flatbuffers::FlatBufferBuilder &_fbb,
     uint64_t bitset = 0) {
-  KeyStateFbsBuilder builder_(_fbb);
+  KeyStateBuilder builder_(_fbb);
   builder_.add_bitset(bitset);
   return builder_.Finish();
 }
 
-struct PlayerFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef PlayerFbsBuilder Builder;
+struct Player FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef PlayerBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_ID = 4,
     VT_OWNER = 6
@@ -381,40 +381,40 @@ struct PlayerFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
 };
 
-struct PlayerFbsBuilder {
-  typedef PlayerFbs Table;
+struct PlayerBuilder {
+  typedef Player Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_id(int32_t id) {
-    fbb_.AddElement<int32_t>(PlayerFbs::VT_ID, id, 0);
+    fbb_.AddElement<int32_t>(Player::VT_ID, id, 0);
   }
   void add_owner(bool owner) {
-    fbb_.AddElement<uint8_t>(PlayerFbs::VT_OWNER, static_cast<uint8_t>(owner), 0);
+    fbb_.AddElement<uint8_t>(Player::VT_OWNER, static_cast<uint8_t>(owner), 0);
   }
-  explicit PlayerFbsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit PlayerBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  PlayerFbsBuilder &operator=(const PlayerFbsBuilder &);
-  flatbuffers::Offset<PlayerFbs> Finish() {
+  PlayerBuilder &operator=(const PlayerBuilder &);
+  flatbuffers::Offset<Player> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<PlayerFbs>(end);
+    auto o = flatbuffers::Offset<Player>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<PlayerFbs> CreatePlayerFbs(
+inline flatbuffers::Offset<Player> CreatePlayer(
     flatbuffers::FlatBufferBuilder &_fbb,
     int32_t id = 0,
     bool owner = false) {
-  PlayerFbsBuilder builder_(_fbb);
+  PlayerBuilder builder_(_fbb);
   builder_.add_id(id);
   builder_.add_owner(owner);
   return builder_.Finish();
 }
 
-struct ConnectionFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef ConnectionFbsBuilder Builder;
+struct Connection FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef ConnectionBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_ID = 4,
     VT_USERNAME = 6
@@ -434,196 +434,196 @@ struct ConnectionFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
 };
 
-struct ConnectionFbsBuilder {
-  typedef ConnectionFbs Table;
+struct ConnectionBuilder {
+  typedef Connection Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_id(int32_t id) {
-    fbb_.AddElement<int32_t>(ConnectionFbs::VT_ID, id, 0);
+    fbb_.AddElement<int32_t>(Connection::VT_ID, id, 0);
   }
   void add_username(flatbuffers::Offset<flatbuffers::String> username) {
-    fbb_.AddOffset(ConnectionFbs::VT_USERNAME, username);
+    fbb_.AddOffset(Connection::VT_USERNAME, username);
   }
-  explicit ConnectionFbsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit ConnectionBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ConnectionFbsBuilder &operator=(const ConnectionFbsBuilder &);
-  flatbuffers::Offset<ConnectionFbs> Finish() {
+  ConnectionBuilder &operator=(const ConnectionBuilder &);
+  flatbuffers::Offset<Connection> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<ConnectionFbs>(end);
+    auto o = flatbuffers::Offset<Connection>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<ConnectionFbs> CreateConnectionFbs(
+inline flatbuffers::Offset<Connection> CreateConnection(
     flatbuffers::FlatBufferBuilder &_fbb,
     int32_t id = 0,
     flatbuffers::Offset<flatbuffers::String> username = 0) {
-  ConnectionFbsBuilder builder_(_fbb);
+  ConnectionBuilder builder_(_fbb);
   builder_.add_username(username);
   builder_.add_id(id);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<ConnectionFbs> CreateConnectionFbsDirect(
+inline flatbuffers::Offset<Connection> CreateConnectionDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     int32_t id = 0,
     const char *username = nullptr) {
   auto username__ = username ? _fbb.CreateString(username) : 0;
-  return EntityBuffer::CreateConnectionFbs(
+  return EntityBuffer::CreateConnection(
       _fbb,
       id,
       username__);
 }
 
-struct EntityFbs FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef EntityFbsBuilder Builder;
+struct Entity FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef EntityBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_ID = 4,
-    VT_DATA_TYPE = 6,
-    VT_DATA = 8
+    VT_COMPONENT_TYPE = 6,
+    VT_COMPONENT = 8
   };
   int32_t id() const {
     return GetField<int32_t>(VT_ID, 0);
   }
-  const flatbuffers::Vector<uint8_t> *data_type() const {
-    return GetPointer<const flatbuffers::Vector<uint8_t> *>(VT_DATA_TYPE);
+  const flatbuffers::Vector<uint8_t> *component_type() const {
+    return GetPointer<const flatbuffers::Vector<uint8_t> *>(VT_COMPONENT_TYPE);
   }
-  const flatbuffers::Vector<flatbuffers::Offset<void>> *data() const {
-    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<void>> *>(VT_DATA);
+  const flatbuffers::Vector<flatbuffers::Offset<void>> *component() const {
+    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<void>> *>(VT_COMPONENT);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int32_t>(verifier, VT_ID) &&
-           VerifyOffset(verifier, VT_DATA_TYPE) &&
-           verifier.VerifyVector(data_type()) &&
-           VerifyOffset(verifier, VT_DATA) &&
-           verifier.VerifyVector(data()) &&
-           VerifyDataVector(verifier, data(), data_type()) &&
+           VerifyOffset(verifier, VT_COMPONENT_TYPE) &&
+           verifier.VerifyVector(component_type()) &&
+           VerifyOffset(verifier, VT_COMPONENT) &&
+           verifier.VerifyVector(component()) &&
+           VerifyComponentVector(verifier, component(), component_type()) &&
            verifier.EndTable();
   }
 };
 
-struct EntityFbsBuilder {
-  typedef EntityFbs Table;
+struct EntityBuilder {
+  typedef Entity Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_id(int32_t id) {
-    fbb_.AddElement<int32_t>(EntityFbs::VT_ID, id, 0);
+    fbb_.AddElement<int32_t>(Entity::VT_ID, id, 0);
   }
-  void add_data_type(flatbuffers::Offset<flatbuffers::Vector<uint8_t>> data_type) {
-    fbb_.AddOffset(EntityFbs::VT_DATA_TYPE, data_type);
+  void add_component_type(flatbuffers::Offset<flatbuffers::Vector<uint8_t>> component_type) {
+    fbb_.AddOffset(Entity::VT_COMPONENT_TYPE, component_type);
   }
-  void add_data(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<void>>> data) {
-    fbb_.AddOffset(EntityFbs::VT_DATA, data);
+  void add_component(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<void>>> component) {
+    fbb_.AddOffset(Entity::VT_COMPONENT, component);
   }
-  explicit EntityFbsBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit EntityBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  EntityFbsBuilder &operator=(const EntityFbsBuilder &);
-  flatbuffers::Offset<EntityFbs> Finish() {
+  EntityBuilder &operator=(const EntityBuilder &);
+  flatbuffers::Offset<Entity> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<EntityFbs>(end);
+    auto o = flatbuffers::Offset<Entity>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<EntityFbs> CreateEntityFbs(
+inline flatbuffers::Offset<Entity> CreateEntity(
     flatbuffers::FlatBufferBuilder &_fbb,
     int32_t id = 0,
-    flatbuffers::Offset<flatbuffers::Vector<uint8_t>> data_type = 0,
-    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<void>>> data = 0) {
-  EntityFbsBuilder builder_(_fbb);
-  builder_.add_data(data);
-  builder_.add_data_type(data_type);
+    flatbuffers::Offset<flatbuffers::Vector<uint8_t>> component_type = 0,
+    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<void>>> component = 0) {
+  EntityBuilder builder_(_fbb);
+  builder_.add_component(component);
+  builder_.add_component_type(component_type);
   builder_.add_id(id);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<EntityFbs> CreateEntityFbsDirect(
+inline flatbuffers::Offset<Entity> CreateEntityDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     int32_t id = 0,
-    const std::vector<uint8_t> *data_type = nullptr,
-    const std::vector<flatbuffers::Offset<void>> *data = nullptr) {
-  auto data_type__ = data_type ? _fbb.CreateVector<uint8_t>(*data_type) : 0;
-  auto data__ = data ? _fbb.CreateVector<flatbuffers::Offset<void>>(*data) : 0;
-  return EntityBuffer::CreateEntityFbs(
+    const std::vector<uint8_t> *component_type = nullptr,
+    const std::vector<flatbuffers::Offset<void>> *component = nullptr) {
+  auto component_type__ = component_type ? _fbb.CreateVector<uint8_t>(*component_type) : 0;
+  auto component__ = component ? _fbb.CreateVector<flatbuffers::Offset<void>>(*component) : 0;
+  return EntityBuffer::CreateEntity(
       _fbb,
       id,
-      data_type__,
-      data__);
+      component_type__,
+      component__);
 }
 
-inline bool VerifyData(flatbuffers::Verifier &verifier, const void *obj, Data type) {
+inline bool VerifyComponent(flatbuffers::Verifier &verifier, const void *obj, Component type) {
   switch (type) {
-    case Data_NONE: {
+    case Component_NONE: {
       return true;
     }
-    case Data_TransformFbs: {
-      auto ptr = reinterpret_cast<const EntityBuffer::TransformFbs *>(obj);
+    case Component_Transform: {
+      auto ptr = reinterpret_cast<const EntityBuffer::Transform *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case Data_DynamicFbs: {
-      auto ptr = reinterpret_cast<const EntityBuffer::DynamicFbs *>(obj);
+    case Component_Dynamic: {
+      auto ptr = reinterpret_cast<const EntityBuffer::Dynamic *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case Data_KeyStateFbs: {
-      auto ptr = reinterpret_cast<const EntityBuffer::KeyStateFbs *>(obj);
+    case Component_KeyState: {
+      auto ptr = reinterpret_cast<const EntityBuffer::KeyState *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case Data_PlayerFbs: {
-      auto ptr = reinterpret_cast<const EntityBuffer::PlayerFbs *>(obj);
+    case Component_Player: {
+      auto ptr = reinterpret_cast<const EntityBuffer::Player *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case Data_ConnectionFbs: {
-      auto ptr = reinterpret_cast<const EntityBuffer::ConnectionFbs *>(obj);
+    case Component_Connection: {
+      auto ptr = reinterpret_cast<const EntityBuffer::Connection *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;
   }
 }
 
-inline bool VerifyDataVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
+inline bool VerifyComponentVector(flatbuffers::Verifier &verifier, const flatbuffers::Vector<flatbuffers::Offset<void>> *values, const flatbuffers::Vector<uint8_t> *types) {
   if (!values || !types) return !values && !types;
   if (values->size() != types->size()) return false;
   for (flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
-    if (!VerifyData(
-        verifier,  values->Get(i), types->GetEnum<Data>(i))) {
+    if (!VerifyComponent(
+        verifier,  values->Get(i), types->GetEnum<Component>(i))) {
       return false;
     }
   }
   return true;
 }
 
-inline const EntityBuffer::EntityFbs *GetEntityFbs(const void *buf) {
-  return flatbuffers::GetRoot<EntityBuffer::EntityFbs>(buf);
+inline const EntityBuffer::Entity *GetEntity(const void *buf) {
+  return flatbuffers::GetRoot<EntityBuffer::Entity>(buf);
 }
 
-inline const EntityBuffer::EntityFbs *GetSizePrefixedEntityFbs(const void *buf) {
-  return flatbuffers::GetSizePrefixedRoot<EntityBuffer::EntityFbs>(buf);
+inline const EntityBuffer::Entity *GetSizePrefixedEntity(const void *buf) {
+  return flatbuffers::GetSizePrefixedRoot<EntityBuffer::Entity>(buf);
 }
 
-inline bool VerifyEntityFbsBuffer(
+inline bool VerifyEntityBuffer(
     flatbuffers::Verifier &verifier) {
-  return verifier.VerifyBuffer<EntityBuffer::EntityFbs>(nullptr);
+  return verifier.VerifyBuffer<EntityBuffer::Entity>(nullptr);
 }
 
-inline bool VerifySizePrefixedEntityFbsBuffer(
+inline bool VerifySizePrefixedEntityBuffer(
     flatbuffers::Verifier &verifier) {
-  return verifier.VerifySizePrefixedBuffer<EntityBuffer::EntityFbs>(nullptr);
+  return verifier.VerifySizePrefixedBuffer<EntityBuffer::Entity>(nullptr);
 }
 
-inline void FinishEntityFbsBuffer(
+inline void FinishEntityBuffer(
     flatbuffers::FlatBufferBuilder &fbb,
-    flatbuffers::Offset<EntityBuffer::EntityFbs> root) {
+    flatbuffers::Offset<EntityBuffer::Entity> root) {
   fbb.Finish(root);
 }
 
-inline void FinishSizePrefixedEntityFbsBuffer(
+inline void FinishSizePrefixedEntityBuffer(
     flatbuffers::FlatBufferBuilder &fbb,
-    flatbuffers::Offset<EntityBuffer::EntityFbs> root) {
+    flatbuffers::Offset<EntityBuffer::Entity> root) {
   fbb.FinishSizePrefixed(root);
 }
 

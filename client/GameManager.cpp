@@ -59,7 +59,7 @@ void GameManager::AddSystems()
     m_world->addSystem(std::move(std::make_unique<InputSystem>(m_inputManager)));
 
     /* Run physics, animation, and overlays */
-    m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
+    // m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
     m_world->addSystem(std::move(std::make_unique<AnimationSystem>(m_graphicManager)));
     m_world->addSystem(std::move(std::make_unique<OverlaySystem>(m_graphicManager)));
 
@@ -67,11 +67,13 @@ void GameManager::AddSystems()
 
 void GameManager::AddEntities()
 {
-    m_world->createEntity().addSingletonComponent(KeyState()); // Input
-    m_world->createEntity().addSingletonComponent(CollisionSingleton()); // Collision Data
-    m_world->createEntity().addSingletonComponent(ClientSocketSingleton());  // Client Connection Data
+    auto e = m_world->createEntity();
+    e.addSingletonComponent(KeyState()); // Input
+    e.addSingletonComponent(CollisionSingleton()); // Collision Data
+    e.addSingletonComponent(ClientSocketSingleton());  // Client Connection Data
+    odsloga("Created ECS entity, id (" << e.id() << ")\n");
 
-    addWolf(400, 400);
+    // addWolf(400, 400);
 }
 
 /* Tick the world */

@@ -26,8 +26,14 @@ public:
     /* Create a new Entity */
     EntityHandle createEntity();
 
+    /* Create a new Entity with the given id */
+    EntityHandle createEntity(int uuid);
+
     /* Destroy an Entity and all its Components*/
     void destroyEntity(Entity e);
+
+    /* Test if entity exists */
+    bool entityExists(Entity e);
 
     /* Return all entity IDs registered in world */
     std::set<int> getEntityIds();

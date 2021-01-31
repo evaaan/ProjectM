@@ -6,7 +6,7 @@
 #include <windows.h>
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
 #include "fbs/entity_generated.h"
-#include "Entity.h"
+#include "EntityHandle.h"
 #include "System.h"
 #include "World.h"
 #include "ClientConnectSystem.h"
@@ -16,7 +16,6 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 
-using namespace EntityBuffer;
 
 /* Steam Sockets init and shutdown helpers */
 SteamNetworkingMicroseconds g_logTimeZero;
@@ -283,18 +282,18 @@ void ClientConnectSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCall
         auto new_entity = parentWorld->createEntity();
         auto id = new_entity.id();
         flatbuffers::FlatBufferBuilder builder(1024);
-        auto connection = CreateConnectionFbs(builder, id,
+        auto connection = EntityBuffer::CreateConnection(builder, id,
                                               builder.CreateString(std::string(nick)));
 
         std::vector<uint8_t> types;
-        types.push_back(static_cast<uint8_t>(Data_ConnectionFbs));
+        types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Connection));
 
         std::vector<flatbuffers::Offset<void>> components;
         components.push_back(connection.Union());
-        auto entity_offset = CreateEntityFbs(builder, id,
+        auto entity_offset = EntityBuffer::CreateEntity(builder, id,
                                              builder.CreateVector(types),
                                              builder.CreateVector(components));
-        FinishEntityFbsBuffer(builder, entity_offset);
+        EntityBuffer::FinishEntityBuffer(builder, entity_offset);
 
         uint8_t* buf = builder.GetBufferPointer();
         int buf_size = builder.GetSize();

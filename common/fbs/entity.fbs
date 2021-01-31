@@ -7,16 +7,16 @@ struct Vec2{
 
 enum BodyType : byte { Player=0, Transparent, Ledge, Solid }
 
-union Data { TransformFbs, DynamicFbs, KeyStateFbs, PlayerFbs, ConnectionFbs}
+union Component { Transform, Dynamic, KeyState, Player, Connection}
 
-table TransformFbs {
+table Transform {
   x:int;
   y:int;
   width:int;
   height:int;
 }
 
-table DynamicFbs {
+table Dynamic {
   width:float;
   height:float;
   pos:Vec2;
@@ -25,24 +25,24 @@ table DynamicFbs {
   accel:Vec2;
 }
 
-table KeyStateFbs {
+table KeyState {
   bitset:uint64;
 }
 
-table PlayerFbs {
+table Player {
   id:int;
   owner:bool = false;
 }
 
-table ConnectionFbs {
+table Connection {
   id:int;
   username:string;
 }
 
 // Entity ID and vector of Components to update 
-table EntityFbs {
+table Entity {
   id:int;
-  data:[Data];  // Vector of Unions
+  component:[Component];  // Vector of Unions
 }
 
-root_type EntityFbs;
+root_type Entity;

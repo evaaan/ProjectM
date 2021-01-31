@@ -42,7 +42,7 @@ struct ComponentMask
     }
 
     /* Reset the mask */
-    void reset()
+    void clear()
     {
         mask = 0;
     }

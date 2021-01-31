@@ -1,13 +1,12 @@
 #include <stdexcept>
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
-#include "Entity.h"
+#include "EntityHandle.h"
 #include "System.h"
 #include "World.h"
 #include "ServerUpdateSystem.h"
 #include "Utilities.h"
 #include "fbs/entity_generated.h"
 
-using namespace EntityBuffer;  // FlatBuffer
 
 /* Receive entity updates from Server */
 ServerUpdateSystem::ServerUpdateSystem()
@@ -60,46 +59,67 @@ void ServerUpdateSystem::update(double dt)
 void ServerUpdateSystem::processFbMessage(uint8_t* buf_ptr)
 {
     // Get a pointer to the root object inside the buffer
-    auto entity = GetEntityFbs(buf_ptr);
+    auto entity = EntityBuffer::GetEntity(buf_ptr);
 
     // Get entity
     auto id = entity->id();
 
     // Unpack message
-    auto cs = entity->data();        // components
-    auto cts = entity->data_type();  // component types
+    auto cs = entity->component();        // components
+    auto cts = entity->component_type();  // component types
     auto num_cts = cts->size();      // number of components
+
 
     Entity e;
     e.uuid = id;
 
-    for (int idx = 0; idx < num_cts; idx++)
+    // Create Entity if it doesn't exist
+    // Will need to determine read Component Types from FlatBuffer and add them
+    if (!parentWorld->entityExists(e))
     {
-        auto type = cts->GetEnum<Data>(idx);
+        parentWorld->createEntity(id).addComponent(Transform());
+        odsloga("Creating a new entity, id (" << id << ") \n");
+    }
+    else { odsloga("Entity already exists, id (" << id << ") \n"); }
+
+    for (auto idx = 0; idx < num_cts; idx++)
+    {
+        auto type = cts->GetEnum<EntityBuffer::Component>(idx); // Get Component type
         switch (type)
         {
             // Transform
-            case Data_TransformFbs:
+            case EntityBuffer::Component_Transform:
             {
+
+                odsloga("Transform message! \n");
                 ComponentHandle<Transform> transform;
                 parentWorld->unpack(e, transform);
 
-                auto data = cs->GetAs<TransformFbs>(idx);
+                auto data = cs->GetAs<EntityBuffer::Transform>(idx);
                 transform->x = data->x();
                 transform->y = data->y();
                 transform->width = data->width();
                 transform->height = data->height();
                 break;
             }
-            case Data_DynamicFbs:
+            case EntityBuffer::Component_Dynamic:
             {
+                odsloga("Dynamic message! \n");
                 ComponentHandle<Dynamic> dynamic;
                 parentWorld->unpack(e, dynamic);
                 break;
             }
+            case EntityBuffer::Component_Connection:
+            {
+                odsloga("Connection message \n");
+                break;
+            }
 
             default:
+            {
+                odsloga("Unknown message! \n");
                 throw std::runtime_error("Component type undefined! How do I unpack this message?\n");
+            }
         }
     }
 

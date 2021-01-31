@@ -69,7 +69,7 @@ void ServerManager::AddSystems()
     m_world->addSystem(std::move(std::make_unique<ClientConnectSystem>()));
 
     /* Read and parse client messages */
-    m_world->addSystem(std::move(std::make_unique<ClientInputSystem>()));
+    //m_world->addSystem(std::move(std::make_unique<ClientInputSystem>()));
     //m_world->addSystem(std::move(std::make_unique<CombatSystem>()));
     //m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
     //m_world->addSystem(std::move(std::make_unique<PlayerSystem>()));
@@ -78,11 +78,37 @@ void ServerManager::AddSystems()
     m_world->addSystem(std::move(std::make_unique<ClientUpdateSystem>()));
 }
 
+int ServerManager::AddBox(int x, int y, int height, int width)
+{
+    auto box = m_world->createEntity();
+    box.addComponent(Transform());
+    auto transform = box.getComponent<Transform>();
+    transform->x = x;
+    transform->y = y;
+    transform->width = width;
+    transform->height = height;
+    return box.id();
+}
+
 void ServerManager::AddEntities()
 {
-    m_world->createEntity().addSingletonComponent(CollisionSingleton()); // Collision Data
-    m_world->createEntity().addSingletonComponent(ServerSocketSingleton());  // Server Connection Data
-    m_world->createEntity().addSingletonComponent(WorldDeltaSingleton());  // Entity update data
+
+    // Store all singleton components in a single entity
+    auto e = m_world->createEntity();
+    e.addSingletonComponent(CollisionSingleton()); // Collision Data
+    e.addSingletonComponent(ServerSocketSingleton());  // Server Connection Data
+
+    // Create worldDelta and initialize entities
+    e.addSingletonComponent(WorldDeltaSingleton());  // Entity update data
+
+    // Create boxes and update worldDelta
+    int id1 = AddBox(500, 500, 200, 300);
+    int id2 = AddBox(900, 600, 300, 400);
+    auto worldDelta = e.getComponent<WorldDeltaSingleton>();
+    worldDelta->state[id1] = ComponentMask();
+    worldDelta->state[id2] = ComponentMask();
+    worldDelta->state[id1].addComponent<Transform>();
+    worldDelta->state[id2].addComponent<Transform>();
 }
 
 long numFrames = 0;

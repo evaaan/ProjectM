@@ -41,6 +41,17 @@ EntityHandle World::createEntity()
     return { entity, shared_from_this() };
 }
 
+/* Create an Entity with given id. Override any Entity that already exists with this id. */
+EntityHandle World::createEntity(int id)
+{
+    if (entityExists({ id }))
+        destroyEntity({ id });
+    auto entity = m_entityManager->create(id);
+    m_entitySet.insert(entity.uuid);
+    return { entity, shared_from_this() };
+}
+
+
 /* Destroy an Entity */
 void World::destroyEntity(Entity entity)
 {
@@ -48,6 +59,13 @@ void World::destroyEntity(Entity entity)
         system->unRegisterEntity(entity);
     m_entitySet.erase(entity.uuid);
     m_entityManager->destroy(entity);
+}
+
+/* Test if Entity exists */
+bool World::entityExists(Entity entity)
+{
+    return m_entitySet.find(entity.uuid) != m_entitySet.end();
+
 }
 
 std::set<int> World::getEntityIds()

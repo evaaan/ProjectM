@@ -25,6 +25,7 @@ public:
     EntityManager();
     ~EntityManager();
     Entity create();
+    Entity create(int uuid);
     void destroy(Entity entity);
 
 private:

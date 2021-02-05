@@ -11,10 +11,9 @@
 #pragma comment (lib, "Windowscodecs.lib")
 
 
-enum class Color { yellow, red, green, blue, black, white };
-
 // Forward declarations
 class Direct3D;
+enum class Color;
 
 class Direct2D
 {

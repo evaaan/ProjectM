@@ -26,11 +26,12 @@ void PhysicsSystem::init()
 
 void PhysicsSystem::update(double dt)
 {
-    demoRunTick(dt);  // hacky physics demo
+    // demoRunTick(dt);  // hacky physics demo
+    advanceTick(dt);
     checkAllCollisions();
-    demoResolveSolidCollisions();
-    demoResolveLedgeCollisions();
-    demoUpdateTransforms();
+    // demoResolveSolidCollisions();
+    // demoResolveLedgeCollisions();
+    // demoUpdateTransforms();
     showImGui();
 }
 
@@ -165,7 +166,7 @@ std::set<int> PhysicsSystem::getSolidCollisions(Entity entity)
 /* Advance physics simulation */
 void PhysicsSystem::advanceTick(double dt)
 {
-    ComponentHandle<KeyState> input = parentWorld->getSingletonComponent<KeyState>();
+    // ComponentHandle<KeyState> input = parentWorld->getSingletonComponent<KeyState>();
 
     for (auto& entity : registeredEntities)
     {
@@ -173,6 +174,50 @@ void PhysicsSystem::advanceTick(double dt)
         ComponentHandle<Dynamic> dynamic;
         ComponentHandle<Transform> transform;
         parentWorld->unpack(entity, dynamic, transform);
+
+        bool falling = false;
+        double walking_speed = 300.0;
+        double max_vel = -800.0;
+        int floor_height = 600;
+        int wall_length = 1600;
+
+        /* Save last position */
+        if (dynamic->prev_pos.y != dynamic->pos.y)
+            falling = true;
+
+        dynamic->prev_pos = dynamic->pos;
+
+        /* Update velocity */
+        dynamic->vel.x += dynamic->accel.x * dt;  // v = v0 + a(dt)
+        dynamic->vel.y += dynamic->accel.y * dt;
+
+        /* Update position */
+        dynamic->pos.x += dynamic->vel.x * dt;  // r = r0 + v(dt)
+        dynamic->pos.y += dynamic->vel.y * dt;
+
+        /* Ceiling */
+        if (dynamic->pos.y < 0)
+        {
+            dynamic->pos.y = 0;
+            dynamic->vel.y = 0;
+        }
+        /* Floor */
+        if (dynamic->pos.y > floor_height)
+        {
+            dynamic->pos.y = floor_height;
+            dynamic->vel.y = 0;
+            falling = false;
+        }
+
+        /* Walls */
+        if (dynamic->pos.x < 0)
+            dynamic->pos.x = 0;
+        if (dynamic->pos.x > wall_length)
+            dynamic->pos.x = wall_length;
+
+        /* Limit fall speed */
+        if (dynamic->vel.y < max_vel)
+            dynamic->vel.y = max_vel;
     }
 }
 

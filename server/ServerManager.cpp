@@ -78,15 +78,20 @@ void ServerManager::AddSystems()
     m_world->addSystem(std::move(std::make_unique<ClientUpdateSystem>()));
 }
 
-int ServerManager::AddBox(int x, int y, int height, int width)
+int ServerManager::AddBox(int x, int y, int height, int width, Color color)
 {
     auto box = m_world->createEntity();
     box.addComponent(Transform());
+    box.addComponent(Outline());
     auto transform = box.getComponent<Transform>();
     transform->x = x;
     transform->y = y;
     transform->width = width;
     transform->height = height;
+
+    auto outline = box.getComponent<Outline>();
+    outline->width = 2;
+    outline->color = color;
     return box.id();
 }
 
@@ -102,13 +107,15 @@ void ServerManager::AddEntities()
     e.addSingletonComponent(WorldDeltaSingleton());  // Entity update data
 
     // Create boxes and update worldDelta
-    int id1 = AddBox(500, 500, 200, 300);
-    int id2 = AddBox(900, 600, 300, 400);
+    int id1 = AddBox(500, 500, 200, 300, Color::red);
+    int id2 = AddBox(900, 600, 300, 400, Color::red);
     auto worldDelta = e.getComponent<WorldDeltaSingleton>();
     worldDelta->state[id1] = ComponentMask();
     worldDelta->state[id2] = ComponentMask();
     worldDelta->state[id1].addComponent<Transform>();
     worldDelta->state[id2].addComponent<Transform>();
+    worldDelta->state[id1].addComponent<Outline>();
+    worldDelta->state[id2].addComponent<Outline>();
 }
 
 long numFrames = 0;

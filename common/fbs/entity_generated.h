@@ -25,6 +25,9 @@ struct PlayerBuilder;
 struct Connection;
 struct ConnectionBuilder;
 
+struct Outline;
+struct OutlineBuilder;
+
 struct Entity;
 struct EntityBuilder;
 
@@ -64,6 +67,48 @@ inline const char *EnumNameBodyType(BodyType e) {
   return EnumNamesBodyType()[index];
 }
 
+enum Color {
+  Color_Yellow = 0,
+  Color_Red = 1,
+  Color_Green = 2,
+  Color_Blue = 3,
+  Color_Black = 4,
+  Color_White = 5,
+  Color_MIN = Color_Yellow,
+  Color_MAX = Color_White
+};
+
+inline const Color (&EnumValuesColor())[6] {
+  static const Color values[] = {
+    Color_Yellow,
+    Color_Red,
+    Color_Green,
+    Color_Blue,
+    Color_Black,
+    Color_White
+  };
+  return values;
+}
+
+inline const char * const *EnumNamesColor() {
+  static const char * const names[7] = {
+    "Yellow",
+    "Red",
+    "Green",
+    "Blue",
+    "Black",
+    "White",
+    nullptr
+  };
+  return names;
+}
+
+inline const char *EnumNameColor(Color e) {
+  if (flatbuffers::IsOutRange(e, Color_Yellow, Color_White)) return "";
+  const size_t index = static_cast<size_t>(e);
+  return EnumNamesColor()[index];
+}
+
 enum Component {
   Component_NONE = 0,
   Component_Transform = 1,
@@ -71,37 +116,40 @@ enum Component {
   Component_KeyState = 3,
   Component_Player = 4,
   Component_Connection = 5,
+  Component_Outline = 6,
   Component_MIN = Component_NONE,
-  Component_MAX = Component_Connection
+  Component_MAX = Component_Outline
 };
 
-inline const Component (&EnumValuesComponent())[6] {
+inline const Component (&EnumValuesComponent())[7] {
   static const Component values[] = {
     Component_NONE,
     Component_Transform,
     Component_Dynamic,
     Component_KeyState,
     Component_Player,
-    Component_Connection
+    Component_Connection,
+    Component_Outline
   };
   return values;
 }
 
 inline const char * const *EnumNamesComponent() {
-  static const char * const names[7] = {
+  static const char * const names[8] = {
     "NONE",
     "Transform",
     "Dynamic",
     "KeyState",
     "Player",
     "Connection",
+    "Outline",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameComponent(Component e) {
-  if (flatbuffers::IsOutRange(e, Component_NONE, Component_Connection)) return "";
+  if (flatbuffers::IsOutRange(e, Component_NONE, Component_Outline)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesComponent()[index];
 }
@@ -128,6 +176,10 @@ template<> struct ComponentTraits<EntityBuffer::Player> {
 
 template<> struct ComponentTraits<EntityBuffer::Connection> {
   static const Component enum_value = Component_Connection;
+};
+
+template<> struct ComponentTraits<EntityBuffer::Outline> {
+  static const Component enum_value = Component_Outline;
 };
 
 bool VerifyComponent(flatbuffers::Verifier &verifier, const void *obj, Component type);
@@ -477,6 +529,58 @@ inline flatbuffers::Offset<Connection> CreateConnectionDirect(
       username__);
 }
 
+struct Outline FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef OutlineBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_COLOR = 4,
+    VT_WIDTH = 6
+  };
+  EntityBuffer::Color color() const {
+    return static_cast<EntityBuffer::Color>(GetField<int8_t>(VT_COLOR, 0));
+  }
+  int32_t width() const {
+    return GetField<int32_t>(VT_WIDTH, 0);
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<int8_t>(verifier, VT_COLOR) &&
+           VerifyField<int32_t>(verifier, VT_WIDTH) &&
+           verifier.EndTable();
+  }
+};
+
+struct OutlineBuilder {
+  typedef Outline Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_color(EntityBuffer::Color color) {
+    fbb_.AddElement<int8_t>(Outline::VT_COLOR, static_cast<int8_t>(color), 0);
+  }
+  void add_width(int32_t width) {
+    fbb_.AddElement<int32_t>(Outline::VT_WIDTH, width, 0);
+  }
+  explicit OutlineBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  OutlineBuilder &operator=(const OutlineBuilder &);
+  flatbuffers::Offset<Outline> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<Outline>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<Outline> CreateOutline(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    EntityBuffer::Color color = EntityBuffer::Color_Yellow,
+    int32_t width = 0) {
+  OutlineBuilder builder_(_fbb);
+  builder_.add_width(width);
+  builder_.add_color(color);
+  return builder_.Finish();
+}
+
 struct Entity FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   typedef EntityBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
@@ -579,6 +683,10 @@ inline bool VerifyComponent(flatbuffers::Verifier &verifier, const void *obj, Co
     }
     case Component_Connection: {
       auto ptr = reinterpret_cast<const EntityBuffer::Connection *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case Component_Outline: {
+      auto ptr = reinterpret_cast<const EntityBuffer::Outline *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

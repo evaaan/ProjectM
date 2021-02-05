@@ -3,8 +3,6 @@
 #include "System.h"
 #include "World.h"
 
-enum class Color { yellow, red, green, blue, black, white };
-
 World::World(std::unique_ptr<EntityManager> em) : m_entityManager(std::move(em))
 {
 }

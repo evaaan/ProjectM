@@ -115,6 +115,25 @@ void ClientUpdateSystem::sendWorldUpdate()
             else if (family == GetComponentFamily<Dynamic>())
             {
             }
+            else if (family == GetComponentFamily<Outline>())
+            {
+                ComponentHandle<Outline> c;
+                parentWorld->unpack({ id }, c);
+                EntityBuffer::Color buffer_color;
+                switch (c->color)
+                {
+                case Color::yellow : buffer_color = EntityBuffer::Color_Yellow; break;
+                case Color::red    : buffer_color = EntityBuffer::Color_Red;    break;
+                case Color::green  : buffer_color = EntityBuffer::Color_Green;  break;
+                case Color::blue   : buffer_color = EntityBuffer::Color_Blue;   break;
+                case Color::black  : buffer_color = EntityBuffer::Color_Black;  break;
+                case Color::white  : buffer_color = EntityBuffer::Color_White;  break;
+                default: buffer_color = EntityBuffer::Color_Red; break;
+                }
+                auto outline = EntityBuffer::CreateOutline(builder, buffer_color, c->width);
+                types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Outline));
+                components.push_back(outline.Union());
+            }
         }
         // Create entity table and get offset
         auto entity_offset = EntityBuffer::CreateEntity(builder, id,
@@ -138,6 +157,8 @@ void ClientUpdateSystem::sendWorldUpdate()
         builder.Clear();
         types.clear();
         components.clear();
+        
+        // Reset worldDelta state
         // componentMask.clear();
     }
 }

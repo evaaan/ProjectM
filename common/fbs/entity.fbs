@@ -7,7 +7,9 @@ struct Vec2{
 
 enum BodyType : byte { Player=0, Transparent, Ledge, Solid }
 
-union Component { Transform, Dynamic, KeyState, Player, Connection}
+enum Color : byte { Yellow=0, Red, Green, Blue, Black, White }
+
+union Component { Transform, Dynamic, KeyState, Player, Connection, Outline}
 
 table Transform {
   x:int;
@@ -37,6 +39,11 @@ table Player {
 table Connection {
   id:int;
   username:string;
+}
+
+table Outline {
+  color:Color;
+  width:int;
 }
 
 // Entity ID and vector of Components to update 

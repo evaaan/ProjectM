@@ -28,7 +28,8 @@ class Direct2D;
 class SpriteSheet;
 struct Entity;
 struct ComponentMask;
-enum class Color;
+
+enum class Color { yellow, red, green, blue, black, white };
 
 /* familyCounter tracks the ComponentManager the Component is assigned to.*/
 struct ComponentCounter {

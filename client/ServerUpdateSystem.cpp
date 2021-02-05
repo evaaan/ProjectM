@@ -78,6 +78,7 @@ void ServerUpdateSystem::processFbMessage(uint8_t* buf_ptr)
     if (!parentWorld->entityExists(e))
     {
         parentWorld->createEntity(id).addComponent(Transform());
+        parentWorld->createEntity(id).addComponent(Outline());
         odsloga("Creating a new entity, id (" << id << ") \n");
     }
     else { odsloga("Entity already exists, id (" << id << ") \n"); }
@@ -112,6 +113,26 @@ void ServerUpdateSystem::processFbMessage(uint8_t* buf_ptr)
             case EntityBuffer::Component_Connection:
             {
                 odsloga("Connection message \n");
+                break;
+            }
+            case EntityBuffer::Component_Outline:
+            {
+                odsloga("Outline message! \n");
+                ComponentHandle<Outline> outline;
+                parentWorld->unpack(e, outline);
+
+                auto data = cs->GetAs<EntityBuffer::Outline>(idx);
+                switch (data->color())
+                {
+                case EntityBuffer::Color_Yellow : outline->color = Color::yellow ; break;
+                case EntityBuffer::Color_Red    : outline->color = Color::red    ; break;
+                case EntityBuffer::Color_Green  : outline->color = Color::green  ; break;
+                case EntityBuffer::Color_Blue   : outline->color = Color::blue   ; break;
+                case EntityBuffer::Color_Black  : outline->color = Color::black  ; break;
+                case EntityBuffer::Color_White  : outline->color = Color::white  ; break;
+                default: outline->color = Color::red; break;
+                }
+                outline->width = data->width();
                 break;
             }
 

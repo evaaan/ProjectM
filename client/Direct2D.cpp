@@ -1,6 +1,7 @@
 #include <comdef.h>
 #include "Direct3D.h"
 #include "Direct2D.h"
+#include "Component.h"
 #include "App.h"
 
 using namespace ComError;

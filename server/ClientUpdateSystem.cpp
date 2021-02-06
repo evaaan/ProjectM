@@ -159,7 +159,7 @@ void ClientUpdateSystem::sendWorldUpdate()
         components.clear();
         
         // Reset worldDelta state
-        // componentMask.clear();
+        componentMask.clear();
     }
 }
 

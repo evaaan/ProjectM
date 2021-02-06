@@ -59,14 +59,14 @@ void ServerUpdateSystem::update(double dt)
 void ServerUpdateSystem::processFbMessage(uint8_t* buf_ptr)
 {
     // Get a pointer to the root object inside the buffer
-    auto entity = EntityBuffer::GetEntity(buf_ptr);
+    auto entity_buffer = EntityBuffer::GetEntity(buf_ptr);
 
     // Get entity
-    auto id = entity->id();
+    auto id = entity_buffer->id();
 
     // Unpack message
-    auto cs = entity->component();        // components
-    auto cts = entity->component_type();  // component types
+    auto cs = entity_buffer->component();        // components
+    auto cts = entity_buffer->component_type();  // component types
     auto num_cts = cts->size();      // number of components
 
 
@@ -77,8 +77,10 @@ void ServerUpdateSystem::processFbMessage(uint8_t* buf_ptr)
     // Will need to determine read Component Types from FlatBuffer and add them
     if (!parentWorld->entityExists(e))
     {
-        parentWorld->createEntity(id).addComponent(Transform());
-        parentWorld->createEntity(id).addComponent(Outline());
+        auto entity = parentWorld->createEntity(id);
+
+        // parentWorld->createEntity(id).addComponent(Transform());
+        // parentWorld->createEntity(id).addComponent(Outline());
         odsloga("Creating a new entity, id (" << id << ") \n");
     }
     else { odsloga("Entity already exists, id (" << id << ") \n"); }
@@ -92,7 +94,7 @@ void ServerUpdateSystem::processFbMessage(uint8_t* buf_ptr)
             case EntityBuffer::Component_Transform:
             {
 
-                odsloga("Transform message! \n");
+                odsloga("Transform message!\n");
                 ComponentHandle<Transform> transform;
                 parentWorld->unpack(e, transform);
 
@@ -105,19 +107,19 @@ void ServerUpdateSystem::processFbMessage(uint8_t* buf_ptr)
             }
             case EntityBuffer::Component_Dynamic:
             {
-                odsloga("Dynamic message! \n");
+                odsloga("Dynamic message!\n");
                 ComponentHandle<Dynamic> dynamic;
                 parentWorld->unpack(e, dynamic);
                 break;
             }
             case EntityBuffer::Component_Connection:
             {
-                odsloga("Connection message \n");
+                odsloga("Connection message!\n");
                 break;
             }
             case EntityBuffer::Component_Outline:
             {
-                odsloga("Outline message! \n");
+                odsloga("Outline message!\n");
                 ComponentHandle<Outline> outline;
                 parentWorld->unpack(e, outline);
 

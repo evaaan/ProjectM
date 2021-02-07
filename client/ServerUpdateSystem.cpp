@@ -73,17 +73,59 @@ void ServerUpdateSystem::processFbMessage(uint8_t* buf_ptr)
     Entity e;
     e.uuid = id;
 
+    bool newEntity = false;
+
     // Create Entity if it doesn't exist
     // Will need to determine read Component Types from FlatBuffer and add them
     if (!parentWorld->entityExists(e))
     {
-        auto entity = parentWorld->createEntity(id);
-
+        // auto entity = parentWorld->createEntity(id);
         // parentWorld->createEntity(id).addComponent(Transform());
-        // parentWorld->createEntity(id).addComponent(Outline());
+        createEntity(entity_buffer);
         odsloga("Creating a new entity, id (" << id << ") \n");
     }
     else { odsloga("Entity already exists, id (" << id << ") \n"); }
+    
+    updateEntity(entity_buffer);
+}
+
+/* Create an Entity based on a FlatBuffer message */
+void ServerUpdateSystem::createEntity(const EntityBuffer::Entity* entity_buffer)
+{
+    auto cs = entity_buffer->component();        // components
+    auto cts = entity_buffer->component_type();  // component types
+    auto num_cts = cts->size();      // number of components
+
+    auto id = entity_buffer->id();
+    auto entity = parentWorld->createEntity(id);
+
+    for (auto idx = 0; idx < num_cts; idx++)
+    {
+        auto type = cts->GetEnum<EntityBuffer::Component>(idx); // Get Component type
+        switch (type)
+        {
+        case EntityBuffer::Component_Transform:
+        { entity.addComponent(Transform()); break; }
+        case EntityBuffer::Component_Dynamic:
+        { entity.addComponent(Dynamic()); break; }
+        case EntityBuffer::Component_KeyState:
+        { entity.addComponent(KeyState()); break; }
+        case EntityBuffer::Component_Animation:
+        { entity.addComponent(Animation()); break; }
+        case EntityBuffer::Component_Outline:
+        { entity.addComponent(Outline()); break; }
+        }
+    }
+}
+
+/* Update an Entity based on a FlatBuffer message */
+void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
+{
+    auto cs = entity_buffer->component();        // components
+    auto cts = entity_buffer->component_type();  // component types
+    auto num_cts = cts->size();      // number of components
+
+    Entity e = { entity_buffer->id() };
 
     for (auto idx = 0; idx < num_cts; idx++)
     {
@@ -91,58 +133,62 @@ void ServerUpdateSystem::processFbMessage(uint8_t* buf_ptr)
         switch (type)
         {
             // Transform
-            case EntityBuffer::Component_Transform:
-            {
+        case EntityBuffer::Component_Transform:
+        {
+            odsloga("Transform message!\n");
+            ComponentHandle<Transform> transform;
+            parentWorld->unpack(e, transform);
 
-                odsloga("Transform message!\n");
-                ComponentHandle<Transform> transform;
-                parentWorld->unpack(e, transform);
+            auto data = cs->GetAs<EntityBuffer::Transform>(idx);
+            transform->x = data->x();
+            transform->y = data->y();
+            transform->width = data->width();
+            transform->height = data->height();
+            break;
+        }
+        case EntityBuffer::Component_Dynamic:
+        {
+            odsloga("Dynamic message!\n");
+            ComponentHandle<Dynamic> dynamic;
+            parentWorld->unpack(e, dynamic);
+            break;
+        }
+        case EntityBuffer::Component_Connection:
+        {
+            odsloga("Connection message!\n");
+            break;
+        }
+        case EntityBuffer::Component_Outline:
+        {
+            odsloga("Outline message!\n");
+            ComponentHandle<Outline> outline;
+            parentWorld->unpack(e, outline);
 
-                auto data = cs->GetAs<EntityBuffer::Transform>(idx);
-                transform->x = data->x();
-                transform->y = data->y();
-                transform->width = data->width();
-                transform->height = data->height();
-                break;
-            }
-            case EntityBuffer::Component_Dynamic:
+            auto data = cs->GetAs<EntityBuffer::Outline>(idx);
+            switch (data->color())
             {
-                odsloga("Dynamic message!\n");
-                ComponentHandle<Dynamic> dynamic;
-                parentWorld->unpack(e, dynamic);
-                break;
+            case EntityBuffer::Color_Yellow: outline->color = Color::yellow; break;
+            case EntityBuffer::Color_Red: outline->color = Color::red; break;
+            case EntityBuffer::Color_Green: outline->color = Color::green; break;
+            case EntityBuffer::Color_Blue: outline->color = Color::blue; break;
+            case EntityBuffer::Color_Black: outline->color = Color::black; break;
+            case EntityBuffer::Color_White: outline->color = Color::white; break;
+            default: outline->color = Color::red; break;
             }
-            case EntityBuffer::Component_Connection:
-            {
-                odsloga("Connection message!\n");
-                break;
-            }
-            case EntityBuffer::Component_Outline:
-            {
-                odsloga("Outline message!\n");
-                ComponentHandle<Outline> outline;
-                parentWorld->unpack(e, outline);
+            outline->width = data->width();
+            break;
+        }
 
-                auto data = cs->GetAs<EntityBuffer::Outline>(idx);
-                switch (data->color())
-                {
-                case EntityBuffer::Color_Yellow : outline->color = Color::yellow ; break;
-                case EntityBuffer::Color_Red    : outline->color = Color::red    ; break;
-                case EntityBuffer::Color_Green  : outline->color = Color::green  ; break;
-                case EntityBuffer::Color_Blue   : outline->color = Color::blue   ; break;
-                case EntityBuffer::Color_Black  : outline->color = Color::black  ; break;
-                case EntityBuffer::Color_White  : outline->color = Color::white  ; break;
-                default: outline->color = Color::red; break;
-                }
-                outline->width = data->width();
-                break;
-            }
+        case EntityBuffer::Component_KeyState:
+        { }
+        case EntityBuffer::Component_Animation:
+        { }
 
-            default:
-            {
-                odsloga("Unknown message! \n");
-                throw std::runtime_error("Component type undefined! How do I unpack this message?\n");
-            }
+        default:
+        {
+            odsloga("Unknown message! \n");
+            throw std::runtime_error("Component type undefined! How do I unpack this message?\n");
+        }
         }
     }
 

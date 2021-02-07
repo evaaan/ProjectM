@@ -9,7 +9,7 @@ enum BodyType : byte { Player=0, Transparent, Ledge, Solid }
 
 enum Color : byte { Yellow=0, Red, Green, Blue, Black, White }
 
-union Component { Transform, Dynamic, KeyState, Player, Connection, Outline }
+union Component { Transform, Dynamic, KeyState, Player, Connection, Outline, Animation }
 
 table Transform {
   x:int;
@@ -50,6 +50,9 @@ table Outline {
 table Entity {
   id:int;
   component:[Component];  // Vector of Unions
+}
+
+table Animation {
 }
 
 root_type Entity;

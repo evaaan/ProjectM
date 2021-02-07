@@ -31,6 +31,9 @@ struct OutlineBuilder;
 struct Entity;
 struct EntityBuilder;
 
+struct Animation;
+struct AnimationBuilder;
+
 enum BodyType {
   BodyType_Player = 0,
   BodyType_Transparent = 1,
@@ -117,11 +120,12 @@ enum Component {
   Component_Player = 4,
   Component_Connection = 5,
   Component_Outline = 6,
+  Component_Animation = 7,
   Component_MIN = Component_NONE,
-  Component_MAX = Component_Outline
+  Component_MAX = Component_Animation
 };
 
-inline const Component (&EnumValuesComponent())[7] {
+inline const Component (&EnumValuesComponent())[8] {
   static const Component values[] = {
     Component_NONE,
     Component_Transform,
@@ -129,13 +133,14 @@ inline const Component (&EnumValuesComponent())[7] {
     Component_KeyState,
     Component_Player,
     Component_Connection,
-    Component_Outline
+    Component_Outline,
+    Component_Animation
   };
   return values;
 }
 
 inline const char * const *EnumNamesComponent() {
-  static const char * const names[8] = {
+  static const char * const names[9] = {
     "NONE",
     "Transform",
     "Dynamic",
@@ -143,13 +148,14 @@ inline const char * const *EnumNamesComponent() {
     "Player",
     "Connection",
     "Outline",
+    "Animation",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameComponent(Component e) {
-  if (flatbuffers::IsOutRange(e, Component_NONE, Component_Outline)) return "";
+  if (flatbuffers::IsOutRange(e, Component_NONE, Component_Animation)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesComponent()[index];
 }
@@ -180,6 +186,10 @@ template<> struct ComponentTraits<EntityBuffer::Connection> {
 
 template<> struct ComponentTraits<EntityBuffer::Outline> {
   static const Component enum_value = Component_Outline;
+};
+
+template<> struct ComponentTraits<EntityBuffer::Animation> {
+  static const Component enum_value = Component_Animation;
 };
 
 bool VerifyComponent(flatbuffers::Verifier &verifier, const void *obj, Component type);
@@ -660,6 +670,36 @@ inline flatbuffers::Offset<Entity> CreateEntityDirect(
       component__);
 }
 
+struct Animation FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef AnimationBuilder Builder;
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           verifier.EndTable();
+  }
+};
+
+struct AnimationBuilder {
+  typedef Animation Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  explicit AnimationBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  AnimationBuilder &operator=(const AnimationBuilder &);
+  flatbuffers::Offset<Animation> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<Animation>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<Animation> CreateAnimation(
+    flatbuffers::FlatBufferBuilder &_fbb) {
+  AnimationBuilder builder_(_fbb);
+  return builder_.Finish();
+}
+
 inline bool VerifyComponent(flatbuffers::Verifier &verifier, const void *obj, Component type) {
   switch (type) {
     case Component_NONE: {
@@ -687,6 +727,10 @@ inline bool VerifyComponent(flatbuffers::Verifier &verifier, const void *obj, Co
     }
     case Component_Outline: {
       auto ptr = reinterpret_cast<const EntityBuffer::Outline *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case Component_Animation: {
+      auto ptr = reinterpret_cast<const EntityBuffer::Animation *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

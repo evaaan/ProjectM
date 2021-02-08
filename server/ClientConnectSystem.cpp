@@ -281,6 +281,7 @@ void ClientConnectSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCall
         // Create an entity and send it to the client. or should we send uuid?
         auto new_entity = parentWorld->createEntity();
         auto id = new_entity.id();
+        server->m_idMap[uuid] = id;
         flatbuffers::FlatBufferBuilder builder(1024);
         auto connection = EntityBuffer::CreateConnection(builder, id,
                                               builder.CreateString(std::string(nick)));

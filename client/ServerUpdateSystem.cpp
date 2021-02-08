@@ -60,20 +60,9 @@ void ServerUpdateSystem::processFbMessage(uint8_t* buf_ptr)
 {
     // Get a pointer to the root object inside the buffer
     auto entity_buffer = EntityBuffer::GetEntity(buf_ptr);
-
-    // Get entity
     auto id = entity_buffer->id();
-
-    // Unpack message
-    auto cs = entity_buffer->component();        // components
-    auto cts = entity_buffer->component_type();  // component types
-    auto num_cts = cts->size();      // number of components
-
-
     Entity e;
     e.uuid = id;
-
-    bool newEntity = false;
 
     // Create Entity if it doesn't exist
     // Will need to determine read Component Types from FlatBuffer and add them

@@ -11,6 +11,7 @@
 /* Poll keyboard state and send to server */
 InputSystem::InputSystem(InputManager* inputManager) : m_inputManager(inputManager)
 {
+    signature.addComponent<ClientSocketSingleton>();
     signature.addComponent<KeyState>();
 }
 
@@ -19,11 +20,15 @@ void InputSystem::init()
     /* Only one client socket component exists */
     for (auto& entity : registeredEntities)
     {
+        ComponentHandle<ClientSocketSingleton> client_component;
         ComponentHandle<KeyState> key_component;
-        parentWorld->unpack(entity, key_component);
+        parentWorld->unpack(entity, key_component, client_component);
 
-        /* Store a reference directly to the client singleton component. */
+        /* Store a reference directly to the keystate component. */
         keyState = key_component;
+
+        /* Store a reference directly to the server singleton component. */
+        client = client_component;
     }
 }
 
@@ -55,10 +60,34 @@ void InputSystem::pollKeys()
 void InputSystem::sendKeyStateToServer()
 {
     flatbuffers::FlatBufferBuilder builder(1024);
+    std::vector<uint8_t> types;
+    std::vector<flatbuffers::Offset<void>> components;
+
     uint64_t keys = keyState->keyDownState.to_ullong();
     auto keyState = EntityBuffer::CreateKeyState(builder, keys);
 
-    // Need to know my own ID
+    types.push_back(static_cast<uint8_t>(EntityBuffer::Component_KeyState));
+    components.push_back(keyState.Union());
+
+
+    // Create entity table and get offset
+    auto entity_offset = EntityBuffer::CreateEntity(builder, { -1 }, // Server doesn't need entity ID
+                                                    builder.CreateVector(types),
+                                                    builder.CreateVector(components));
+
+    // Finish the buffer
+    EntityBuffer::FinishEntityBuffer(builder, entity_offset);
+
+    // Get pointer and size
+    uint8_t* buf = builder.GetBufferPointer();
+    int buf_size = builder.GetSize();
+
+     client->m_pInterface->SendMessageToConnection(client->m_hConnection, buf, buf_size, k_nSteamNetworkingSend_Reliable, nullptr);
+
+    // Reset data structures
+    builder.Clear();
+    types.clear();
+    components.clear();
 }
 
 void InputSystem::render() {}

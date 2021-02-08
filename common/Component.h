@@ -154,6 +154,7 @@ struct ServerSocketSingleton : public Component<ServerSocketSingleton>
     std::map<HSteamNetConnection, boost::uuids::uuid> m_uuidMap;  // Map Steam connections to user UUID
     std::map<boost::uuids::uuid, HSteamNetConnection> m_hConnMap;  // Map user UUIDs to Steam connection
     std::map<boost::uuids::uuid, std::string> m_nickMap;  // Map user UUIDs to username
+    std::map<boost::uuids::uuid, int> m_idMap;  // Map user UUIDs to username
 };
 
 /* Client Steam Socket */

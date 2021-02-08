@@ -19,4 +19,5 @@ private:
     ComponentHandle<KeyState> keyState;
     void pollKeys();
     void sendKeyStateToServer();
+    ComponentHandle<ClientSocketSingleton> client;
 };

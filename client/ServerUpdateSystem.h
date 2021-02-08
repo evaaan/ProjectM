@@ -1,8 +1,7 @@
 #pragma once
+#include "fbs/entity_generated.h"
 
 // Forward declarations
-class System;
-class EntityBuffer::Entity;
 
 class ServerUpdateSystem : public System {
 public:

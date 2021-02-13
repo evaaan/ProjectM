@@ -103,6 +103,8 @@ void ServerUpdateSystem::createEntity(const EntityBuffer::Entity* entity_buffer)
         { entity.addComponent(Animation()); break; }
         case EntityBuffer::Component_Outline:
         { entity.addComponent(Outline()); break; }
+        case EntityBuffer::Component_Connection:
+        { break; }
         }
     }
 }
@@ -145,6 +147,7 @@ void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
         case EntityBuffer::Component_Connection:
         {
             odsloga("Connection message!\n");
+            // Assign our own nickname and which entity we control
             break;
         }
         case EntityBuffer::Component_Outline:

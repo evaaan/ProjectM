@@ -10,12 +10,10 @@ App::App(HINSTANCE hInstance, HWND hWindow):
 
 void App::Initialize()
 {
-    // Create the timer and start it
-    m_timer = std::make_shared<Timer>();
-    m_timer->start();
+    int tick_ms = 20;  // 50 Hz max
 
     // Initialize GameEngine
-    m_engine = std::make_unique<GameEngine>(appInstance, appWindow, m_timer);
+    m_engine = std::make_unique<GameEngine>(appInstance, appWindow, tick_ms);
 }
 
 void App::Run()

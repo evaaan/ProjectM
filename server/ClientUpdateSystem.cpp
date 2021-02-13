@@ -83,7 +83,6 @@ void ClientUpdateSystem::sendWorldUpdate()
     * create a FlatBuffer with its corresponding Components and send
     * to every connected client. */
 
-
     flatbuffers::FlatBufferBuilder builder(1024);
     std::vector<uint8_t> types;
     std::vector<flatbuffers::Offset<void>> components;

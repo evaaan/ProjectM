@@ -38,12 +38,12 @@ public:
 
 	GraphicManager(HWND hWindow, std::shared_ptr<Timer>);
 	~GraphicManager();
-	void Render();
+	void Render(double update_time);
 	void Present();
     void loadAnimation(LPCWSTR spriteSheetFile, ComponentHandle<Animation> &animation);
     void registerWorld(World* world);
 
-    void calculateFrameStatistics();
+    void calculateFrameStatistics(double process_time);
     std::shared_ptr<AnimatedSprite> createWolf(unsigned int x, unsigned int y);
     void onResize();
     void makeTonsOfWolves(unsigned int numberOfWolves);

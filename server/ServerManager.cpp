@@ -69,7 +69,7 @@ void ServerManager::AddSystems()
     m_world->addSystem(std::move(std::make_unique<ClientConnectSystem>()));
 
     /* Read and parse client messages */
-    //m_world->addSystem(std::move(std::make_unique<ClientInputSystem>()));
+    m_world->addSystem(std::move(std::make_unique<ClientInputSystem>()));
     //m_world->addSystem(std::move(std::make_unique<CombatSystem>()));
     //m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
     //m_world->addSystem(std::move(std::make_unique<PlayerSystem>()));
@@ -101,10 +101,9 @@ void ServerManager::AddEntities()
     // Store all singleton components in a single entity
     auto e = m_world->createEntity();
     e.addSingletonComponent(CollisionSingleton()); // Collision Data
-    e.addSingletonComponent(ServerSocketSingleton());  // Server Connection Data
-
-    // Create worldDelta and initialize entities
-    e.addSingletonComponent(WorldDeltaSingleton());  // Entity update data
+    e.addSingletonComponent(ServerSocketSingleton());  // Client Connection Data
+    e.addSingletonComponent(WorldDeltaSingleton()); //  Store Entity changes each tick
+    e.addSingletonComponent(KeyStateSingleton());  // User input
 
     // Create boxes and update worldDelta
     int id1 = AddBox(500, 500, 200, 300, Color::red);

@@ -23,7 +23,6 @@ public:
     void Initialize();
 	void Run();
 	std::unique_ptr<GameEngine> m_engine;
-    std::shared_ptr<Timer> m_timer;
 
     const HINSTANCE appInstance;			// handle to an instance of the application
     const HWND appWindow;				    // handle to the window

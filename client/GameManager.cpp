@@ -18,8 +18,8 @@
 #include "Direct2D.h"
 #include "Utilities.h"
 
-GameManager::GameManager(std::shared_ptr<Timer> timer, InputManager* input, GraphicManager* graphic) :
-    m_timer(timer), m_inputManager(input), m_graphicManager(graphic), m_world(nullptr) {}
+GameManager::GameManager(std::shared_ptr<Timer> timer, InputManager* input, GraphicManager* graphic, int tick_ms) :
+    m_timer(timer), m_inputManager(input), m_graphicManager(graphic), m_world(nullptr), m_tick(tick_ms) {}
 
 GameManager::~GameManager() {}
 
@@ -76,14 +76,39 @@ void GameManager::AddEntities()
     // addWolf(400, 400);
 }
 
-/* Tick the world */
-void GameManager::Update()
+long numFrames = 0;
+
+void printFrameInfo(double totalTime, double deltaTime, double updateTime)
 {
-	// tick timer
+
+    static double lastUpdate = 0;
+    if (totalTime - lastUpdate > 1.0)
+    {
+        lastUpdate = totalTime;
+        double usTime = deltaTime * 1000.0;
+        odsloga("Frame num: " << numFrames);
+        odsloga(", update: " << std::fixed << updateTime * 1000.0 << " ms");
+        odsloga(", tick: " << std::fixed << usTime << " ms\n");
+    }
+}
+
+/* Tick the world, return processing time (seconds) */
+double GameManager::Update()
+{
+    double startTime, updateTime;
+	
+    // tick timer
+    numFrames++;
     m_timer->tick();
 
 	// Update world
+    startTime = m_timer->getCurrentTime();
     m_world->update(m_timer->getDeltaTime());
+    updateTime = m_timer->getCurrentTime() - startTime;
+
+    m_timer->sleep_until(m_tick);
+    printFrameInfo(m_timer->getTotalTime(), m_timer->getDeltaTime(), updateTime);
+    return updateTime;
 }
 
 /* Get a pointer to the current world */
@@ -91,6 +116,7 @@ World* GameManager::getWorld()
 {
     return m_world.get();
 }
+
 
 void GameManager::addWolf(int x, int y)
 {

@@ -7,17 +7,21 @@
 
 using namespace GameControl;
 
-GameEngine::GameEngine(HINSTANCE hInstance, HWND hWindow, std::shared_ptr<Timer> timer) :
+GameEngine::GameEngine(HINSTANCE hInstance, HWND hWindow, int tick_ms) :
     appInstance(hInstance),
     appWindow(hWindow),
-    m_timer(timer),
 	m_engineState(EngineState::WaitingForResources),
     hasStarted(false),
-    isActive(true)
+    isActive(true),
+    m_tick(tick_ms)
 {
+
+    // Create the timer and start it
+    m_timer = std::make_shared<Timer>();
+    m_timer->start();
     m_graphic = std::make_unique<GraphicManager>(appWindow, m_timer);     // Graphics
     m_input = std::make_unique<InputManager>(m_timer, isActive);                    // Input
-    m_game = std::make_unique<GameManager>(m_timer, m_input.get(), m_graphic.get());  // Game
+    m_game = std::make_unique<GameManager>(m_timer, m_input.get(), m_graphic.get(), tick_ms);  // Game
 
 }
 
@@ -33,6 +37,7 @@ GameEngine::~GameEngine()
 void GameEngine::Run()
 {
     hasStarted = true;
+    double process_time = 0.0;
 	while (m_engineState != EngineState::Terminate)
 	{
 		/* Update user input, handle exit signal */
@@ -55,13 +60,13 @@ void GameEngine::Run()
             /* Update world */
             case EngineState::Dynamics:
             {
-                m_game->Update();
+                process_time = m_game->Update();
                 break;
             }
         }
 
         /* Render and present */
-        m_graphic->Render();
+        m_graphic->Render(process_time);
         m_graphic->Present();
 	}
 }

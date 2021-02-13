@@ -24,7 +24,7 @@ namespace GameControl
 class GameEngine
 {
 public:
-	GameEngine(HINSTANCE hInstance, HWND hWindow, std::shared_ptr<Timer>);
+	GameEngine(HINSTANCE hInstance, HWND hWindow, int tick_ms);
 	~GameEngine();
 
     void Init();
@@ -40,9 +40,10 @@ public:
 
 private:
 	GameControl::EngineState m_engineState;
-    std::shared_ptr<Timer> m_timer;
     std::unique_ptr<GameManager> m_game;                // ECS System
     std::unique_ptr<GraphicManager> m_graphic;          // Graphics and rendering
+    std::shared_ptr<Timer> m_timer;                     // Game timer
+    int m_tick;                                         // Client tick rate (ms)
 
     HINSTANCE appInstance;
     HWND appWindow;

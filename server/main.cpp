@@ -22,11 +22,14 @@ void PrintUsageAndExit()
 /* Entry point */
 int main(int argc, char *argv[])
 {
+    // default
     int port_num = 35656;
     int tick_ms = 50;
 
+    // parse arguments
     for (int i = 1; i < argc; ++i)
     {
+        // must specify --port
         if (!strcmp(argv[i], "--port"))
         {
             ++i;
@@ -40,6 +43,7 @@ int main(int argc, char *argv[])
             }
             continue;
         }
+        // must specify --tick
         if (!strcmp(argv[i], "--tick"))
         {
             ++i;
@@ -53,6 +57,7 @@ int main(int argc, char *argv[])
             }
             continue;
         }
+        // help
         if (!strcmp(argv[i], "--help") || !strcmp(argv[i], "-h"))
         {
             PrintUsageAndExit();

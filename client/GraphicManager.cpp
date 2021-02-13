@@ -173,7 +173,7 @@ void GraphicManager::loadAnimation(LPCWSTR spriteSheetFile, ComponentHandle<Anim
     bitmaps.push_back(bitmapPtr);
 }
 
-void GraphicManager::Render()
+void GraphicManager::Render(double process_time)
 {   
     // clear the back buffer and the depth/stencil buffer
     m_direct3D->clearBuffers();
@@ -189,7 +189,7 @@ void GraphicManager::Render()
     // else show Loading Screen, etc.
 
         // print FPS info
-    calculateFrameStatistics();
+    calculateFrameStatistics(process_time * 1000.0);
     if (showFPS)
         m_direct2D->printFPS();
 
@@ -226,7 +226,7 @@ void GraphicManager::registerWorld(World* world)
 * queue::pop
 * calculate average fps of queue and display
 */
-void GraphicManager::calculateFrameStatistics()
+void GraphicManager::calculateFrameStatistics(double process_ms)
 {
     HRESULT hr;
     static double elapsedTime;  // time since last call
@@ -239,8 +239,10 @@ void GraphicManager::calculateFrameStatistics()
 
         // Update textLayoutFPS
         std::wostringstream outFPS;
+        std::wostringstream outProcess;
         outFPS.precision(6);
         outFPS << "FPS: " << fps << std::endl;
+        outFPS << "Processing: " << process_ms << " ms" << std::endl;
         hr = m_direct2D->writeFactory->CreateTextLayout(
             outFPS.str().c_str(),
             (UINT32)outFPS.str().size(),

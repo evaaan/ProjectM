@@ -6,6 +6,7 @@
 #include "Entity.h"
 #include "KeyMap.h"
 #include "fbs/entity_generated.h"
+#include "Utilities.h"
 
 
 /* Poll keyboard state and send to server */
@@ -35,26 +36,33 @@ void InputSystem::init()
 /*Read onKeyDown messages from InputManager, translate to Actions, and update Input component. */
 void InputSystem::update(double dt)
 {
-    pollKeys();
-    sendKeyStateToServer();
+    if (pollKeys())
+        sendKeyStateToServer();
 }
 
-void InputSystem::pollKeys()
+/* Return true if any key is pressed */
+bool InputSystem::pollKeys()
 {
-        keyState->keyDownState.reset();
+    bool keyDown = false;
+    keyState->keyDownState.reset();
 
-        /* Ignore input when inactive*/
-        if (m_inputManager->isActive)
+    /* Ignore input when inactive*/
+    if (m_inputManager->isActive)
+    {
+        /* Read keyboard state asynchronously, map to Actions, and upate component */
+        for (const auto& [keyCode, action] : m_inputManager->keymap.keyCodeMap)
         {
-            /* Read keyboard state asynchronously, map to Actions, and upate component */
-            for (const auto& [keyCode, action] : m_inputManager->keymap.keyCodeMap)
+            if (GetAsyncKeyState((int)keyCode) & 0x8000)
             {
-                if (GetAsyncKeyState((int)keyCode) & 0x8000)
-                    keyState->keyDownState.set(action);
+                keyState->keyDownState.set(action);
+                keyDown = true;
             }
         }
-    // Clear queue
+    }
+
+    // Clear key message queue
     m_inputManager->m_msgQueue.clear();
+    return keyDown;
 }
 
 void InputSystem::sendKeyStateToServer()
@@ -82,7 +90,8 @@ void InputSystem::sendKeyStateToServer()
     uint8_t* buf = builder.GetBufferPointer();
     int buf_size = builder.GetSize();
 
-     client->m_pInterface->SendMessageToConnection(client->m_hConnection, buf, buf_size, k_nSteamNetworkingSend_Reliable, nullptr);
+    client->m_pInterface->SendMessageToConnection(client->m_hConnection, buf, buf_size, k_nSteamNetworkingSend_Reliable, nullptr);
+    odsloga("Input message send!\n");
 
     // Reset data structures
     builder.Clear();

@@ -17,7 +17,7 @@ public:
 private:
     InputManager* m_inputManager;
     ComponentHandle<KeyState> keyState;
-    void pollKeys();
+    bool pollKeys();
     void sendKeyStateToServer();
     ComponentHandle<ClientSocketSingleton> client;
 };

@@ -12,7 +12,7 @@
 ClientInputSystem::ClientInputSystem()
 {
     signature.addComponent<ServerSocketSingleton>();
-    signature.addComponent<KeyState>();  // Make this a singleton, or keep one per entity? 
+    signature.addComponent<KeyStateSingleton>(); // Map of client to key state
 }
 
 void ClientInputSystem::init()
@@ -21,10 +21,12 @@ void ClientInputSystem::init()
     for (auto& entity : registeredEntities)
     {
         ComponentHandle<ServerSocketSingleton> server_component;
-        parentWorld->unpack(entity, server_component);
+        ComponentHandle<KeyStateSingleton> keystate_component;
+        parentWorld->unpack(entity, server_component, keystate_component);
 
         /* Store a reference directly to the server singleton component. */
         server = server_component;
+        keys = keystate_component;
     }
 }
 
@@ -48,7 +50,7 @@ void ClientInputSystem::update(double dt)
             
             // Process the message
             auto entity_buffer = EntityBuffer::GetEntity(buffer_pointer);
-            processInputMessage(entity_buffer, { entity_id });
+            processInputMessage(entity_buffer, { entity_id }, uuid);
 
             msg->Release();
         }
@@ -56,7 +58,7 @@ void ClientInputSystem::update(double dt)
 }
 
 /* Pull key state data from flatbuffer message */
-void ClientInputSystem::processInputMessage(const EntityBuffer::Entity* entity_buffer, Entity e)
+void ClientInputSystem::processInputMessage(const EntityBuffer::Entity* entity_buffer, Entity e, boost::uuids::uuid uuid)
 {
     auto cs = entity_buffer->component();
     auto cts = entity_buffer->component_type();
@@ -73,8 +75,9 @@ void ClientInputSystem::processInputMessage(const EntityBuffer::Entity* entity_b
             ComponentHandle<KeyState> key_state;
             parentWorld->unpack(e, key_state);
 
+            // Assign fbs bitset to client's stored key state
             auto data = cs->GetAs<EntityBuffer::KeyState>(idx);
-            key_state->keyDownState = std::bitset<64>(data->bitset());
+            keys->keyDownMap[uuid] = std::bitset<64>(data->bitset());
             break;
         }
         }

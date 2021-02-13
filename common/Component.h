@@ -64,6 +64,12 @@ struct KeyState : public Component<KeyState>
     std::bitset<NUM_KEYBINDINGS> keyDownState;
 };
 
+struct KeyStateSingleton : public Component<KeyStateSingleton>
+{
+    // Map client UUIDs to inputs
+    std::map<boost::uuids::uuid, std::bitset<NUM_KEYBINDINGS>> keyDownMap;
+};
+
 /* Debug windows */
 struct ImGuiSingleton : public Component<ImGuiSingleton>
 {

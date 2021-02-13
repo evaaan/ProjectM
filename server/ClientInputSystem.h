@@ -1,4 +1,5 @@
 #pragma once
+#include "fbs/entity_generated.h"
 
 // Forward declarations
 class ClientInputSystem;

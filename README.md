@@ -55,3 +55,5 @@ Visual Studio should recognize header includes for all vcpkg-installed projects 
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
 #include <flatbuffers/flatbuffers.h>
 ```
+
+5. Install [Boost](https://www.boost.org/users/download/) and add to C/C++ > General > Additional Include Directories.

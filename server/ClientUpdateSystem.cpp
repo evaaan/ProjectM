@@ -151,6 +151,9 @@ void ClientUpdateSystem::sendWorldUpdate()
         for (auto const& [hConn, uuid] : server->m_uuidMap)
         {
             server->m_pInterface->SendMessageToConnection(hConn, buf, buf_size, k_nSteamNetworkingSend_Reliable, nullptr);
+
+            // Reset worldDelta state
+            componentMask.clear();
         }
 
         // Reset data structures
@@ -158,8 +161,6 @@ void ClientUpdateSystem::sendWorldUpdate()
         types.clear();
         components.clear();
         
-        // Reset worldDelta state
-        componentMask.clear();
     }
 }
 

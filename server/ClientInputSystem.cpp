@@ -47,7 +47,7 @@ void ClientInputSystem::update(double dt)
             uint8_t* buffer_pointer = (uint8_t*)msg->m_pData;
             
             // Process the message
-            auto entity_buffer = EntityBuffer::GetEntity(buffer_pointer, { entity_id } );
+            auto entity_buffer = EntityBuffer::GetEntity(buffer_pointer);
             processInputMessage(entity_buffer, { entity_id });
 
             msg->Release();

@@ -183,5 +183,5 @@ struct PlayerDelta
 /* List of entities to update for ALL players */
 struct WorldDeltaSingleton
 {
-    std::map<int, ComponentMask> state;
+    std::map<int, ComponentMask> state;  // entity ID to Component Mask
 };

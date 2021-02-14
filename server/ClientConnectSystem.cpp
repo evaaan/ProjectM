@@ -285,34 +285,11 @@ void ClientConnectSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCall
         server->m_pInterface->SetConnectionName(pInfo->m_hConn, nick);
         odslog("New user connected: " << nick << "\n");
 
-        // Create an entity and send it to the client.
+        // Create an entity for the player
         auto id = addClientEntity(nick);
         server->m_idMap[uuid] = id;
 
-        // FlatBuffer will be sent by ClientUpdateSystem. Just create the entity and set its mask.
-        /*
-        flatbuffers::FlatBufferBuilder builder(1024);
-        auto connection = EntityBuffer::CreateConnection(builder, id,
-                                              builder.CreateString(std::string(nick)));
-
-        std::vector<uint8_t> types;
-        types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Connection));
-        types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Animation));
-        types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Transform));
-        types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Dynamic));
-        types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Outline));
-
-        std::vector<flatbuffers::Offset<void>> components;
-        components.push_back(connection.Union());
-        auto entity_offset = EntityBuffer::CreateEntity(builder, id,
-                                             builder.CreateVector(types),
-                                             builder.CreateVector(components));
-        EntityBuffer::FinishEntityBuffer(builder, entity_offset);
-
-        uint8_t* buf = builder.GetBufferPointer();
-        int buf_size = builder.GetSize();
-        server->m_pInterface->SendMessageToConnection(pInfo->m_hConn, buf, buf_size, k_nSteamNetworkingSend_Reliable, nullptr);
-        */ 
+        // Tell every component about it
         break;
     }
 
@@ -336,7 +313,7 @@ int ClientConnectSystem::addClientEntity(const char* nick)
     client_entity.addComponent(Player());
 
     int id = client_entity.entity.uuid;
-    int x_pos = 600;
+    int x_pos = 200 + (rand() % 800);
     int y_pos = 600;
 
     // Build Transform and Dynamic Components

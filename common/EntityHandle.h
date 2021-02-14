@@ -32,11 +32,22 @@ struct EntityHandle
         world->destroyEntity(entity);
     }
 
+    // Use variadic template to accept an unknown number of Components
+    template <typename ComponentType, typename... Args>
+    void addComponent(ComponentType&& component, ComponentType&&... args)
+    {
+        world->addComponent<ComponentType>(entity, std::forward<ComponentType>(component));
+
+        // Recurse
+        addComponent<Args...>(args...);
+    }
+
     template <typename ComponentType>
     void addComponent(ComponentType&& component)
     {
         world->addComponent<ComponentType>(entity, std::forward<ComponentType>(component));
     }
+
 
 
     template <typename ComponentType>

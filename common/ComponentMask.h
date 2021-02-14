@@ -9,6 +9,18 @@ struct ComponentMask
 {
     unsigned int mask = 0;
 
+    // Use variadic template to accept an number of Components
+    template <typename ComponentType1, typename ComponentType2, typename... Args>
+    void addComponent()
+    {
+        mask |= (1 << GetComponentFamily<ComponentType1>());
+        mask |= (1 << GetComponentFamily<ComponentType2>());
+
+        // Recurse
+        addComponent<Args...>();
+    }
+
+    // base case
     template <typename ComponentType>
     void addComponent()
     {

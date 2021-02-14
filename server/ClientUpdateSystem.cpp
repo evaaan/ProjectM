@@ -93,7 +93,7 @@ void ClientUpdateSystem::sendWorldUpdate()
 
         // Skip if there are no Entity updates to send
         if (mask == 0)
-            break;
+            continue;
 
         // Get components set in the worldDelta update
         std::vector<int> families = uint_to_vec(mask);
@@ -197,14 +197,15 @@ void ClientUpdateSystem::sendWorldUpdate()
         {
             server->m_pInterface->SendMessageToConnection(hConn, buf, buf_size, k_nSteamNetworkingSend_Reliable, nullptr);
 
-            // Reset worldDelta state
-            componentMask.clear();
         }
 
         // Reset data structures
         builder.Clear();
         types.clear();
         components.clear();
+
+        // Reset worldDelta state
+        componentMask.clear();
         
     }
 }

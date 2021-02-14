@@ -72,8 +72,6 @@ void GameManager::AddEntities()
     e.addSingletonComponent(CollisionSingleton()); // Collision Data
     e.addSingletonComponent(ClientSocketSingleton());  // Client Connection Data
     odsloga("Created ECS entity, id (" << e.id() << ")\n");
-
-    // addWolf(400, 400);
 }
 
 long numFrames = 0;
@@ -115,51 +113,4 @@ double GameManager::Update()
 World* GameManager::getWorld()
 {
     return m_world.get();
-}
-
-
-void GameManager::addWolf(int x, int y)
-{
-    EntityHandle wolf_entity = m_world->createEntity();
-    wolf_entity.addComponent(Animation());
-    wolf_entity.addComponent(Transform());
-    wolf_entity.addComponent(Dynamic());
-    wolf_entity.addComponent(Outline());
-
-    auto transform = wolf_entity.getComponent<Transform>();
-    transform->width = 64;
-    transform->height = 64;
-
-    auto dynamic = wolf_entity.getComponent<Dynamic>();
-    dynamic->width = transform->width;
-    dynamic->height = transform->height;
-    dynamic->pos.x = x;
-    dynamic->pos.y = y;
-    dynamic->vel.x = 0.0;
-    dynamic->vel.y = 0.0;
-    dynamic->accel.x = 0.0;
-    dynamic->accel.y = 3000.0;
-    dynamic->type = BodyType::Mob;
-    odsloga("Added wolf, id: " << wolf_entity.entity.uuid << "\n");
-}
-
-void GameManager::addBox(int x, int y)
-{
-    // Box
-    EntityHandle solid_entity = m_world->createEntity();
-    solid_entity.addComponent(Transform());
-    solid_entity.addComponent(Dynamic());
-    solid_entity.addComponent(Outline());
-    auto solid_transform = solid_entity.getComponent<Transform>();
-    solid_transform->width = 200;
-    solid_transform->height = 200;
-    auto solid_dynamic = solid_entity.getComponent<Dynamic>();
-    solid_dynamic->width = solid_transform->width;
-    solid_dynamic->height = solid_transform->height;
-    solid_dynamic->pos.x = x;
-    solid_dynamic->pos.y = y;
-    solid_dynamic->type = BodyType::Ledge;
-    auto solid_outline = solid_entity.getComponent<Outline>();
-    solid_outline->color = Color::red;
-    solid_outline->width = 1;
 }

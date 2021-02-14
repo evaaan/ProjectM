@@ -306,11 +306,7 @@ int ClientConnectSystem::addClientEntity(const char* nick)
 {
     // Create Entity and add Components
     EntityHandle client_entity = parentWorld->createEntity();
-    client_entity.addComponent(Animation());
-    client_entity.addComponent(Transform());
-    client_entity.addComponent(Dynamic());
-    client_entity.addComponent(Outline());
-    client_entity.addComponent(Player());
+    client_entity.addComponent(Animation(), Transform(), Dynamic(), Outline(), Player());
 
     int id = client_entity.entity.uuid;
     int x_pos = 200 + (rand() % 800);
@@ -345,11 +341,7 @@ int ClientConnectSystem::addClientEntity(const char* nick)
 
     // Set mask so that ClientUpdateSystem updates the client(s)
     worldDelta->state[id] = ComponentMask();
-    worldDelta->state[id].addComponent<Animation>();
-    worldDelta->state[id].addComponent<Transform>();
-    worldDelta->state[id].addComponent<Dynamic>();
-    worldDelta->state[id].addComponent<Outline>();
-    worldDelta->state[id].addComponent<Player>();
+    worldDelta->state[id].addComponent<Animation, Transform, Dynamic, Outline, Player>();
 
     return id;
 }

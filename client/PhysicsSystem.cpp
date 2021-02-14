@@ -247,7 +247,7 @@ void PhysicsSystem::demoRunTick(double dt)
 
         dynamic->prev_pos = dynamic->pos;
 
-        if (dynamic->type == BodyType::Player)
+        if (dynamic->type == BodyType::Mob)
         {
 
             /* Set x velocity based on key presses. */

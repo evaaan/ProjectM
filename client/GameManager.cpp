@@ -53,7 +53,7 @@ void GameManager::AddSystems()
     m_world->addSystem(std::move(std::make_unique<ServerConnectSystem>(serverAddr)));
 
     /* Receive updates from server */
-    m_world->addSystem(std::move(std::make_unique<ServerUpdateSystem>()));
+    m_world->addSystem(std::move(std::make_unique<ServerUpdateSystem>(m_graphicManager)));
 
     /* Poll inputs and send to server */
     m_world->addSystem(std::move(std::make_unique<InputSystem>(m_inputManager)));
@@ -139,7 +139,7 @@ void GameManager::addWolf(int x, int y)
     dynamic->vel.y = 0.0;
     dynamic->accel.x = 0.0;
     dynamic->accel.y = 3000.0;
-    dynamic->type = BodyType::Player;
+    dynamic->type = BodyType::Mob;
     odsloga("Added wolf, id: " << wolf_entity.entity.uuid << "\n");
 }
 

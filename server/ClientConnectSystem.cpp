@@ -82,6 +82,9 @@ ClientConnectSystem::ClientConnectSystem()
 {
     // Add ComponentTypes the System acts on
     signature.addComponent<ServerSocketSingleton>();
+
+    // Client entity is created on connection
+    signature.addComponent<WorldDeltaSingleton>();
 }
 
 /* Cleanup server connections */
@@ -111,10 +114,14 @@ void ClientConnectSystem::init()
     for (auto& entity : registeredEntities)
     {
         ComponentHandle<ServerSocketSingleton> server_component;
-        parentWorld->unpack(entity, server_component);
+        ComponentHandle<WorldDeltaSingleton> delta_component;
+        parentWorld->unpack(entity, server_component, delta_component);
 
         /* Store a reference directly to the server singleton component. */
         server = server_component;
+
+        /* Store a reference directly to the worldDelta singleton component. */
+        worldDelta = delta_component;
     }
     InitSteamDatagramConnectionSockets();
 
@@ -278,16 +285,22 @@ void ClientConnectSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCall
         server->m_pInterface->SetConnectionName(pInfo->m_hConn, nick);
         odslog("New user connected: " << nick << "\n");
 
-        // Create an entity and send it to the client. or should we send uuid?
-        auto new_entity = parentWorld->createEntity();
-        auto id = new_entity.id();
+        // Create an entity and send it to the client.
+        auto id = addClientEntity(nick);
         server->m_idMap[uuid] = id;
+
+        // FlatBuffer will be sent by ClientUpdateSystem. Just create the entity and set its mask.
+        /*
         flatbuffers::FlatBufferBuilder builder(1024);
         auto connection = EntityBuffer::CreateConnection(builder, id,
                                               builder.CreateString(std::string(nick)));
 
         std::vector<uint8_t> types;
         types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Connection));
+        types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Animation));
+        types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Transform));
+        types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Dynamic));
+        types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Outline));
 
         std::vector<flatbuffers::Offset<void>> components;
         components.push_back(connection.Union());
@@ -299,7 +312,7 @@ void ClientConnectSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCall
         uint8_t* buf = builder.GetBufferPointer();
         int buf_size = builder.GetSize();
         server->m_pInterface->SendMessageToConnection(pInfo->m_hConn, buf, buf_size, k_nSteamNetworkingSend_Reliable, nullptr);
-
+        */ 
         break;
     }
 
@@ -310,6 +323,58 @@ void ClientConnectSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCall
     default:
         break;
     }
+}
+
+int ClientConnectSystem::addClientEntity(const char* nick)
+{
+    // Create Entity and add Components
+    EntityHandle client_entity = parentWorld->createEntity();
+    client_entity.addComponent(Animation());
+    client_entity.addComponent(Transform());
+    client_entity.addComponent(Dynamic());
+    client_entity.addComponent(Outline());
+    client_entity.addComponent(Player());
+
+    int id = client_entity.entity.uuid;
+    int x_pos = 600;
+    int y_pos = 600;
+
+    // Build Transform and Dynamic Components
+    auto transform = client_entity.getComponent<Transform>();
+    transform->width = 64;
+    transform->height = 64;
+    transform->x = x_pos;
+    transform->y = y_pos;
+
+    auto dynamic = client_entity.getComponent<Dynamic>();
+    dynamic->width = transform->width;
+    dynamic->height = transform->height;
+    dynamic->pos.x = x_pos;
+    dynamic->pos.y = y_pos;
+    dynamic->vel.x = 0.0;
+    dynamic->vel.y = 0.0;
+    dynamic->accel.x = 0.0;
+    dynamic->accel.y = 3000.0;
+    dynamic->type = BodyType::Mob;
+    odsloga("Added client entity, id: " << id << "\n");
+
+    // Transform component data loaded locally on client9s)!
+    // todo: encode animation layer information instead of hard coding on client side
+
+    // Set player nickname and entity ID
+    auto player = client_entity.getComponent<Player>();
+    player->id = id;
+    player->username = nick;
+
+    // Set mask so that ClientUpdateSystem updates the client(s)
+    worldDelta->state[id] = ComponentMask();
+    worldDelta->state[id].addComponent<Animation>();
+    worldDelta->state[id].addComponent<Transform>();
+    worldDelta->state[id].addComponent<Dynamic>();
+    worldDelta->state[id].addComponent<Outline>();
+    worldDelta->state[id].addComponent<Player>();
+
+    return id;
 }
 
 void ClientConnectSystem::SendStringToClient(HSteamNetConnection conn, const char* str)

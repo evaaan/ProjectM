@@ -106,7 +106,7 @@ void GraphicManager::makeTonsOfWolves(unsigned int numberOfWolves)
     }
 }
 
-/* Create an Animation Component (of a Wolf) */
+/* Create an Animation Component */
 void GraphicManager::loadAnimation(LPCWSTR spriteSheetFile, ComponentHandle<Animation> &animation)
 {
     HRESULT hr;

@@ -22,30 +22,27 @@ struct KeyStateBuilder;
 struct Player;
 struct PlayerBuilder;
 
-struct Connection;
-struct ConnectionBuilder;
-
 struct Outline;
 struct OutlineBuilder;
-
-struct Entity;
-struct EntityBuilder;
 
 struct Animation;
 struct AnimationBuilder;
 
+struct Entity;
+struct EntityBuilder;
+
 enum BodyType {
-  BodyType_Player = 0,
+  BodyType_Mob = 0,
   BodyType_Transparent = 1,
   BodyType_Ledge = 2,
   BodyType_Solid = 3,
-  BodyType_MIN = BodyType_Player,
+  BodyType_MIN = BodyType_Mob,
   BodyType_MAX = BodyType_Solid
 };
 
 inline const BodyType (&EnumValuesBodyType())[4] {
   static const BodyType values[] = {
-    BodyType_Player,
+    BodyType_Mob,
     BodyType_Transparent,
     BodyType_Ledge,
     BodyType_Solid
@@ -55,7 +52,7 @@ inline const BodyType (&EnumValuesBodyType())[4] {
 
 inline const char * const *EnumNamesBodyType() {
   static const char * const names[5] = {
-    "Player",
+    "Mob",
     "Transparent",
     "Ledge",
     "Solid",
@@ -65,7 +62,7 @@ inline const char * const *EnumNamesBodyType() {
 }
 
 inline const char *EnumNameBodyType(BodyType e) {
-  if (flatbuffers::IsOutRange(e, BodyType_Player, BodyType_Solid)) return "";
+  if (flatbuffers::IsOutRange(e, BodyType_Mob, BodyType_Solid)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesBodyType()[index];
 }
@@ -112,27 +109,61 @@ inline const char *EnumNameColor(Color e) {
   return EnumNamesColor()[index];
 }
 
+enum AnimType {
+  AnimType_Idle = 0,
+  AnimType_Walk = 1,
+  AnimType_Attack = 2,
+  AnimType_Fall = 3,
+  AnimType_MIN = AnimType_Idle,
+  AnimType_MAX = AnimType_Fall
+};
+
+inline const AnimType (&EnumValuesAnimType())[4] {
+  static const AnimType values[] = {
+    AnimType_Idle,
+    AnimType_Walk,
+    AnimType_Attack,
+    AnimType_Fall
+  };
+  return values;
+}
+
+inline const char * const *EnumNamesAnimType() {
+  static const char * const names[5] = {
+    "Idle",
+    "Walk",
+    "Attack",
+    "Fall",
+    nullptr
+  };
+  return names;
+}
+
+inline const char *EnumNameAnimType(AnimType e) {
+  if (flatbuffers::IsOutRange(e, AnimType_Idle, AnimType_Fall)) return "";
+  const size_t index = static_cast<size_t>(e);
+  return EnumNamesAnimType()[index];
+}
+
 enum Component {
   Component_NONE = 0,
   Component_Transform = 1,
   Component_Dynamic = 2,
   Component_KeyState = 3,
   Component_Player = 4,
-  Component_Connection = 5,
-  Component_Outline = 6,
-  Component_Animation = 7,
+  Component_Outline = 5,
+  Component_Animation = 6,
   Component_MIN = Component_NONE,
   Component_MAX = Component_Animation
 };
 
-inline const Component (&EnumValuesComponent())[8] {
+inline const Component (&EnumValuesComponent())[7] {
   static const Component values[] = {
     Component_NONE,
     Component_Transform,
     Component_Dynamic,
     Component_KeyState,
     Component_Player,
-    Component_Connection,
     Component_Outline,
     Component_Animation
   };
@@ -140,13 +171,12 @@ inline const Component (&EnumValuesComponent())[8] {
 }
 
 inline const char * const *EnumNamesComponent() {
-  static const char * const names[9] = {
+  static const char * const names[8] = {
     "NONE",
     "Transform",
     "Dynamic",
     "KeyState",
     "Player",
-    "Connection",
     "Outline",
     "Animation",
     nullptr
@@ -178,10 +208,6 @@ template<> struct ComponentTraits<EntityBuffer::KeyState> {
 
 template<> struct ComponentTraits<EntityBuffer::Player> {
   static const Component enum_value = Component_Player;
-};
-
-template<> struct ComponentTraits<EntityBuffer::Connection> {
-  static const Component enum_value = Component_Connection;
 };
 
 template<> struct ComponentTraits<EntityBuffer::Outline> {
@@ -297,7 +323,8 @@ struct Dynamic FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     VT_POS = 8,
     VT_PREV_POS = 10,
     VT_VEL = 12,
-    VT_ACCEL = 14
+    VT_ACCEL = 14,
+    VT_TYPE = 16
   };
   float width() const {
     return GetField<float>(VT_WIDTH, 0.0f);
@@ -317,6 +344,9 @@ struct Dynamic FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   const EntityBuffer::Vec2 *accel() const {
     return GetStruct<const EntityBuffer::Vec2 *>(VT_ACCEL);
   }
+  EntityBuffer::BodyType type() const {
+    return static_cast<EntityBuffer::BodyType>(GetField<int8_t>(VT_TYPE, 0));
+  }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<float>(verifier, VT_WIDTH) &&
@@ -325,6 +355,7 @@ struct Dynamic FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
            VerifyField<EntityBuffer::Vec2>(verifier, VT_PREV_POS) &&
            VerifyField<EntityBuffer::Vec2>(verifier, VT_VEL) &&
            VerifyField<EntityBuffer::Vec2>(verifier, VT_ACCEL) &&
+           VerifyField<int8_t>(verifier, VT_TYPE) &&
            verifier.EndTable();
   }
 };
@@ -351,6 +382,9 @@ struct DynamicBuilder {
   void add_accel(const EntityBuffer::Vec2 *accel) {
     fbb_.AddStruct(Dynamic::VT_ACCEL, accel);
   }
+  void add_type(EntityBuffer::BodyType type) {
+    fbb_.AddElement<int8_t>(Dynamic::VT_TYPE, static_cast<int8_t>(type), 0);
+  }
   explicit DynamicBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
@@ -370,7 +404,8 @@ inline flatbuffers::Offset<Dynamic> CreateDynamic(
     const EntityBuffer::Vec2 *pos = 0,
     const EntityBuffer::Vec2 *prev_pos = 0,
     const EntityBuffer::Vec2 *vel = 0,
-    const EntityBuffer::Vec2 *accel = 0) {
+    const EntityBuffer::Vec2 *accel = 0,
+    EntityBuffer::BodyType type = EntityBuffer::BodyType_Mob) {
   DynamicBuilder builder_(_fbb);
   builder_.add_accel(accel);
   builder_.add_vel(vel);
@@ -378,6 +413,7 @@ inline flatbuffers::Offset<Dynamic> CreateDynamic(
   builder_.add_pos(pos);
   builder_.add_height(height);
   builder_.add_width(width);
+  builder_.add_type(type);
   return builder_.Finish();
 }
 
@@ -427,58 +463,6 @@ struct Player FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   typedef PlayerBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_ID = 4,
-    VT_OWNER = 6
-  };
-  int32_t id() const {
-    return GetField<int32_t>(VT_ID, 0);
-  }
-  bool owner() const {
-    return GetField<uint8_t>(VT_OWNER, 0) != 0;
-  }
-  bool Verify(flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyField<int32_t>(verifier, VT_ID) &&
-           VerifyField<uint8_t>(verifier, VT_OWNER) &&
-           verifier.EndTable();
-  }
-};
-
-struct PlayerBuilder {
-  typedef Player Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  void add_id(int32_t id) {
-    fbb_.AddElement<int32_t>(Player::VT_ID, id, 0);
-  }
-  void add_owner(bool owner) {
-    fbb_.AddElement<uint8_t>(Player::VT_OWNER, static_cast<uint8_t>(owner), 0);
-  }
-  explicit PlayerBuilder(flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  PlayerBuilder &operator=(const PlayerBuilder &);
-  flatbuffers::Offset<Player> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<Player>(end);
-    return o;
-  }
-};
-
-inline flatbuffers::Offset<Player> CreatePlayer(
-    flatbuffers::FlatBufferBuilder &_fbb,
-    int32_t id = 0,
-    bool owner = false) {
-  PlayerBuilder builder_(_fbb);
-  builder_.add_id(id);
-  builder_.add_owner(owner);
-  return builder_.Finish();
-}
-
-struct Connection FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef ConnectionBuilder Builder;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_ID = 4,
     VT_USERNAME = 6
   };
   int32_t id() const {
@@ -496,44 +480,44 @@ struct Connection FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   }
 };
 
-struct ConnectionBuilder {
-  typedef Connection Table;
+struct PlayerBuilder {
+  typedef Player Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
   void add_id(int32_t id) {
-    fbb_.AddElement<int32_t>(Connection::VT_ID, id, 0);
+    fbb_.AddElement<int32_t>(Player::VT_ID, id, 0);
   }
   void add_username(flatbuffers::Offset<flatbuffers::String> username) {
-    fbb_.AddOffset(Connection::VT_USERNAME, username);
+    fbb_.AddOffset(Player::VT_USERNAME, username);
   }
-  explicit ConnectionBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+  explicit PlayerBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ConnectionBuilder &operator=(const ConnectionBuilder &);
-  flatbuffers::Offset<Connection> Finish() {
+  PlayerBuilder &operator=(const PlayerBuilder &);
+  flatbuffers::Offset<Player> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<Connection>(end);
+    auto o = flatbuffers::Offset<Player>(end);
     return o;
   }
 };
 
-inline flatbuffers::Offset<Connection> CreateConnection(
+inline flatbuffers::Offset<Player> CreatePlayer(
     flatbuffers::FlatBufferBuilder &_fbb,
     int32_t id = 0,
     flatbuffers::Offset<flatbuffers::String> username = 0) {
-  ConnectionBuilder builder_(_fbb);
+  PlayerBuilder builder_(_fbb);
   builder_.add_username(username);
   builder_.add_id(id);
   return builder_.Finish();
 }
 
-inline flatbuffers::Offset<Connection> CreateConnectionDirect(
+inline flatbuffers::Offset<Player> CreatePlayerDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
     int32_t id = 0,
     const char *username = nullptr) {
   auto username__ = username ? _fbb.CreateString(username) : 0;
-  return EntityBuffer::CreateConnection(
+  return EntityBuffer::CreatePlayer(
       _fbb,
       id,
       username__);
@@ -588,6 +572,48 @@ inline flatbuffers::Offset<Outline> CreateOutline(
   OutlineBuilder builder_(_fbb);
   builder_.add_width(width);
   builder_.add_color(color);
+  return builder_.Finish();
+}
+
+struct Animation FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
+  typedef AnimationBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_TYPE = 4
+  };
+  EntityBuffer::AnimType type() const {
+    return static_cast<EntityBuffer::AnimType>(GetField<int8_t>(VT_TYPE, 0));
+  }
+  bool Verify(flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<int8_t>(verifier, VT_TYPE) &&
+           verifier.EndTable();
+  }
+};
+
+struct AnimationBuilder {
+  typedef Animation Table;
+  flatbuffers::FlatBufferBuilder &fbb_;
+  flatbuffers::uoffset_t start_;
+  void add_type(EntityBuffer::AnimType type) {
+    fbb_.AddElement<int8_t>(Animation::VT_TYPE, static_cast<int8_t>(type), 0);
+  }
+  explicit AnimationBuilder(flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  AnimationBuilder &operator=(const AnimationBuilder &);
+  flatbuffers::Offset<Animation> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = flatbuffers::Offset<Animation>(end);
+    return o;
+  }
+};
+
+inline flatbuffers::Offset<Animation> CreateAnimation(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    EntityBuffer::AnimType type = EntityBuffer::AnimType_Idle) {
+  AnimationBuilder builder_(_fbb);
+  builder_.add_type(type);
   return builder_.Finish();
 }
 
@@ -670,36 +696,6 @@ inline flatbuffers::Offset<Entity> CreateEntityDirect(
       component__);
 }
 
-struct Animation FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
-  typedef AnimationBuilder Builder;
-  bool Verify(flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           verifier.EndTable();
-  }
-};
-
-struct AnimationBuilder {
-  typedef Animation Table;
-  flatbuffers::FlatBufferBuilder &fbb_;
-  flatbuffers::uoffset_t start_;
-  explicit AnimationBuilder(flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  AnimationBuilder &operator=(const AnimationBuilder &);
-  flatbuffers::Offset<Animation> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = flatbuffers::Offset<Animation>(end);
-    return o;
-  }
-};
-
-inline flatbuffers::Offset<Animation> CreateAnimation(
-    flatbuffers::FlatBufferBuilder &_fbb) {
-  AnimationBuilder builder_(_fbb);
-  return builder_.Finish();
-}
-
 inline bool VerifyComponent(flatbuffers::Verifier &verifier, const void *obj, Component type) {
   switch (type) {
     case Component_NONE: {
@@ -719,10 +715,6 @@ inline bool VerifyComponent(flatbuffers::Verifier &verifier, const void *obj, Co
     }
     case Component_Player: {
       auto ptr = reinterpret_cast<const EntityBuffer::Player *>(obj);
-      return verifier.VerifyTable(ptr);
-    }
-    case Component_Connection: {
-      auto ptr = reinterpret_cast<const EntityBuffer::Connection *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case Component_Outline: {

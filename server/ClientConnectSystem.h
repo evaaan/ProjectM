@@ -20,9 +20,11 @@ private:
     static void ConnStatusChangedCallback(SteamNetConnectionStatusChangedCallback_t* pInfo);
     void OnConnStatusChange(SteamNetConnectionStatusChangedCallback_t* pInfo);
     void PollConnectionStateChanges();
+    int addClientEntity(const char* nick);
 
     void SendStringToClient(HSteamNetConnection conn, const char* str);
 
-
     ComponentHandle<ServerSocketSingleton> server;
+    ComponentHandle<WorldDeltaSingleton> worldDelta;
+    
 };

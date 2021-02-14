@@ -3,13 +3,14 @@
 #include "EntityHandle.h"
 #include "System.h"
 #include "World.h"
+#include "GraphicManager.h"
 #include "ServerUpdateSystem.h"
 #include "Utilities.h"
 #include "fbs/entity_generated.h"
 
 
 /* Receive entity updates from Server */
-ServerUpdateSystem::ServerUpdateSystem()
+ServerUpdateSystem::ServerUpdateSystem(GraphicManager* graphicManager) : m_graphicManager(graphicManager)
 {
     // Add ComponentTypes the System acts on
     // signature.addComponent<ComponentType>();
@@ -86,6 +87,8 @@ void ServerUpdateSystem::createEntity(const EntityBuffer::Entity* entity_buffer)
     auto num_cts = cts->size();      // number of components
 
     auto id = entity_buffer->id();
+
+    odsloga("New entity (" << id << ") has " << num_cts << " components.\n");
     auto entity = parentWorld->createEntity(id);
 
     for (auto idx = 0; idx < num_cts; idx++)
@@ -103,8 +106,8 @@ void ServerUpdateSystem::createEntity(const EntityBuffer::Entity* entity_buffer)
         { entity.addComponent(Animation()); break; }
         case EntityBuffer::Component_Outline:
         { entity.addComponent(Outline()); break; }
-        case EntityBuffer::Component_Connection:
-        { break; }
+        case EntityBuffer::Component_Player:
+        { entity.addComponent(Player());  break; }
         }
     }
 }
@@ -142,12 +145,43 @@ void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
             odsloga("Dynamic message!\n");
             ComponentHandle<Dynamic> dynamic;
             parentWorld->unpack(e, dynamic);
+
+            auto data = cs->GetAs<EntityBuffer::Dynamic>(idx);
+            dynamic->width = data->width();
+            dynamic->height = data->height();
+            dynamic->pos.x = data->pos()->x();
+            dynamic->pos.y = data->pos()->y();
+            dynamic->prev_pos.x = data->prev_pos()->x();
+            dynamic->prev_pos.y = data->prev_pos()->y();
+            dynamic->vel.x = data->vel()->x();
+            dynamic->vel.y = data->vel()->y();
+            dynamic->accel.x = data->accel()->x();
+            dynamic->accel.y = data->accel()->y();
+
+            switch (data->type())
+            {
+            case EntityBuffer::BodyType_Mob: dynamic->type = BodyType::Mob; break;
+            case EntityBuffer::BodyType_Transparent: dynamic->type = BodyType::Transparent; break;
+            case EntityBuffer::BodyType_Ledge: dynamic->type = BodyType::Ledge; break;
+            case EntityBuffer::BodyType_Solid: dynamic->type = BodyType::Solid; break;
+            default: dynamic->type = BodyType::Solid; break;
+            }
             break;
         }
-        case EntityBuffer::Component_Connection:
+        case EntityBuffer::Component_KeyState:
+        {  // Won't get a KeyState from the server
+            break;
+        }
+
+        case EntityBuffer::Component_Player:
         {
-            odsloga("Connection message!\n");
-            // Assign our own nickname and which entity we control
+            odslog("Player message!\n");
+            ComponentHandle<Player> player;
+            parentWorld->unpack(e, player);
+
+            auto data = cs->GetAs<EntityBuffer::Player>(idx);
+            player->id = data->id();
+            player->username = data->username()->str();
             break;
         }
         case EntityBuffer::Component_Outline:
@@ -170,12 +204,22 @@ void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
             outline->width = data->width();
             break;
         }
-
-        case EntityBuffer::Component_KeyState:
-        { }
         case EntityBuffer::Component_Animation:
-        { }
+        {
+            odsloga("Animation message!\n");
+            ComponentHandle<Animation> animation;
+            parentWorld->unpack(e, animation);
 
+            odsloga("GetAs\n");
+            auto data = cs->GetAs<EntityBuffer::Animation>(idx);
+            // data->type() // Get animation type
+
+            // Hard code assets for now
+            odsloga("load assets\n");
+            m_graphicManager->loadAnimation(L"C:/assets/sprites/nakedManMirror.png", animation);
+            odsloga("assets loaded\n");
+            break;
+        }
         default:
         {
             odsloga("Unknown message! \n");

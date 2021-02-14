@@ -113,6 +113,32 @@ void ClientUpdateSystem::sendWorldUpdate()
             }
             else if (family == GetComponentFamily<Dynamic>())
             {
+                ComponentHandle<Dynamic> c;
+                parentWorld->unpack({ id }, c);
+
+                // Build Vec2 tables
+                auto pos = EntityBuffer::Vec2(c->pos.x, c->pos.y);
+                auto prev_pos = EntityBuffer::Vec2(c->prev_pos.x, c->prev_pos.y);
+                auto vel = EntityBuffer::Vec2(c->vel.x, c->vel.y);
+                auto accel = EntityBuffer::Vec2(c->accel.x, c->accel.y);
+
+                // BodyType enum
+                EntityBuffer::BodyType body_type;
+                switch (c->type)
+                {
+                case BodyType::Mob: body_type = EntityBuffer::BodyType_Mob; break;
+                case BodyType::Transparent: body_type = EntityBuffer::BodyType_Transparent; break;
+                case BodyType::Ledge: body_type = EntityBuffer::BodyType_Ledge; break;
+                case BodyType::Solid: body_type = EntityBuffer::BodyType_Solid; break;
+                default: body_type = EntityBuffer::BodyType_Solid; break;
+                }
+                
+
+                // Build FlatBuffer
+                auto dynamic = EntityBuffer::CreateDynamic(builder, c->width, c->height,
+                                                           &pos, &prev_pos, &vel, &accel, body_type);
+                types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Dynamic));
+                components.push_back(dynamic.Union());
             }
             else if (family == GetComponentFamily<Outline>())
             {
@@ -132,6 +158,26 @@ void ClientUpdateSystem::sendWorldUpdate()
                 auto outline = EntityBuffer::CreateOutline(builder, buffer_color, c->width);
                 types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Outline));
                 components.push_back(outline.Union());
+            }
+            else if (family == GetComponentFamily<Player>())
+            {
+                ComponentHandle<Player> c;
+                parentWorld->unpack({ id }, c);
+
+                // Build username string
+                auto username = builder.CreateString(c->username);
+
+                // Build flatbuffer and push_back the table type
+                auto player = EntityBuffer::CreatePlayer(builder, c->id, username);
+                types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Player));
+                components.push_back(player.Union());
+            }
+            else if (family == GetComponentFamily<Animation>())
+            {
+                EntityBuffer::AnimType buffer_anim = EntityBuffer::AnimType_Idle;
+                auto animation = EntityBuffer::CreateAnimation(builder, buffer_anim);
+                types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Animation));
+                components.push_back(animation.Union());
             }
         }
         // Create entity table and get offset

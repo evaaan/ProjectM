@@ -92,7 +92,7 @@ struct Transform : public Component<Transform>
     int height;
 };
 
-enum class BodyType { Player, Transparent, Ledge, Solid };
+enum class BodyType { Mob, Transparent, Ledge, Solid };
 
 /* Affected by physics */
 struct Dynamic : public Component<Dynamic>
@@ -148,6 +148,13 @@ struct Outline : public Component<Outline>
     int width;
 };
 
+/* Player specific information */
+struct Player : public Component<Player>
+{
+    int id;
+    std::string username;
+};
+
 /* Server Steam Socket */
 struct ServerSocketSingleton : public Component<ServerSocketSingleton>
 {
@@ -181,13 +188,12 @@ struct ClientInput : public Component<ClientInput>
 
 
 /* List of entities to update for the player */
-struct PlayerDelta
+struct PlayerDelta : public Component<PlayerDelta>
 {
-
 };
 
 /* List of entities to update for ALL players */
-struct WorldDeltaSingleton
+struct WorldDeltaSingleton : public Component<WorldDeltaSingleton>
 {
     std::map<int, ComponentMask> state;  // entity ID to Component Mask
 };

@@ -5,11 +5,13 @@ struct Vec2 {
   y:float;
 }
 
-enum BodyType : byte { Player=0, Transparent, Ledge, Solid }
+enum BodyType : byte { Mob=0, Transparent, Ledge, Solid }
 
 enum Color : byte { Yellow=0, Red, Green, Blue, Black, White }
 
-union Component { Transform, Dynamic, KeyState, Player, Connection, Outline, Animation }
+enum AnimType : byte { Idle=0, Walk, Attack, Fall }
+
+union Component { Transform, Dynamic, KeyState, Player, Outline, Animation }
 
 table Transform {
   x:int;
@@ -25,6 +27,7 @@ table Dynamic {
   prev_pos:Vec2;
   vel:Vec2;
   accel:Vec2;
+  type:BodyType;
 }
 
 table KeyState {
@@ -32,11 +35,6 @@ table KeyState {
 }
 
 table Player {
-  id:int;
-  owner:bool = false;
-}
-
-table Connection {
   id:int;
   username:string;
 }
@@ -46,13 +44,14 @@ table Outline {
   width:int;
 }
 
+table Animation {
+  type:AnimType;
+}
+
 // Entity ID and vector of Components to update 
 table Entity {
   id:int;
   component:[Component];  // Vector of Unions
-}
-
-table Animation {
 }
 
 root_type Entity;

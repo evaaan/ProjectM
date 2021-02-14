@@ -70,8 +70,9 @@ void ServerManager::AddSystems()
 
     /* Read and parse client messages */
     m_world->addSystem(std::move(std::make_unique<ClientInputSystem>()));
-    //m_world->addSystem(std::move(std::make_unique<CombatSystem>()));
+
     m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
+    //m_world->addSystem(std::move(std::make_unique<CombatSystem>()));
     //m_world->addSystem(std::move(std::make_unique<PlayerSystem>()));
 
     /* Send entity updates to clients */
@@ -80,8 +81,10 @@ void ServerManager::AddSystems()
 
 int ServerManager::AddBox(int x, int y, int height, int width, Color color)
 {
+    // Create entity
     auto box = m_world->createEntity();
     box.addComponent(Transform());
+    box.addComponent(Dynamic());
     box.addComponent(Outline());
     auto transform = box.getComponent<Transform>();
     transform->x = x;
@@ -89,15 +92,38 @@ int ServerManager::AddBox(int x, int y, int height, int width, Color color)
     transform->width = width;
     transform->height = height;
 
+    auto dynamic = box.getComponent<Dynamic>();
+    dynamic->width = width;
+    dynamic->height = height;
+    dynamic->pos.x = x;
+    dynamic->prev_pos.x = x;
+    dynamic->pos.y = y;
+    dynamic->prev_pos.y = y;
+    dynamic->vel.x = 0;
+    dynamic->vel.y = 0;
+    dynamic->accel.x = 0;
+    dynamic->accel.y = 0;
+    dynamic->type = BodyType::Ledge;
+    dynamic->falling = false;
+
     auto outline = box.getComponent<Outline>();
     outline->width = 2;
     outline->color = color;
-    return box.id();
+
+    // Update worldDelta
+    auto worldDelta = m_world->getSingletonComponent<WorldDeltaSingleton>();
+    int entity_id = box.id();
+    worldDelta->state[entity_id] = ComponentMask();
+    worldDelta->state[entity_id].addDefaultComponent<Transform, Dynamic, Outline>();
+    worldDelta->state[entity_id].setDefault();
+
+    odsloga("Created box with id " << entity_id << "\n");
+
+    return entity_id;
 }
 
 void ServerManager::AddEntities()
 {
-
     // Store all singleton components in a single entity
     auto e = m_world->createEntity();
     e.addSingletonComponent(CollisionSingleton()); // Collision Data
@@ -106,15 +132,9 @@ void ServerManager::AddEntities()
     e.addSingletonComponent(KeyStateSingleton());  // User input
 
     // Create boxes and update worldDelta
-    int id1 = AddBox(500, 500, 200, 300, Color::red);
-    int id2 = AddBox(900, 600, 300, 400, Color::red);
-    auto worldDelta = e.getComponent<WorldDeltaSingleton>();
-    worldDelta->state[id1] = ComponentMask();
-    worldDelta->state[id2] = ComponentMask();
-    worldDelta->state[id1].addComponent<Transform>();
-    worldDelta->state[id2].addComponent<Transform>();
-    worldDelta->state[id1].addComponent<Outline>();
-    worldDelta->state[id2].addComponent<Outline>();
+
+    AddBox(200, 600, 200, 300, Color::red);
+    AddBox(900, 600, 200, 300, Color::red);
 }
 
 long numFrames = 0;

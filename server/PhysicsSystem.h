@@ -20,15 +20,13 @@ private:
     ComponentHandle<WorldDeltaSingleton> worldDelta;
     ComponentHandle<KeyStateSingleton> keys;
     ComponentHandle<ServerSocketSingleton> server;
+    ComponentHandle<CollisionSingleton> collisions;
 
     void advanceTick(double dt);
 
-    std::set<int> getSolidCollisions(Entity entity);
-    void demoRunTick(double dt);
-
     bool checkCollision(ComponentHandle<Dynamic> one, ComponentHandle<Dynamic> two);
     void checkAllCollisions();
-    void demoResolveSolidCollisions();
-    void demoResolveLedgeCollisions();
+    void ResolveLedgeCollisions();
+    std::set<int> getSolidCollisions(Entity entity);
     void updateTransforms();
 };

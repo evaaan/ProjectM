@@ -296,11 +296,26 @@ void ClientConnectSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCall
 /* Notify all clients of all existing players */
 void ClientConnectSystem::updateAllClients()
 {
-    for (auto const& [uuid, entity_id] : server->m_idMap)
+    // for (auto const& [uuid, entity_id] : server->m_idMap)
+    for (auto const& entity_id: parentWorld->getEntityIds())
     {
-        worldDelta->state[entity_id].addComponent<Animation, Transform, Dynamic, Outline, Player>();
+        worldDelta->state[entity_id].setDefault();
     }
 }
+
+void ClientConnectSystem::destroyClient(boost::uuids::uuid uuid)
+{
+    int entity_id = server->m_idMap[uuid];
+
+    // Delete ECS references
+    parentWorld->destroyEntity({ entity_id });
+
+    // Delete netcode references
+    server->m_hConnMap.erase(uuid);
+    server->m_nickMap.erase(uuid);
+    server->m_idMap.erase(uuid);
+}
+
 
 int ClientConnectSystem::addClientEntity(const char* nick)
 {
@@ -341,7 +356,8 @@ int ClientConnectSystem::addClientEntity(const char* nick)
 
     // Set mask so that ClientUpdateSystem updates the client(s)
     worldDelta->state[id] = ComponentMask();
-    worldDelta->state[id].addComponent<Animation, Transform, Dynamic, Outline, Player>();
+    worldDelta->state[id].addDefaultComponent<Animation, Transform, Dynamic, Outline, Player>();
+    worldDelta->state[id].setDefault();
 
     return id;
 }

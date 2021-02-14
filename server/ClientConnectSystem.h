@@ -24,6 +24,7 @@ private:
 
     void SendStringToClient(HSteamNetConnection conn, const char* str);
     void updateAllClients();
+    void destroyClient(boost::uuids::uuid uuid);  // disconnect and delete a client
 
     ComponentHandle<ServerSocketSingleton> server;
     ComponentHandle<WorldDeltaSingleton> worldDelta;

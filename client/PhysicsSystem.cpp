@@ -53,6 +53,7 @@ void PhysicsSystem::showImGui()
         ImGui::DragInt2("Position (pix)", pos2a);
         float vel2a[2] = { (float)dynamic->vel.x, (float)dynamic->vel.y };
         ImGui::DragFloat2("Velocity (pix/sec)", vel2a);
+        ImGui::Text ("Falling? : %s", dynamic->falling ? "true" : "false");
 
         ImGui::PopID();
     }

@@ -59,7 +59,7 @@ void GameManager::AddSystems()
     m_world->addSystem(std::move(std::make_unique<InputSystem>(m_inputManager)));
 
     /* Run physics, animation, and overlays */
-    // m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
+    m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
     m_world->addSystem(std::move(std::make_unique<AnimationSystem>(m_graphicManager)));
     m_world->addSystem(std::move(std::make_unique<OverlaySystem>(m_graphicManager)));
 

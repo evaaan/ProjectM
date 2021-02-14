@@ -110,19 +110,9 @@ ClientConnectSystem::~ClientConnectSystem()
 
 void ClientConnectSystem::init()
 {
-    /* Only one server per World */
-    for (auto& entity : registeredEntities)
-    {
-        ComponentHandle<ServerSocketSingleton> server_component;
-        ComponentHandle<WorldDeltaSingleton> delta_component;
-        parentWorld->unpack(entity, server_component, delta_component);
+    server = parentWorld->getSingletonComponent<ServerSocketSingleton>();
+    worldDelta = parentWorld->getSingletonComponent<WorldDeltaSingleton>();
 
-        /* Store a reference directly to the server singleton component. */
-        server = server_component;
-
-        /* Store a reference directly to the worldDelta singleton component. */
-        worldDelta = delta_component;
-    }
     InitSteamDatagramConnectionSockets();
 
 
@@ -289,7 +279,8 @@ void ClientConnectSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCall
         auto id = addClientEntity(nick);
         server->m_idMap[uuid] = id;
 
-        // Tell every component about it
+        // Initialize world for the player; notify all clients of all other players out there
+        updateAllClients();
         break;
     }
 
@@ -302,6 +293,15 @@ void ClientConnectSystem::OnConnStatusChange(SteamNetConnectionStatusChangedCall
     }
 }
 
+/* Notify all clients of all existing players */
+void ClientConnectSystem::updateAllClients()
+{
+    for (auto const& [uuid, entity_id] : server->m_idMap)
+    {
+        worldDelta->state[entity_id].addComponent<Animation, Transform, Dynamic, Outline, Player>();
+    }
+}
+
 int ClientConnectSystem::addClientEntity(const char* nick)
 {
     // Create Entity and add Components
@@ -310,7 +310,7 @@ int ClientConnectSystem::addClientEntity(const char* nick)
 
     int id = client_entity.entity.uuid;
     int x_pos = 200 + (rand() % 800);
-    int y_pos = 600;
+    int y_pos = 200 + (rand() % 100);
 
     // Build Transform and Dynamic Components
     auto transform = client_entity.getComponent<Transform>();

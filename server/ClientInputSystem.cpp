@@ -1,3 +1,4 @@
+#include <bitset>
 #include <stdexcept>
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
 #include <boost/uuid/uuid.hpp>
@@ -19,22 +20,17 @@ ClientInputSystem::ClientInputSystem()
 
 void ClientInputSystem::init()
 {
-    /* Only one server per World */
-    for (auto& entity : registeredEntities)
-    {
-        ComponentHandle<ServerSocketSingleton> server_component;
-        ComponentHandle<KeyStateSingleton> keystate_component;
-        parentWorld->unpack(entity, server_component, keystate_component);
-
-        /* Store a reference directly to the server singleton component. */
-        server = server_component;
-        keys = keystate_component;
-    }
+    server = parentWorld->getSingletonComponent<ServerSocketSingleton>();
+    keys = parentWorld->getSingletonComponent<KeyStateSingleton>();
 }
 
 /* System behaviors */
 void ClientInputSystem::update(double dt)
 {
+    // Clear last known inputs
+    for (auto& [id, keyMap] : keys->keyDownMap)
+        keyMap.reset();
+
     // Read messages on poll group
     int num_calls = 0;
     ISteamNetworkingMessage* pIncomingMsg[16];
@@ -53,7 +49,7 @@ void ClientInputSystem::update(double dt)
             
             // Process the message
             auto entity_buffer = EntityBuffer::GetEntity(buffer_pointer);
-            processInputMessage(entity_buffer, { entity_id }, uuid);
+            processInputMessage(entity_buffer, entity_id);
             num_calls++;
 
             pIncomingMsg[msg_num]->Release();
@@ -62,7 +58,7 @@ void ClientInputSystem::update(double dt)
 }
 
 /* Pull key state data from flatbuffer message */
-void ClientInputSystem::processInputMessage(const EntityBuffer::Entity* entity_buffer, Entity e, boost::uuids::uuid uuid)
+void ClientInputSystem::processInputMessage(const EntityBuffer::Entity* entity_buffer, int id)
 {
     auto cs = entity_buffer->component();
     auto cts = entity_buffer->component_type();
@@ -77,9 +73,9 @@ void ClientInputSystem::processInputMessage(const EntityBuffer::Entity* entity_b
         {
             // Assign fbs bitset to client's stored key state
             auto data = cs->GetAs<EntityBuffer::KeyState>(idx);
-            keys->keyDownMap[uuid] = std::bitset<64>(data->bitset());
+            keys->keyDownMap[id] = std::bitset<64>(data->bitset());
 
-            odsloga("Client input (" << to_string(uuid) << "): " << keys->keyDownMap[uuid].to_string() << "\n");
+            // odsloga("Client input (" << id << "): " << keys->keyDownMap[id].to_string() << "\n");
             break;
         }
         }

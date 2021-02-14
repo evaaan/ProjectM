@@ -66,8 +66,8 @@ struct KeyState : public Component<KeyState>
 
 struct KeyStateSingleton : public Component<KeyStateSingleton>
 {
-    // Map client UUIDs to inputs
-    std::map<boost::uuids::uuid, std::bitset<NUM_KEYBINDINGS>> keyDownMap;
+    // Map entity ids to inputs
+    std::map<int, std::bitset<NUM_KEYBINDINGS>> keyDownMap;
 };
 
 /* Debug windows */
@@ -104,6 +104,7 @@ struct Dynamic : public Component<Dynamic>
     Vector2 vel;            // Velocity (speed (pix/sec) and direction vector)
     Vector2 accel;          // Acceleration
     BodyType type;       // trasparent, ledge, or solid
+    bool falling = true;
 };
 
 struct AnimationCycle
@@ -151,7 +152,7 @@ struct Outline : public Component<Outline>
 /* Player specific information */
 struct Player : public Component<Player>
 {
-    int id;
+    int id;  // entity ID
     std::string username;
 };
 
@@ -167,7 +168,7 @@ struct ServerSocketSingleton : public Component<ServerSocketSingleton>
     std::map<HSteamNetConnection, boost::uuids::uuid> m_uuidMap;  // Map Steam connections to user UUID
     std::map<boost::uuids::uuid, HSteamNetConnection> m_hConnMap;  // Map user UUIDs to Steam connection
     std::map<boost::uuids::uuid, std::string> m_nickMap;  // Map user UUIDs to username
-    std::map<boost::uuids::uuid, int> m_idMap;  // Map user UUIDs to username
+    std::map<boost::uuids::uuid, int> m_idMap;  // Map user UUIDs to entity ID
 };
 
 /* Client Steam Socket */

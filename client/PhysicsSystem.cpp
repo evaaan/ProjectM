@@ -27,8 +27,8 @@ void PhysicsSystem::init()
 void PhysicsSystem::update(double dt)
 {
     // demoRunTick(dt);  // hacky physics demo
-    advanceTick(dt);
-    checkAllCollisions();
+    // advanceTick(dt);
+    // checkAllCollisions();
     // demoResolveSolidCollisions();
     // demoResolveLedgeCollisions();
     // demoUpdateTransforms();
@@ -40,8 +40,6 @@ void PhysicsSystem::showImGui()
 {
     /* Entity position, velocity, and dimensions */
     ImGui::Begin("PhyicsSystem");
-    static int translate = 100;
-    ImGui::SliderInt("Translate", &translate, 0, 500, "%d");
     for (auto& entity : registeredEntities)
     {
         /* Get Components*/
@@ -51,31 +49,15 @@ void PhysicsSystem::showImGui()
         ImGui::PushID(entity.uuid);  // Use PushID and PopID to distinguish ids
         ImGui::Text("Entity %d", entity.uuid);
 
-        ImGui::SameLine();
-        if (ImGui::Button("Up"))
-            dynamic->pos.y -= translate;
-        ImGui::SameLine();
-        if (ImGui::Button("Down"))
-            dynamic->pos.y += translate;
-        ImGui::SameLine();
-        if (ImGui::Button("Left"))
-            dynamic->pos.x -= translate;
-        ImGui::SameLine();
-        if (ImGui::Button("Right"))
-            dynamic->pos.x += translate;
-
         int pos2a[2] = { (int)transform->x, (int)transform->y };
         ImGui::DragInt2("Position (pix)", pos2a);
         float vel2a[2] = { (float)dynamic->vel.x, (float)dynamic->vel.y };
         ImGui::DragFloat2("Velocity (pix/sec)", vel2a);
 
-        ImGui::SliderInt("Width (pix)", &transform->width, 0, 1000);
-        ImGui::SliderInt("Height (pix)", &transform->height, 0, 1000);
         ImGui::PopID();
     }
 
-    ImGui::End();
-    /* Collisions */
+    /* Collisions 
     ImGui::Begin("Collisions");
     ComponentHandle<CollisionSingleton> colHandle = parentWorld->getSingletonComponent<CollisionSingleton>();
 
@@ -100,6 +82,7 @@ void PhysicsSystem::showImGui()
         }
         ImGui::Spacing();
     }
+    */
     ImGui::End();
 }
 

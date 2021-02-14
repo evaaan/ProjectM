@@ -71,7 +71,7 @@ void ServerManager::AddSystems()
     /* Read and parse client messages */
     m_world->addSystem(std::move(std::make_unique<ClientInputSystem>()));
     //m_world->addSystem(std::move(std::make_unique<CombatSystem>()));
-    //m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
+    m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
     //m_world->addSystem(std::move(std::make_unique<PlayerSystem>()));
 
     /* Send entity updates to clients */

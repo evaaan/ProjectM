@@ -9,13 +9,12 @@ World::World(std::unique_ptr<EntityManager> em) : m_entityManager(std::move(em))
 
 World::~World() {}
 
+/* Initialize Systems */
 void World::init()
 {
-    /* Initialize Systems */
     for (auto& system : m_systems)
         system->init();
 }
-
 
 /* Update Systems */
 void World::update(double dt)

@@ -23,6 +23,7 @@ private:
     int addClientEntity(const char* nick);
 
     void SendStringToClient(HSteamNetConnection conn, const char* str);
+    void updateAllClients();
 
     ComponentHandle<ServerSocketSingleton> server;
     ComponentHandle<WorldDeltaSingleton> worldDelta;

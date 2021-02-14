@@ -2,6 +2,7 @@
 
 // Forward declarations
 class System;
+struct WorldDeltaSingleton;
 template <typename T>
 struct ComponentHandle;
 struct Dynamic;
@@ -11,14 +12,23 @@ class PhysicsSystem : public System {
 public:
     PhysicsSystem();
     void init();
-    void advanceTick(double dt);
     void update(double dt);
-    bool checkCollision(ComponentHandle<Dynamic> one, ComponentHandle<Dynamic> two);
-    void checkAllCollisions();
+    void render();
+
+private:
+
+    ComponentHandle<WorldDeltaSingleton> worldDelta;
+    ComponentHandle<KeyStateSingleton> keys;
+    ComponentHandle<ServerSocketSingleton> server;
+
+    void advanceTick(double dt);
+
     std::set<int> getSolidCollisions(Entity entity);
     void demoRunTick(double dt);
+
+    bool checkCollision(ComponentHandle<Dynamic> one, ComponentHandle<Dynamic> two);
+    void checkAllCollisions();
     void demoResolveSolidCollisions();
     void demoResolveLedgeCollisions();
-    void demoUpdateTransforms();
-    void render();
+    void updateTransforms();
 };

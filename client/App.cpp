@@ -10,7 +10,7 @@ App::App(HINSTANCE hInstance, HWND hWindow):
 
 void App::Initialize()
 {
-    int tick_ms = 20;  // 50 Hz max
+    int tick_ms = 10;  // 100 Hz max
 
     // Initialize GameEngine
     m_engine = std::make_unique<GameEngine>(appInstance, appWindow, tick_ms);

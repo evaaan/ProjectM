@@ -1,6 +1,4 @@
 #pragma once
-#include <boost/uuid/uuid.hpp>
-#include <boost/uuid/uuid_generators.hpp>
 #include "fbs/entity_generated.h"
 
 // Forward declarations
@@ -15,7 +13,7 @@ public:
     void render();
 
 private:
-    void processInputMessage(const EntityBuffer::Entity* entity_buffer, Entity e, boost::uuids::uuid uuid);
+    void processInputMessage(const EntityBuffer::Entity* entity_buffer, int id);  // Input message and entity ID
     ComponentHandle<ServerSocketSingleton> server;
     ComponentHandle<KeyStateSingleton> keys;
 };

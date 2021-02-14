@@ -39,26 +39,11 @@ ClientUpdateSystem::ClientUpdateSystem()
 
 void ClientUpdateSystem::init()
 {
+    /* Store a reference directly to the server singleton component. */
+    server = parentWorld->getSingletonComponent<ServerSocketSingleton>();
 
-    /* Only one server per World */
-    for (auto& entity : registeredEntities)
-    {
-        ComponentHandle<ServerSocketSingleton> server_component;
-        parentWorld->unpack(entity, server_component);
-
-        /* Store a reference directly to the server singleton component. */
-        server = server_component;
-    }
-
-    /* Only one global delta per World */
-    for (auto& entity : registeredEntities)
-    {
-        ComponentHandle<WorldDeltaSingleton> delta_component;
-        parentWorld->unpack(entity, delta_component);
-
-        /* Store a reference directly to the server singleton component. */
-        worldDelta = delta_component;
-    }
+    /* Store a reference directly to the server singleton component. */
+    worldDelta = parentWorld->getSingletonComponent<WorldDeltaSingleton>();
 }
 
 

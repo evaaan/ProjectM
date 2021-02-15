@@ -120,11 +120,12 @@ public:
         paddingHeight,			// height of the padding
         borderPaddingWidth,		// width of the border padding
         borderPaddingHeight;	// height of the border padding
-
 };
 
 enum class Layer { Background, Characters, UserInterface };
 enum class DrawCommand { All, onlyBackground, onlyCharacters, onlyUserInterface };
+enum class AnimType { Idle, Walk, Attack, Fall };
+
 
 /* Uses a Sprite Sheet */
 struct Animation : public Component<Animation>
@@ -140,6 +141,13 @@ struct Animation : public Component<Animation>
     double frameTime;
     Microsoft::WRL::ComPtr<ID2D1Bitmap1> bitmap;         // bitmap of the sprite sheet
     std::array<AnimationCycle, 10> cyclesData;           // config for animation
+};
+
+/* Set of Animations */
+struct AnimationStore : public Component<AnimationStore>
+{
+    std::set<AnimType> store;  // Active animations
+    std::map<AnimType, Animation> animations;  // ALL possible animations
 };
 
 /* Has an outline (with color and width) */

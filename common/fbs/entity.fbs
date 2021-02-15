@@ -46,7 +46,7 @@ table Outline {
 }
 
 table Animation {
-  type:AnimType;
+  animType:[AnimType];  // Vector of AnimTypes
 }
 
 // Entity ID and vector of Components to update 

@@ -157,10 +157,22 @@ void ClientUpdateSystem::sendWorldUpdate()
                 types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Player));
                 components.push_back(player.Union());
             }
-            else if (family == GetComponentFamily<Animation>())
+            else if (family == GetComponentFamily<AnimationStore>())
             {
-                EntityBuffer::AnimType buffer_anim = EntityBuffer::AnimType_Idle;
-                auto animation = EntityBuffer::CreateAnimation(builder, buffer_anim);
+                // Default to Idle animation state
+                // EntityBuffer::AnimType buffer_anim = EntityBuffer::AnimType_Idle;
+                auto buffer_anim = (int8_t)EntityBuffer::AnimType_Idle;
+
+                // Build vector
+                // std::vector<EntityBuffer::AnimType> animType_vector;
+                std::vector<int8_t> animType_vector;
+                animType_vector.push_back(buffer_anim);
+                auto animTypes = builder.CreateVector(animType_vector);
+
+                // Create Animation table
+                auto animation = EntityBuffer::CreateAnimation(builder, animTypes);
+
+                // Pushback to types and components vectors
                 types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Animation));
                 components.push_back(animation.Union());
             }

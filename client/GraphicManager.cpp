@@ -34,8 +34,6 @@ GraphicManager::GraphicManager(HWND hWindow, std::shared_ptr<Timer> timer) :
     onResize();
     m_direct2D = std::make_unique<Direct2D>(m_direct3D);               // Direct2D
 
-    // Make wolves
-    // makeTonsOfWolves(1);
     // addBackground();
 }
 
@@ -74,40 +72,10 @@ void GraphicManager::addBackground()
     cycle.borderPaddingHeight = 0;
     bgAnimationsCycles.push_back(cycle);
 
-    // create wolf animations
-    // auto bgAnimations = std::make_shared<SpriteSheet>(m_direct2D,
-    //     L"C:/Users/Evan/source/repos/GameAppWin32/Art/ansimuz/country-platform-back.png", bgAnimationsCycles);
-
-    // create wolf
-    //m_entities.push_back(std::make_shared<AnimatedSprite>(m_direct2D, bgAnimations, 0, 10, 400, 400));
-}
-
-void GraphicManager::makeTonsOfWolves(unsigned int numberOfWolves)
-{
-    unsigned int x, y, anim;
-    std::default_random_engine generator;
-
-    // Randomly distribute wolves
-    auto winSize = getWindowSize();
-    std::uniform_int_distribution<int> widthDistribution(20, winSize.width - 50);
-    std::uniform_int_distribution<int> heightDistribution(50, winSize.height - 100);
-    std::uniform_int_distribution<int> animDistribution(0, 1);
-
-
-    for (unsigned int i = 0; i < numberOfWolves; i++)
-    {
-        x = widthDistribution(generator);
-        y = heightDistribution(generator);
-        anim = animDistribution(generator);
-
-        // auto wolf = createWolf(x, y);
-        // auto entity = std::make_shared<Entity>(wolf, 0, true);
-        // m_entities.push_back(entity);
-    }
 }
 
 /* Create an Animation Component */
-void GraphicManager::loadAnimation(LPCWSTR spriteSheetFile, ComponentHandle<Animation> &animation)
+void GraphicManager::loadAnimation(LPCWSTR spriteSheetFile, Animation &animation)
 {
     HRESULT hr;
     AnimationCycle cycle;
@@ -140,20 +108,20 @@ void GraphicManager::loadAnimation(LPCWSTR spriteSheetFile, ComponentHandle<Anim
         throwComError(hr, L"Failed to initialize WIC image!");
 
     // create the bitmap and store in animation
-    hr = m_direct2D->deviceContext->CreateBitmapFromWicBitmap(image.Get(), animation->bitmap.ReleaseAndGetAddressOf());
+    hr = m_direct2D->deviceContext->CreateBitmapFromWicBitmap(image.Get(), animation.bitmap.ReleaseAndGetAddressOf());
     if (FAILED(hr))
         throwComError(hr, L"Failed to create the bitmap!");
 
     /* BUILD COMPONENT */
-    animation->m_layer = Layer::Characters;
-    animation->drawOrder = 0;
-    animation->opacity = 1.0;
-    animation->interpol = D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR;
-    animation->activeAnimation = 0;
-    animation->activeAnimationFrame = 0;
-    animation->numCycles = 1;
-    animation->animationFPS = 2.0;
-    animation->frameTime = 0.0;
+    animation.m_layer = Layer::Characters;
+    animation.drawOrder = 0;
+    animation.opacity = 1.0;
+    animation.interpol = D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR;
+    animation.activeAnimation = 0;
+    animation.activeAnimationFrame = 0;
+    animation.numCycles = 1;
+    animation.animationFPS = 2.0;
+    animation.frameTime = 0.0;
 
     // man cycle
     cycle.startFrame = 0;
@@ -166,10 +134,10 @@ void GraphicManager::loadAnimation(LPCWSTR spriteSheetFile, ComponentHandle<Anim
     cycle.paddingHeight = 0;
     cycle.borderPaddingWidth = 0;
     cycle.borderPaddingHeight = 0;
-    animation->cyclesData[0] = cycle;
+    animation.cyclesData[0] = cycle;
 
     /* Store bitmap pointer to release at GraphicManager destructor */
-    ID2D1Bitmap1* bitmapPtr = animation->bitmap.Get();
+    ID2D1Bitmap1* bitmapPtr = animation.bitmap.Get();
     bitmaps.push_back(bitmapPtr);
 }
 

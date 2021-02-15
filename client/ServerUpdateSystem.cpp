@@ -103,7 +103,7 @@ void ServerUpdateSystem::createEntity(const EntityBuffer::Entity* entity_buffer)
         case EntityBuffer::Component_KeyState:
         { entity.addComponent(KeyState()); break; }
         case EntityBuffer::Component_Animation:
-        { entity.addComponent(Animation()); break; }
+        { entity.addComponent(AnimationStore()); break; }
         case EntityBuffer::Component_Outline:
         { entity.addComponent(Outline()); break; }
         case EntityBuffer::Component_Player:
@@ -208,17 +208,41 @@ void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
         case EntityBuffer::Component_Animation:
         {
             odsloga("Animation message!\n");
-            ComponentHandle<Animation> animation;
+            ComponentHandle<AnimationStore> animation;
             parentWorld->unpack(e, animation);
 
             odsloga("GetAs\n");
             auto data = cs->GetAs<EntityBuffer::Animation>(idx);
-            // data->type() // Get animation type
 
-            // Hard code assets for now
-            odsloga("load assets\n");
-            m_graphicManager->loadAnimation(L"C:/assets/sprites/nakedManMirror.png", animation);
-            odsloga("assets loaded\n");
+            // Clear animation store
+            animation->store.clear();
+
+            // Unpack AnimTypes from flatbuffer
+            auto animTypes = data->animType();        // A pointer to a 'flatbuffers::Vector<>'
+            odsloga("getsize\n");
+            auto anims_size = animTypes->size();
+            odsloga("start loop\n");
+            for (int num_anim=0; num_anim < anims_size; num_anim++)
+            {
+                switch (animTypes->Get(num_anim))
+                {
+                case EntityBuffer::AnimType_Idle: animation->store.insert(AnimType::Idle); break;
+                case EntityBuffer::AnimType_Walk: animation->store.insert(AnimType::Walk); break;
+                case EntityBuffer::AnimType_Attack: animation->store.insert(AnimType::Attack); break;
+                case EntityBuffer::AnimType_Fall: animation->store.insert(AnimType::Fall); break;
+                default: animation->store.insert(AnimType::Idle); break;
+                }
+            }
+
+            // Load animation if we haven't seen it already. Move this to the switch statement?
+            if (animation->animations.find(AnimType::Idle) == animation->animations.end()) // not found
+            {
+                Animation idleAnimation;
+                odsloga("load assets\n");
+                m_graphicManager->loadAnimation(L"../../assets/sprites/nakedManMirror.png", idleAnimation);
+                animation->animations[AnimType::Idle] = idleAnimation; // copy constructor
+                odsloga("assets loaded\n");
+            }
             break;
         }
         default:

@@ -321,7 +321,7 @@ int ClientConnectSystem::addClientEntity(const char* nick)
 {
     // Create Entity and add Components
     EntityHandle client_entity = parentWorld->createEntity();
-    client_entity.addComponent(Animation(), Transform(), Dynamic(), Outline(), Player());
+    client_entity.addComponent(AnimationStore(), Transform(), Dynamic(), Outline(), Player());
 
     int id = client_entity.entity.uuid;
     int x_pos = 200 + (rand() % 800);
@@ -346,8 +346,9 @@ int ClientConnectSystem::addClientEntity(const char* nick)
     dynamic->type = BodyType::Mob;
     odsloga("Added client entity, id: " << id << "\n");
 
-    // Transform component data loaded locally on client9s)!
-    // todo: encode animation layer information instead of hard coding on client side
+    // Encode animation data
+    auto animation = client_entity.getComponent<AnimationStore>();
+    animation->store = { AnimType::Idle };
 
     // Set player nickname and entity ID
     auto player = client_entity.getComponent<Player>();
@@ -356,7 +357,7 @@ int ClientConnectSystem::addClientEntity(const char* nick)
 
     // Set mask so that ClientUpdateSystem updates the client(s)
     worldDelta->state[id] = ComponentMask();
-    worldDelta->state[id].addDefaultComponent<Animation, Transform, Dynamic, Outline, Player>();
+    worldDelta->state[id].addDefaultComponent<AnimationStore, Transform, Dynamic, Outline, Player>();
     worldDelta->state[id].setDefault();
 
     return id;

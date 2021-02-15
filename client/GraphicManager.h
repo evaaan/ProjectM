@@ -40,7 +40,7 @@ public:
 	~GraphicManager();
 	void Render(double update_time);
 	void Present();
-    void loadAnimation(LPCWSTR spriteSheetFile, ComponentHandle<Animation> &animation);
+    void loadAnimation(LPCWSTR spriteSheetFile, Animation &animation);
     void registerWorld(World* world);
 
     void calculateFrameStatistics(double process_time);

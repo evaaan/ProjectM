@@ -588,14 +588,15 @@ inline flatbuffers::Offset<Outline> CreateOutline(
 struct Animation FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   typedef AnimationBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_TYPE = 4
+    VT_ANIMTYPE = 4
   };
-  EntityBuffer::AnimType type() const {
-    return static_cast<EntityBuffer::AnimType>(GetField<int8_t>(VT_TYPE, 0));
+  const flatbuffers::Vector<int8_t> *animType() const {
+    return GetPointer<const flatbuffers::Vector<int8_t> *>(VT_ANIMTYPE);
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyField<int8_t>(verifier, VT_TYPE) &&
+           VerifyOffset(verifier, VT_ANIMTYPE) &&
+           verifier.VerifyVector(animType()) &&
            verifier.EndTable();
   }
 };
@@ -604,8 +605,8 @@ struct AnimationBuilder {
   typedef Animation Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_type(EntityBuffer::AnimType type) {
-    fbb_.AddElement<int8_t>(Animation::VT_TYPE, static_cast<int8_t>(type), 0);
+  void add_animType(flatbuffers::Offset<flatbuffers::Vector<int8_t>> animType) {
+    fbb_.AddOffset(Animation::VT_ANIMTYPE, animType);
   }
   explicit AnimationBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
@@ -621,10 +622,19 @@ struct AnimationBuilder {
 
 inline flatbuffers::Offset<Animation> CreateAnimation(
     flatbuffers::FlatBufferBuilder &_fbb,
-    EntityBuffer::AnimType type = EntityBuffer::AnimType_Idle) {
+    flatbuffers::Offset<flatbuffers::Vector<int8_t>> animType = 0) {
   AnimationBuilder builder_(_fbb);
-  builder_.add_type(type);
+  builder_.add_animType(animType);
   return builder_.Finish();
+}
+
+inline flatbuffers::Offset<Animation> CreateAnimationDirect(
+    flatbuffers::FlatBufferBuilder &_fbb,
+    const std::vector<int8_t> *animType = nullptr) {
+  auto animType__ = animType ? _fbb.CreateVector<int8_t>(*animType) : 0;
+  return EntityBuffer::CreateAnimation(
+      _fbb,
+      animType__);
 }
 
 struct Entity FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {

@@ -149,6 +149,7 @@ void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
             auto data = cs->GetAs<EntityBuffer::Dynamic>(idx);
             dynamic->width = data->width();
             dynamic->height = data->height();
+            dynamic->falling = data->falling();
             dynamic->pos.x = data->pos()->x();
             dynamic->pos.y = data->pos()->y();
             dynamic->prev_pos.x = data->prev_pos()->x();

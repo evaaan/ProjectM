@@ -23,6 +23,7 @@ table Transform {
 table Dynamic {
   width:float;
   height:float;
+  falling:bool;
   pos:Vec2;
   prev_pos:Vec2;
   vel:Vec2;

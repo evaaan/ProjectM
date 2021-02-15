@@ -320,17 +320,21 @@ struct Dynamic FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_WIDTH = 4,
     VT_HEIGHT = 6,
-    VT_POS = 8,
-    VT_PREV_POS = 10,
-    VT_VEL = 12,
-    VT_ACCEL = 14,
-    VT_TYPE = 16
+    VT_FALLING = 8,
+    VT_POS = 10,
+    VT_PREV_POS = 12,
+    VT_VEL = 14,
+    VT_ACCEL = 16,
+    VT_TYPE = 18
   };
   float width() const {
     return GetField<float>(VT_WIDTH, 0.0f);
   }
   float height() const {
     return GetField<float>(VT_HEIGHT, 0.0f);
+  }
+  bool falling() const {
+    return GetField<uint8_t>(VT_FALLING, 0) != 0;
   }
   const EntityBuffer::Vec2 *pos() const {
     return GetStruct<const EntityBuffer::Vec2 *>(VT_POS);
@@ -351,6 +355,7 @@ struct Dynamic FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
     return VerifyTableStart(verifier) &&
            VerifyField<float>(verifier, VT_WIDTH) &&
            VerifyField<float>(verifier, VT_HEIGHT) &&
+           VerifyField<uint8_t>(verifier, VT_FALLING) &&
            VerifyField<EntityBuffer::Vec2>(verifier, VT_POS) &&
            VerifyField<EntityBuffer::Vec2>(verifier, VT_PREV_POS) &&
            VerifyField<EntityBuffer::Vec2>(verifier, VT_VEL) &&
@@ -369,6 +374,9 @@ struct DynamicBuilder {
   }
   void add_height(float height) {
     fbb_.AddElement<float>(Dynamic::VT_HEIGHT, height, 0.0f);
+  }
+  void add_falling(bool falling) {
+    fbb_.AddElement<uint8_t>(Dynamic::VT_FALLING, static_cast<uint8_t>(falling), 0);
   }
   void add_pos(const EntityBuffer::Vec2 *pos) {
     fbb_.AddStruct(Dynamic::VT_POS, pos);
@@ -401,6 +409,7 @@ inline flatbuffers::Offset<Dynamic> CreateDynamic(
     flatbuffers::FlatBufferBuilder &_fbb,
     float width = 0.0f,
     float height = 0.0f,
+    bool falling = false,
     const EntityBuffer::Vec2 *pos = 0,
     const EntityBuffer::Vec2 *prev_pos = 0,
     const EntityBuffer::Vec2 *vel = 0,
@@ -414,6 +423,7 @@ inline flatbuffers::Offset<Dynamic> CreateDynamic(
   builder_.add_height(height);
   builder_.add_width(width);
   builder_.add_type(type);
+  builder_.add_falling(falling);
   return builder_.Finish();
 }
 

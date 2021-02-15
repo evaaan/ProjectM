@@ -120,7 +120,7 @@ void ClientUpdateSystem::sendWorldUpdate()
                 
 
                 // Build FlatBuffer
-                auto dynamic = EntityBuffer::CreateDynamic(builder, c->width, c->height,
+                auto dynamic = EntityBuffer::CreateDynamic(builder, c->width, c->height, c->falling,
                                                            &pos, &prev_pos, &vel, &accel, body_type);
                 types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Dynamic));
                 components.push_back(dynamic.Union());

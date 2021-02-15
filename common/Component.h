@@ -99,12 +99,12 @@ struct Dynamic : public Component<Dynamic>
 {
     double width;           // hitbox width
     double height;
+    bool falling;
     Vector2 pos;            // Position
     Vector2 prev_pos;       // Position in previous frame
     Vector2 vel;            // Velocity (speed (pix/sec) and direction vector)
     Vector2 accel;          // Acceleration
     BodyType type;       // trasparent, ledge, or solid
-    bool falling = true;
 };
 
 struct AnimationCycle

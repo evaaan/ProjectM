@@ -199,6 +199,7 @@ void PhysicsSystem::ResolveLedgeCollisions()
                 // dynamic->pos.x = dynamic->prev_pos.x;
                 dynamic->vel.y = 0.0;
                 dynamic->vel.x = 0.0;
+                dynamic->falling = false;
             }
 
 

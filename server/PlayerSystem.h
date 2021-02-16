@@ -10,4 +10,7 @@ public:
     void update(double dt);
     void render();
 
+private:
+    ComponentHandle<WorldDeltaSingleton> worldDelta;
+
 };

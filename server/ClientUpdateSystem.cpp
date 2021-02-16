@@ -159,6 +159,9 @@ void ClientUpdateSystem::sendWorldUpdate()
             }
             else if (family == GetComponentFamily<AnimationStore>())
             {
+                ComponentHandle<AnimationStore> c;
+                parentWorld->unpack({ id }, c);
+
                 // Default to Idle animation state
                 auto buffer_anim = (int8_t)EntityBuffer::AnimType_Idle;
 
@@ -168,7 +171,7 @@ void ClientUpdateSystem::sendWorldUpdate()
                 auto animTypes = builder.CreateVector(animType_vector);
 
                 // Create Animation table
-                auto animation = EntityBuffer::CreateAnimation(builder, animTypes);
+                auto animation = EntityBuffer::CreateAnimation(builder, animTypes, c->direction);
 
                 // Pushback to types and components vectors
                 types.push_back(static_cast<uint8_t>(EntityBuffer::Component_Animation));

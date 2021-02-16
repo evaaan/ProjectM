@@ -211,17 +211,15 @@ void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
             ComponentHandle<AnimationStore> animation;
             parentWorld->unpack(e, animation);
 
-            odsloga("GetAs\n");
             auto data = cs->GetAs<EntityBuffer::Animation>(idx);
 
             // Clear animation store
             animation->store.clear();
 
             // Unpack AnimTypes from flatbuffer
+            animation->direction = data->direction(); // true for right-facing, false for left-facing
             auto animTypes = data->animType();        // A pointer to a 'flatbuffers::Vector<>'
-            odsloga("getsize\n");
             auto anims_size = animTypes->size();
-            odsloga("start loop\n");
             for (int num_anim=0; num_anim < anims_size; num_anim++)
             {
                 switch (animTypes->Get(num_anim))
@@ -238,8 +236,6 @@ void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
             if (animation->animations.find(AnimType::Idle) == animation->animations.end()) // not found
             {
                 Animation idleAnimation;
-                Animation idleMAnimation;
-                odsloga("load assets\n");
                 m_graphicManager->loadAnimation(L"../../assets/sprites/nakedMan.png", idleAnimation);
                 animation->animations[AnimType::Idle] = idleAnimation; // copy constructor
                 odsloga("assets loaded\n");

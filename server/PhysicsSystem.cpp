@@ -57,10 +57,16 @@ void PhysicsSystem::advanceTick(double dt)
                 dynamic->vel.x = 0;  // don't slide.
 
                 // Walk left or right
-                if (keyDown(input, MOVE_RIGHT))
-                    dynamic->vel.x += walking_speed;
                 if (keyDown(input, MOVE_LEFT))
+                {
                     dynamic->vel.x -= walking_speed;
+                    dynamic->direction = true;
+                }
+                if (keyDown(input, MOVE_RIGHT))
+                {
+                    dynamic->vel.x += walking_speed;
+                    dynamic->direction = false;
+                }
             }
 
             // Jump

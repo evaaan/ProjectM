@@ -73,7 +73,7 @@ void ServerManager::AddSystems()
 
     m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
     //m_world->addSystem(std::move(std::make_unique<CombatSystem>()));
-    //m_world->addSystem(std::move(std::make_unique<PlayerSystem>()));
+    m_world->addSystem(std::move(std::make_unique<PlayerSystem>()));
 
     /* Send entity updates to clients */
     m_world->addSystem(std::move(std::make_unique<ClientUpdateSystem>()));

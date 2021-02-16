@@ -105,6 +105,7 @@ struct Dynamic : public Component<Dynamic>
     Vector2 vel;            // Velocity (speed (pix/sec) and direction vector)
     Vector2 accel;          // Acceleration
     BodyType type;       // trasparent, ledge, or solid
+    bool direction = false;         // true for left, false for right
 };
 
 struct AnimationCycle

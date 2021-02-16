@@ -92,7 +92,8 @@ void AnimationSystem::render()
             startY += animation.cyclesData[0].borderPaddingHeight;
             D2D1_RECT_F sourceRect = { startX, startY, startX + cycleData.width, startY + cycleData.height };
 
-            m_graphicManager->drawBitmap(animation.bitmap.Get(), destRect, animation.opacity, animation.interpol, sourceRect, true);
+            m_graphicManager->drawBitmap(animation.bitmap.Get(), destRect, animation.opacity, 
+                                         animation.interpol, sourceRect, animationStore->direction);
         }
 
     }

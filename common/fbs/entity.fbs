@@ -47,6 +47,7 @@ table Outline {
 
 table Animation {
   animType:[AnimType];  // Vector of AnimTypes
+  direction:bool;  // true for left, false for right
 }
 
 // Entity ID and vector of Components to update 

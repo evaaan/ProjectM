@@ -588,15 +588,20 @@ inline flatbuffers::Offset<Outline> CreateOutline(
 struct Animation FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   typedef AnimationBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_ANIMTYPE = 4
+    VT_ANIMTYPE = 4,
+    VT_DIRECTION = 6
   };
   const flatbuffers::Vector<int8_t> *animType() const {
     return GetPointer<const flatbuffers::Vector<int8_t> *>(VT_ANIMTYPE);
+  }
+  bool direction() const {
+    return GetField<uint8_t>(VT_DIRECTION, 0) != 0;
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyOffset(verifier, VT_ANIMTYPE) &&
            verifier.VerifyVector(animType()) &&
+           VerifyField<uint8_t>(verifier, VT_DIRECTION) &&
            verifier.EndTable();
   }
 };
@@ -607,6 +612,9 @@ struct AnimationBuilder {
   flatbuffers::uoffset_t start_;
   void add_animType(flatbuffers::Offset<flatbuffers::Vector<int8_t>> animType) {
     fbb_.AddOffset(Animation::VT_ANIMTYPE, animType);
+  }
+  void add_direction(bool direction) {
+    fbb_.AddElement<uint8_t>(Animation::VT_DIRECTION, static_cast<uint8_t>(direction), 0);
   }
   explicit AnimationBuilder(flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
@@ -622,19 +630,23 @@ struct AnimationBuilder {
 
 inline flatbuffers::Offset<Animation> CreateAnimation(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::Vector<int8_t>> animType = 0) {
+    flatbuffers::Offset<flatbuffers::Vector<int8_t>> animType = 0,
+    bool direction = false) {
   AnimationBuilder builder_(_fbb);
   builder_.add_animType(animType);
+  builder_.add_direction(direction);
   return builder_.Finish();
 }
 
 inline flatbuffers::Offset<Animation> CreateAnimationDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
-    const std::vector<int8_t> *animType = nullptr) {
+    const std::vector<int8_t> *animType = nullptr,
+    bool direction = false) {
   auto animType__ = animType ? _fbb.CreateVector<int8_t>(*animType) : 0;
   return EntityBuffer::CreateAnimation(
       _fbb,
-      animType__);
+      animType__,
+      direction);
 }
 
 struct Entity FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {

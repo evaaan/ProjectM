@@ -34,6 +34,8 @@ void PlayerSystem::update(double dt)
             animationStore->direction = new_direction;
             worldDelta->state[entity.uuid].addComponent<AnimationStore>();
         }
+
+        // If we started or stopped moving, change animation
     }
 }
 

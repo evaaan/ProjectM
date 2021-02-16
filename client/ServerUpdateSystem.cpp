@@ -232,13 +232,18 @@ void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
                 }
             }
 
+            Animation idleAnimation;
             // Load animation if we haven't seen it already. Move this to the switch statement?
             if (animation->animations.find(AnimType::Idle) == animation->animations.end()) // not found
             {
-                Animation idleAnimation;
                 m_graphicManager->loadAnimation(L"../../assets/sprites/nakedMan.png", idleAnimation);
                 animation->animations[AnimType::Idle] = idleAnimation; // copy constructor
                 odsloga("assets loaded\n");
+            }
+            if (animation->animations.find(AnimType::Walk) == animation->animations.end()) // not found
+            {
+                m_graphicManager->loadAnimation(L"../../assets/sprites/nakedManWalk.png", idleAnimation);
+                animation->animations[AnimType::Walk] = idleAnimation; // copy constructor
             }
             break;
         }

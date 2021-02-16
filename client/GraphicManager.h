@@ -52,7 +52,7 @@ public:
     windowSize getWindowSize();
 
     void drawBitmap(ID2D1Bitmap1* bitmap, const D2D1_RECT_F& destRect, float opacity,
-        D2D1_BITMAP_INTERPOLATION_MODE interpMode, const D2D1_RECT_F& sourceRect);
+        D2D1_BITMAP_INTERPOLATION_MODE interpMode, const D2D1_RECT_F& sourceRect, bool flip);
 
 private:
     std::vector<ID2D1Bitmap1*> bitmaps;

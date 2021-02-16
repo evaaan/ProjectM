@@ -43,7 +43,7 @@ void PhysicsSystem::advanceTick(double dt)
 
         double walking_speed = 300.0;
         double max_vel = -800.0;
-        int floor_height = 600;
+        int floor_height = 750;
         int wall_length = 1600;
 
         // Player types

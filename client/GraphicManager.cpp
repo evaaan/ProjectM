@@ -174,10 +174,27 @@ void GraphicManager::Present()
 
 /* Wrapper around direct2d DrawBitmap */
 void GraphicManager::drawBitmap(ID2D1Bitmap1* bitmap, const D2D1_RECT_F& destRect, float opacity,
-    D2D1_BITMAP_INTERPOLATION_MODE interpMode, const D2D1_RECT_F& sourceRect)
+    D2D1_BITMAP_INTERPOLATION_MODE interpMode, const D2D1_RECT_F& sourceRect, bool flip)
 {
+    if (flip)
+    {
+        D2D1_POINT_2F imageCenter = D2D1::Point2F(
+            destRect.left + 64 / 2,
+            destRect.top + 64 / 2
+        );
+        
+        // Horizontal translation in 2 steps:
+        // 1. Flip bitmap horizontally about y-axis
+        // 2. Translate left by twice the x-distance to the bitmap center
+        m_direct2D->deviceContext->SetTransform(
+            D2D1::Matrix3x2F(-1, 0, 0, 1, 0, 0) * D2D1::Matrix3x2F::Translation(2 * destRect.left + (destRect.right-destRect.left), 0)
+            // D2D1::Matrix3x2F::Rotation(-20, imageCenter)
+        );
+    }
     m_direct2D->deviceContext->DrawBitmap(bitmap, destRect, opacity, interpMode, sourceRect);
 
+    // un-do transform
+    m_direct2D->deviceContext->SetTransform(D2D1::Matrix3x2F::Identity());
 }
 
 /* Get a reference to the current world so we can render it. */

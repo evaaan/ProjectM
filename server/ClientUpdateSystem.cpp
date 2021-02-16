@@ -160,11 +160,9 @@ void ClientUpdateSystem::sendWorldUpdate()
             else if (family == GetComponentFamily<AnimationStore>())
             {
                 // Default to Idle animation state
-                // EntityBuffer::AnimType buffer_anim = EntityBuffer::AnimType_Idle;
                 auto buffer_anim = (int8_t)EntityBuffer::AnimType_Idle;
 
                 // Build vector
-                // std::vector<EntityBuffer::AnimType> animType_vector;
                 std::vector<int8_t> animType_vector;
                 animType_vector.push_back(buffer_anim);
                 auto animTypes = builder.CreateVector(animType_vector);

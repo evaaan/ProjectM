@@ -132,9 +132,10 @@ void ServerManager::AddEntities()
     e.addSingletonComponent(KeyStateSingleton());  // User input
 
     // Create boxes and update worldDelta
-
-    AddBox(200, 600, 200, 300, Color::red);
-    AddBox(900, 600, 200, 300, Color::red);
+    // int x, int y, int height, int width, Color color
+    AddBox(200, 650, 50, 300, Color::red);
+    AddBox(900, 650, 50, 200, Color::red);
+    AddBox(0, 700, 6000, 2000, Color::red);
 }
 
 long numFrames = 0;

@@ -238,8 +238,9 @@ void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
             if (animation->animations.find(AnimType::Idle) == animation->animations.end()) // not found
             {
                 Animation idleAnimation;
+                Animation idleMAnimation;
                 odsloga("load assets\n");
-                m_graphicManager->loadAnimation(L"../../assets/sprites/nakedManMirror.png", idleAnimation);
+                m_graphicManager->loadAnimation(L"../../assets/sprites/nakedMan.png", idleAnimation);
                 animation->animations[AnimType::Idle] = idleAnimation; // copy constructor
                 odsloga("assets loaded\n");
             }

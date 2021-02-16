@@ -147,6 +147,7 @@ struct Animation : public Component<Animation>
 struct AnimationStore : public Component<AnimationStore>
 {
     std::set<AnimType> store;  // Active animations
+    bool direction;  // true for left, false for right
     std::map<AnimType, Animation> animations;  // ALL possible animations
 };
 

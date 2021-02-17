@@ -162,12 +162,27 @@ void ClientUpdateSystem::sendWorldUpdate()
                 ComponentHandle<AnimationStore> c;
                 parentWorld->unpack({ id }, c);
 
-                // Default to Idle animation state
-                auto buffer_anim = (int8_t)EntityBuffer::AnimType_Idle;
-
                 // Build vector
                 std::vector<int8_t> animType_vector;
-                animType_vector.push_back(buffer_anim);
+
+                // Set animations based on AnimationStore data
+                for (auto& anim : c->store)
+                {
+                    switch (anim)
+                    {
+                    case AnimType::Idle:
+                    {
+                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_Idle);
+                        break;
+                    }
+                    case AnimType::Walk:
+                    {
+                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_Walk);
+                        break;
+                    }
+                    }
+                }
+
                 auto animTypes = builder.CreateVector(animType_vector);
 
                 // Create Animation table

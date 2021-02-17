@@ -232,7 +232,12 @@ void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
                 }
             }
 
+            // Load these from configs!
             Animation idleAnimation;
+            idleAnimation.animationFPS = 2.0;
+            Animation walkAnimation;
+            walkAnimation.animationFPS = 6.0;
+
             // Load animation if we haven't seen it already. Move this to the switch statement?
             if (animation->animations.find(AnimType::Idle) == animation->animations.end()) // not found
             {
@@ -242,8 +247,8 @@ void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
             }
             if (animation->animations.find(AnimType::Walk) == animation->animations.end()) // not found
             {
-                m_graphicManager->loadAnimation(L"../../assets/sprites/nakedManWalk.png", idleAnimation);
-                animation->animations[AnimType::Walk] = idleAnimation; // copy constructor
+                m_graphicManager->loadAnimation(L"../../assets/sprites/nakedManWalk.png", walkAnimation);
+                animation->animations[AnimType::Walk] = walkAnimation; // copy constructor
             }
             break;
         }

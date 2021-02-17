@@ -120,7 +120,6 @@ void GraphicManager::loadAnimation(LPCWSTR spriteSheetFile, Animation &animation
     animation.activeAnimation = 0;
     animation.activeAnimationFrame = 0;
     animation.numCycles = 1;
-    animation.animationFPS = 2.0;
     animation.frameTime = 0.0;
 
     // man cycle

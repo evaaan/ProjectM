@@ -41,10 +41,14 @@ void PhysicsSystem::advanceTick(double dt)
         ComponentHandle<Transform> transform;
         parentWorld->unpack(entity, dynamic, transform);
 
-        double walking_speed = 300.0;
+        double walking_speed = 175.0;
         double max_vel = -800.0;
         int floor_height = 750;
         int wall_length = 1600;
+        dynamic->prev_pos.x = dynamic->pos.x;
+        dynamic->prev_vel.x = dynamic->vel.x;
+        dynamic->start_move = false;
+        dynamic->stop_move = false;
 
         // Player types
         if (dynamic->type == BodyType::Mob)
@@ -61,26 +65,34 @@ void PhysicsSystem::advanceTick(double dt)
                 {
                     dynamic->vel.x -= walking_speed;
                     dynamic->direction = true;
+                    // Set move flag if we started moving
+                    if (dynamic->stopped == true)
+                        dynamic->start_move = true;
+                    dynamic->stopped = false;
                 }
-                if (keyDown(input, MOVE_RIGHT))
+                else if (keyDown(input, MOVE_RIGHT))
                 {
                     dynamic->vel.x += walking_speed;
                     dynamic->direction = false;
+                    // Set move flag if we started moving
+                    if (dynamic->stopped == true)
+                        dynamic->start_move = true;
+                    dynamic->stopped = false;
+                }
+                else
+                {
+                    if (dynamic->stopped == false)
+                        dynamic->stop_move = true;
+                    dynamic->stopped = true;
                 }
             }
 
             // Jump
             if (keyDown(input, RESET) && !(dynamic->falling))
             {
-                dynamic->vel.y -= 800;
+                dynamic->vel.y -= 700;
                 dynamic->falling = true;
             }
-
-            /* Save last position */
-            //if (dynamic->prev_pos.y != dynamic->pos.y)
-            //    dynamic->falling = true;
-
-            dynamic->prev_pos = dynamic->pos;
 
             /* Update velocity */
             dynamic->vel.x += dynamic->accel.x * dt;  // v = v0 + a(dt)
@@ -113,6 +125,7 @@ void PhysicsSystem::advanceTick(double dt)
             /* Limit fall speed */
             if (dynamic->vel.y < max_vel)
                 dynamic->vel.y = max_vel;
+
         }
     }
 }

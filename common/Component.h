@@ -103,9 +103,13 @@ struct Dynamic : public Component<Dynamic>
     Vector2 pos;            // Position
     Vector2 prev_pos;       // Position in previous frame
     Vector2 vel;            // Velocity (speed (pix/sec) and direction vector)
+    Vector2 prev_vel;       // Velocity (speed (pix/sec) and direction vector)
     Vector2 accel;          // Acceleration
     BodyType type;       // trasparent, ledge, or solid
     bool direction = false;         // true for left, false for right
+    bool start_move = false;
+    bool stop_move = false;
+    bool stopped = true;
 };
 
 struct AnimationCycle

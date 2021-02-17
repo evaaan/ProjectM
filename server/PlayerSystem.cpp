@@ -12,7 +12,6 @@ PlayerSystem::PlayerSystem()
 
 void PlayerSystem::init()
 {
-    odsloga("PlayerSystem init!");
     worldDelta = parentWorld->getSingletonComponent<WorldDeltaSingleton>();
 }
 
@@ -35,7 +34,21 @@ void PlayerSystem::update(double dt)
             worldDelta->state[entity.uuid].addComponent<AnimationStore>();
         }
 
-        // If we started or stopped moving, change animation
+        // If we stopped moving, play Idle animation
+        if (dynamic->stop_move)
+        {
+            animationStore->store.clear();
+            animationStore->store.insert(AnimType::Idle);
+            worldDelta->state[entity.uuid].addComponent<AnimationStore>();
+        } // If we started moving, play Walk animation
+        else if (dynamic->start_move)
+        {
+            animationStore->store.clear();
+            animationStore->store.insert(AnimType::Walk);
+            worldDelta->state[entity.uuid].addComponent<AnimationStore>();
+        }
+
+
     }
 }
 

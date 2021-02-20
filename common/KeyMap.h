@@ -12,7 +12,8 @@ enum Action
     MOVE_RIGHT,
     MOVE_UP,
     MOVE_DOWN,
-    RESET
+    RESET,
+    ATTACK
 };
 
 /* Wrapper around two hash tables to map Windows Virtual-Key Codes to Action enums.

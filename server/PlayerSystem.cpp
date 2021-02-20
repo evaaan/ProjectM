@@ -7,12 +7,13 @@
 PlayerSystem::PlayerSystem()
 {
     // Components that define a player
-    signature.addComponent<AnimationStore, Transform, Dynamic, Outline, Player>();
+    signature.addComponent<AnimationStore, Transform, Dynamic, Outline>();
 }
 
 void PlayerSystem::init()
 {
     worldDelta = parentWorld->getSingletonComponent<WorldDeltaSingleton>();
+    keys = parentWorld->getSingletonComponent<KeyStateSingleton>();
 }
 
 /* System behaviors */
@@ -22,7 +23,8 @@ void PlayerSystem::update(double dt)
     {
         ComponentHandle<AnimationStore> animationStore;
         ComponentHandle<Dynamic> dynamic;
-        parentWorld->unpack(entity, animationStore, dynamic);
+        ComponentHandle<Player> player;
+        parentWorld->unpack(entity, animationStore, dynamic, player);
 
         // If direction changed, notify client
         bool old_direction = animationStore->direction;
@@ -34,8 +36,16 @@ void PlayerSystem::update(double dt)
             worldDelta->state[entity.uuid].addComponent<AnimationStore>();
         }
 
+        // If we started attacking, play Attack animation
+        if (player->start_combat)
+        {
+            animationStore->store.clear();
+            animationStore->store.insert(AnimType::Attack);
+            worldDelta->state[entity.uuid].addComponent<AnimationStore>();
+        }
+
         // If we stopped moving, play Idle animation
-        if (dynamic->stop_move)
+        else if (dynamic->stop_move)
         {
             animationStore->store.clear();
             animationStore->store.insert(AnimType::Idle);
@@ -48,6 +58,26 @@ void PlayerSystem::update(double dt)
             worldDelta->state[entity.uuid].addComponent<AnimationStore>();
         }
 
+
+    }
+}
+
+/* Update player status based on user actions */
+void PlayerSystem::updatePlayer()
+{
+    for (auto& entity : registeredEntities)
+    {
+        ComponentHandle<AnimationStore> animationStore;
+        ComponentHandle<Dynamic> dynamic;
+        ComponentHandle<Player> player;
+        parentWorld->unpack(entity, animationStore, dynamic, player);
+
+        auto input = keys->keyDownMap[entity.uuid];
+
+        if (keyDown(input, ATTACK))
+        {
+            // set player attacking state such that animationsystem can update client
+        }
 
     }
 }

@@ -180,6 +180,11 @@ void ClientUpdateSystem::sendWorldUpdate()
                         animType_vector.push_back((int8_t)EntityBuffer::AnimType_Walk);
                         break;
                     }
+                    case AnimType::Attack:
+                    {
+                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_Attack);
+                        break;
+                    }
                     }
                 }
 

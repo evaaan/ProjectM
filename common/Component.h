@@ -168,6 +168,16 @@ struct Player : public Component<Player>
 {
     int id;  // entity ID
     std::string username;
+    bool attacking;  // in an attack animation
+    bool in_combat;  // currently taking damage
+    bool start_combat;  // started combat this tick
+};
+
+/* Can damage another entity */
+struct Combat : public Component<Player>
+{
+    std::vector<int> combat_entities;  // entities in combat
+    int owner;  // entity owner
 };
 
 /* Server Steam Socket */

@@ -237,18 +237,25 @@ void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
             idleAnimation.animationFPS = 2.0;
             Animation walkAnimation;
             walkAnimation.animationFPS = 6.0;
+            Animation attackAnimation;
+            attackAnimation.animationFPS = 4.0;
 
             // Load animation if we haven't seen it already. Move this to the switch statement?
             if (animation->animations.find(AnimType::Idle) == animation->animations.end()) // not found
             {
-                m_graphicManager->loadAnimation(L"../../assets/sprites/nakedMan.png", idleAnimation);
+                m_graphicManager->loadAnimation(L"../../assets/sprites/blueMan.png", idleAnimation);
                 animation->animations[AnimType::Idle] = idleAnimation; // copy constructor
                 odsloga("assets loaded\n");
             }
             if (animation->animations.find(AnimType::Walk) == animation->animations.end()) // not found
             {
-                m_graphicManager->loadAnimation(L"../../assets/sprites/nakedManWalk.png", walkAnimation);
+                m_graphicManager->loadAnimation(L"../../assets/sprites/blueManWalk.png", walkAnimation);
                 animation->animations[AnimType::Walk] = walkAnimation; // copy constructor
+            }
+            if (animation->animations.find(AnimType::Attack) == animation->animations.end()) // not found
+            {
+                m_graphicManager->loadAnimation(L"../../assets/sprites/blueManattack.png", attackAnimation);
+                animation->animations[AnimType::Attack] = attackAnimation; // copy constructor
             }
             break;
         }

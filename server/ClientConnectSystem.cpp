@@ -321,7 +321,7 @@ int ClientConnectSystem::addClientEntity(const char* nick)
 {
     // Create Entity and add Components
     EntityHandle client_entity = parentWorld->createEntity();
-    client_entity.addComponent(AnimationStore(), Transform(), Dynamic(), Outline(), Player());
+    client_entity.addComponent(AnimationStore(), Combat(), Transform(), Dynamic(), Outline(), Player());
 
     int id = client_entity.entity.uuid;
     int x_pos = 200 + (rand() % 800);
@@ -345,6 +345,11 @@ int ClientConnectSystem::addClientEntity(const char* nick)
     dynamic->accel.y = 3000.0;
     dynamic->type = BodyType::Mob;
     odsloga("Added client entity, id: " << id << "\n");
+
+    auto combat = client_entity.getComponent<Combat>();
+    combat->in_combat = false;
+    combat->attacking = false;
+    combat->owner = id;
 
     // Encode animation data
     auto animation = client_entity.getComponent<AnimationStore>();

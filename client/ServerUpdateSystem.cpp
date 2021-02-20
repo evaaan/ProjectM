@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
+#include "Animation.h"
 #include "EntityHandle.h"
 #include "System.h"
 #include "World.h"
@@ -227,35 +228,76 @@ void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
                 case EntityBuffer::AnimType_Idle: animation->store.insert(AnimType::Idle); break;
                 case EntityBuffer::AnimType_Walk: animation->store.insert(AnimType::Walk); break;
                 case EntityBuffer::AnimType_Attack: animation->store.insert(AnimType::Attack); break;
+                case EntityBuffer::AnimType_WeaponAttack: animation->store.insert(AnimType::WeaponAttack); break;
                 case EntityBuffer::AnimType_Fall: animation->store.insert(AnimType::Fall); break;
+                case EntityBuffer::AnimType_MonsterIdle: animation->store.insert(AnimType::MonsterIdle); break;
+                case EntityBuffer::AnimType_MonsterWalk: animation->store.insert(AnimType::MonsterWalk); break;
+                case EntityBuffer::AnimType_MonsterHurt: animation->store.insert(AnimType::MonsterHurt); break;
                 default: animation->store.insert(AnimType::Idle); break;
                 }
             }
 
             // Load these from configs!
-            Animation idleAnimation;
-            idleAnimation.animationFPS = 2.0;
-            Animation walkAnimation;
-            walkAnimation.animationFPS = 6.0;
-            Animation attackAnimation;
-            attackAnimation.animationFPS = 4.0;
 
             // Load animation if we haven't seen it already. Move this to the switch statement?
             if (animation->animations.find(AnimType::Idle) == animation->animations.end()) // not found
             {
-                m_graphicManager->loadAnimation(L"../../assets/sprites/blueMan.png", idleAnimation);
+
+                Animation idleAnimation;
+                idleAnimation.animationFPS = 2.0;
+                m_graphicManager->loadAnimation(L"../../assets/sprites/blueMan.png", idleAnimation, 64, 64, 4);
                 animation->animations[AnimType::Idle] = idleAnimation; // copy constructor
                 odsloga("assets loaded\n");
             }
-            if (animation->animations.find(AnimType::Walk) == animation->animations.end()) // not found
+            if (animation->animations.find(AnimType::Walk) == animation->animations.end())
             {
-                m_graphicManager->loadAnimation(L"../../assets/sprites/blueManWalk.png", walkAnimation);
+
+                Animation walkAnimation;
+                walkAnimation.animationFPS = 6.0;
+
+                m_graphicManager->loadAnimation(L"../../assets/sprites/blueManWalk.png", walkAnimation, 64, 64, 4);
                 animation->animations[AnimType::Walk] = walkAnimation; // copy constructor
             }
-            if (animation->animations.find(AnimType::Attack) == animation->animations.end()) // not found
+            if (animation->animations.find(AnimType::Attack) == animation->animations.end())
             {
-                m_graphicManager->loadAnimation(L"../../assets/sprites/blueManattack.png", attackAnimation);
+                Animation attackAnimation;
+                attackAnimation.animationFPS = 4.0;
+
+                m_graphicManager->loadAnimation(L"../../assets/sprites/blueManAttack.png", attackAnimation, 96, 64, 3);
                 animation->animations[AnimType::Attack] = attackAnimation; // copy constructor
+            }
+            if (animation->animations.find(AnimType::WeaponAttack) == animation->animations.end())
+            {
+                Animation weaponAnimation;
+                weaponAnimation.animationFPS = 4.0;
+
+                m_graphicManager->loadAnimation(L"../../assets/sprites/weaponAttack.png", weaponAnimation, 96, 64, 3);
+                animation->animations[AnimType::WeaponAttack] = weaponAnimation; // copy constructor
+            }
+            if (animation->animations.find(AnimType::MonsterIdle) == animation->animations.end())
+            {
+                Animation weaponAnimation;
+                weaponAnimation.animationFPS = 2.0;
+
+                m_graphicManager->loadAnimation(L"../../assets/sprites/monsterIdle.png", weaponAnimation, 96, 96, 4);
+                animation->animations[AnimType::MonsterIdle] = weaponAnimation; // copy constructor
+            }
+            if (animation->animations.find(AnimType::MonsterWalk) == animation->animations.end())
+            {
+                Animation weaponAnimation;
+                weaponAnimation.animationFPS = 3.0;
+
+                m_graphicManager->loadAnimation(L"../../assets/sprites/monsterWalk.png", weaponAnimation, 96, 96, 5);
+                animation->animations[AnimType::MonsterWalk] = weaponAnimation; // copy constructor
+            }
+
+            if (animation->animations.find(AnimType::MonsterHurt) == animation->animations.end())
+            {
+                Animation weaponAnimation;
+                weaponAnimation.animationFPS = 8.0;
+
+                m_graphicManager->loadAnimation(L"../../assets/sprites/monsterHurt.png", weaponAnimation, 96, 96, 2);
+                animation->animations[AnimType::MonsterHurt] = weaponAnimation; // copy constructor
             }
             break;
         }

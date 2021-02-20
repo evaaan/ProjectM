@@ -7,7 +7,7 @@
 PlayerSystem::PlayerSystem()
 {
     // Components that define a player
-    signature.addComponent<AnimationStore, Transform, Dynamic, Outline>();
+    signature.addComponent<AnimationStore, Player, Combat, Transform, Dynamic, Outline>();
 }
 
 void PlayerSystem::init()
@@ -18,6 +18,13 @@ void PlayerSystem::init()
 
 /* System behaviors */
 void PlayerSystem::update(double dt)
+{
+    updatePlayerState();
+    updatePlayerAnimation();
+}
+
+/* Update animation based on player state */
+void PlayerSystem::updatePlayerAnimation()
 {
     for (auto& entity : registeredEntities)
     {
@@ -37,10 +44,11 @@ void PlayerSystem::update(double dt)
         }
 
         // If we started attacking, play Attack animation
-        if (player->start_combat)
+        if (player->start_combat)  // set in updatePlayerState
         {
             animationStore->store.clear();
             animationStore->store.insert(AnimType::Attack);
+            animationStore->store.insert(AnimType::WeaponAttack);
             worldDelta->state[entity.uuid].addComponent<AnimationStore>();
         }
 
@@ -57,28 +65,35 @@ void PlayerSystem::update(double dt)
             animationStore->store.insert(AnimType::Walk);
             worldDelta->state[entity.uuid].addComponent<AnimationStore>();
         }
-
-
     }
 }
 
 /* Update player status based on user actions */
-void PlayerSystem::updatePlayer()
+void PlayerSystem::updatePlayerState()
 {
     for (auto& entity : registeredEntities)
     {
-        ComponentHandle<AnimationStore> animationStore;
-        ComponentHandle<Dynamic> dynamic;
         ComponentHandle<Player> player;
-        parentWorld->unpack(entity, animationStore, dynamic, player);
+        parentWorld->unpack(entity, player);
 
         auto input = keys->keyDownMap[entity.uuid];
 
         if (keyDown(input, ATTACK))
         {
-            // set player attacking state such that animationsystem can update client
+            // set player attacking state so that animationsystem can update client
+            if (player->attacking)
+                player->start_combat = false;
+            else
+                player->start_combat = true;
+            player->attacking = true;
+            player->in_combat = true;
         }
-
+        else 
+        {
+            player->attacking = false;
+            player->start_combat = false;
+            player->in_combat = false;
+        }
     }
 }
 

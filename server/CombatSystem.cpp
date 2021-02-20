@@ -30,7 +30,6 @@ void CombatSystem::update(double dt)
         ComponentHandle<Combat> combat;
         parentWorld->unpack(entity, combat);
     }
-
 }
 
 /* System rendering */

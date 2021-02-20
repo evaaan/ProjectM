@@ -71,9 +71,11 @@ void ServerManager::AddSystems()
     /* Read and parse client messages */
     m_world->addSystem(std::move(std::make_unique<ClientInputSystem>()));
 
-    m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
-    //m_world->addSystem(std::move(std::make_unique<CombatSystem>()));
     m_world->addSystem(std::move(std::make_unique<PlayerSystem>()));
+
+    m_world->addSystem(std::move(std::make_unique<PhysicsSystem>()));
+    
+    // m_world->addSystem(std::move(std::make_unique<CombatSystem>()));
 
     /* Send entity updates to clients */
     m_world->addSystem(std::move(std::make_unique<ClientUpdateSystem>()));
@@ -122,6 +124,44 @@ int ServerManager::AddBox(int x, int y, int height, int width, Color color)
     return entity_id;
 }
 
+int ServerManager::AddMonster(int x, int y, AnimType animType)
+{
+    auto monster = m_world->createEntity();
+    monster.addComponent(AnimationStore(), Transform(), Dynamic(), Outline());
+    int id = monster.entity.uuid;
+    int x_pos = x;
+    int y_pos = y;
+
+    // Build Transform and Dynamic Components
+    auto transform = monster.getComponent<Transform>();
+    transform->width = 96;
+    transform->height = 96;
+    transform->x = x_pos;
+    transform->y = y_pos;
+
+    auto dynamic = monster.getComponent<Dynamic>();
+    dynamic->width = transform->width;
+    dynamic->height = transform->height;
+    dynamic->pos.x = x_pos;
+    dynamic->pos.y = y_pos;
+    dynamic->vel.x = 0.0;
+    dynamic->vel.y = 0.0;
+    dynamic->accel.x = 0.0;
+    dynamic->accel.y = 3000.0;
+    dynamic->type = BodyType::Mob;
+    odsloga("Added monster entity, id: " << id << "\n");
+
+    auto animation = monster.getComponent<AnimationStore>();
+    animation->store = { animType };
+
+    auto worldDelta = m_world->getSingletonComponent<WorldDeltaSingleton>();
+    worldDelta->state[id] = ComponentMask();
+    worldDelta->state[id].addDefaultComponent<AnimationStore, Transform, Dynamic, Outline>();
+    worldDelta->state[id].setDefault();
+
+    return id;
+}
+
 void ServerManager::AddEntities()
 {
     // Store all singleton components in a single entity
@@ -136,6 +176,10 @@ void ServerManager::AddEntities()
     AddBox(200, 650, 50, 300, Color::red);
     AddBox(900, 650, 50, 200, Color::red);
     AddBox(0, 700, 6000, 2000, Color::red);
+
+    AddMonster(200 + (rand() & 800), 200 + (rand() & 100), AnimType::MonsterIdle);
+    AddMonster(200 + (rand() & 800), 200 + (rand() & 100), AnimType::MonsterWalk);
+    AddMonster(200 + (rand() & 800), 200 + (rand() & 100), AnimType::MonsterHurt);
 }
 
 long numFrames = 0;

@@ -185,6 +185,31 @@ void ClientUpdateSystem::sendWorldUpdate()
                         animType_vector.push_back((int8_t)EntityBuffer::AnimType_Attack);
                         break;
                     }
+                    case AnimType::WeaponIdle:
+                    {
+                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_WeaponIdle);
+                        break;
+                    }
+                    case AnimType::WeaponAttack:
+                    {
+                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_WeaponAttack);
+                        break;
+                    }
+                    case AnimType::MonsterIdle:
+                    {
+                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_MonsterIdle);
+                        break;
+                    }
+                    case AnimType::MonsterWalk:
+                    {
+                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_MonsterWalk);
+                        break;
+                    }
+                    case AnimType::MonsterHurt:
+                    {
+                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_MonsterHurt);
+                        break;
+                    }
                     }
                 }
 

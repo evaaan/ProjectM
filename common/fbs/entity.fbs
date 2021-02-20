@@ -9,7 +9,7 @@ enum BodyType : byte { Mob=0, Transparent, Ledge, Solid }
 
 enum Color : byte { Yellow=0, Red, Green, Blue, Black, White }
 
-enum AnimType : byte { Idle=0, Walk, Attack, Fall }
+enum AnimType : byte { Idle=0, Walk, Attack, WeaponIdle, WeaponAttack, MonsterIdle, MonsterWalk, MonsterHurt, Fall }
 
 union Component { Transform, Dynamic, KeyState, Player, Outline, Animation }
 

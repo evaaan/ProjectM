@@ -16,6 +16,7 @@ class Timer;
 class Direct3D;
 class Direct2D;
 class World;
+struct AnimationCycleData;
 
 class GraphicManager
 {
@@ -40,7 +41,7 @@ public:
 	~GraphicManager();
 	void Render(double update_time);
 	void Present();
-    void loadAnimation(LPCWSTR spriteSheetFile, Animation &animation);
+    void loadAnimation(LPCWSTR spriteSheetFile, Animation &animation, int frameWidth, int frameHeight, int numFrames);
     void registerWorld(World* world);
 
     void calculateFrameStatistics(double process_time);

@@ -75,7 +75,7 @@ void GraphicManager::addBackground()
 }
 
 /* Create an Animation Component */
-void GraphicManager::loadAnimation(LPCWSTR spriteSheetFile, Animation &animation)
+void GraphicManager::loadAnimation(LPCWSTR spriteSheetFile, Animation &animation, int frameWidth, int frameHeight, int numFrames)
 {
     HRESULT hr;
     AnimationCycle cycle;
@@ -119,20 +119,19 @@ void GraphicManager::loadAnimation(LPCWSTR spriteSheetFile, Animation &animation
     animation.interpol = D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR;
     animation.activeAnimation = 0;
     animation.activeAnimationFrame = 0;
-    animation.numCycles = 1;
     animation.frameTime = 0.0;
 
     // man cycle
     cycle.startFrame = 0;
-    cycle.numberOfFrames = 4;
-    cycle.width = 64;
-    cycle.height = 64;
+    cycle.width = frameWidth;
+    cycle.height = frameHeight;
     cycle.destWidth = cycle.width;
     cycle.destHeight = cycle.height;
     cycle.paddingWidth = 0;
     cycle.paddingHeight = 0;
     cycle.borderPaddingWidth = 0;
     cycle.borderPaddingHeight = 0;
+    cycle.numberOfFrames = numFrames;
     animation.cyclesData[0] = cycle;
 
     /* Store bitmap pointer to release at GraphicManager destructor */

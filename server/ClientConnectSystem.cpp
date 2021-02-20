@@ -347,8 +347,6 @@ int ClientConnectSystem::addClientEntity(const char* nick)
     odsloga("Added client entity, id: " << id << "\n");
 
     auto combat = client_entity.getComponent<Combat>();
-    combat->in_combat = false;
-    combat->attacking = false;
     combat->owner = id;
 
     // Encode animation data
@@ -359,6 +357,9 @@ int ClientConnectSystem::addClientEntity(const char* nick)
     auto player = client_entity.getComponent<Player>();
     player->id = id;
     player->username = nick;
+    player->attacking = false;  // in an attack animation
+    player->in_combat = false;  // currently taking damage
+    player->start_combat = false;  // started combat this tick
 
     // Set mask so that ClientUpdateSystem updates the client(s)
     worldDelta->state[id] = ComponentMask();

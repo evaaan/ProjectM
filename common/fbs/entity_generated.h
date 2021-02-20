@@ -113,26 +113,41 @@ enum AnimType {
   AnimType_Idle = 0,
   AnimType_Walk = 1,
   AnimType_Attack = 2,
-  AnimType_Fall = 3,
+  AnimType_WeaponIdle = 3,
+  AnimType_WeaponAttack = 4,
+  AnimType_MonsterIdle = 5,
+  AnimType_MonsterWalk = 6,
+  AnimType_MonsterHurt = 7,
+  AnimType_Fall = 8,
   AnimType_MIN = AnimType_Idle,
   AnimType_MAX = AnimType_Fall
 };
 
-inline const AnimType (&EnumValuesAnimType())[4] {
+inline const AnimType (&EnumValuesAnimType())[9] {
   static const AnimType values[] = {
     AnimType_Idle,
     AnimType_Walk,
     AnimType_Attack,
+    AnimType_WeaponIdle,
+    AnimType_WeaponAttack,
+    AnimType_MonsterIdle,
+    AnimType_MonsterWalk,
+    AnimType_MonsterHurt,
     AnimType_Fall
   };
   return values;
 }
 
 inline const char * const *EnumNamesAnimType() {
-  static const char * const names[5] = {
+  static const char * const names[10] = {
     "Idle",
     "Walk",
     "Attack",
+    "WeaponIdle",
+    "WeaponAttack",
+    "MonsterIdle",
+    "MonsterWalk",
+    "MonsterHurt",
     "Fall",
     nullptr
   };

@@ -13,6 +13,7 @@ public:
 private:
     ComponentHandle<WorldDeltaSingleton> worldDelta;
     ComponentHandle<KeyStateSingleton> keys;
-    void updatePlayer();
+    void updatePlayerState();
+    void updatePlayerAnimation();
 
 };

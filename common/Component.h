@@ -129,7 +129,7 @@ public:
 
 enum class Layer { Background, Characters, UserInterface };
 enum class DrawCommand { All, onlyBackground, onlyCharacters, onlyUserInterface };
-enum class AnimType { Idle, Walk, Attack, Fall };
+enum class AnimType { Idle, Walk, Attack, Fall, WeaponIdle, WeaponAttack, MonsterIdle, MonsterWalk, MonsterHurt };
 
 
 /* Uses a Sprite Sheet */

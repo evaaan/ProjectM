@@ -47,8 +47,8 @@ void PlayerSystem::updatePlayerAnimation()
         if (player->start_combat)  // set in updatePlayerState
         {
             animationStore->store.clear();
-            animationStore->store.insert(AnimType::Attack);
-            animationStore->store.insert(AnimType::WeaponAttack);
+            animationStore->store.insert("attack");
+            animationStore->store.insert("weapon_attack");
             worldDelta->state[entity.uuid].addComponent<AnimationStore>();
         }
 
@@ -56,13 +56,13 @@ void PlayerSystem::updatePlayerAnimation()
         else if (dynamic->stop_move)
         {
             animationStore->store.clear();
-            animationStore->store.insert(AnimType::Idle);
+            animationStore->store.insert("idle");
             worldDelta->state[entity.uuid].addComponent<AnimationStore>();
         } // If we started moving, play Walk animation
         else if (dynamic->start_move)
         {
             animationStore->store.clear();
-            animationStore->store.insert(AnimType::Walk);
+            animationStore->store.insert("walk");
             worldDelta->state[entity.uuid].addComponent<AnimationStore>();
         }
     }

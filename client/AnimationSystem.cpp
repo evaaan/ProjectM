@@ -32,7 +32,7 @@ void AnimationSystem::update(double dt)
         parentWorld->unpack(entity, animationStore, transform);
 
         // Process each of the Entity's animations
-        for (auto& animationType : animationStore->store)
+        for (const auto& animationType : animationStore->store)
         {
             // Get reference to Animation to update
             Animation& animation = animationStore->animations[animationType];

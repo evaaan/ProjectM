@@ -162,58 +162,14 @@ void ClientUpdateSystem::sendWorldUpdate()
                 ComponentHandle<AnimationStore> c;
                 parentWorld->unpack({ id }, c);
 
-                // Build vector
-                std::vector<int8_t> animType_vector;
-
-                // Set animations based on AnimationStore data
-                for (auto& anim : c->store)
+                // Build vector of animation names that client should display
+                std::vector<std::string> animType_vector;
+                for (const auto& anim : c->store)
                 {
-                    switch (anim)
-                    {
-                    case AnimType::Idle:
-                    {
-                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_Idle);
-                        break;
-                    }
-                    case AnimType::Walk:
-                    {
-                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_Walk);
-                        break;
-                    }
-                    case AnimType::Attack:
-                    {
-                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_Attack);
-                        break;
-                    }
-                    case AnimType::WeaponIdle:
-                    {
-                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_WeaponIdle);
-                        break;
-                    }
-                    case AnimType::WeaponAttack:
-                    {
-                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_WeaponAttack);
-                        break;
-                    }
-                    case AnimType::MonsterIdle:
-                    {
-                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_MonsterIdle);
-                        break;
-                    }
-                    case AnimType::MonsterWalk:
-                    {
-                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_MonsterWalk);
-                        break;
-                    }
-                    case AnimType::MonsterHurt:
-                    {
-                        animType_vector.push_back((int8_t)EntityBuffer::AnimType_MonsterHurt);
-                        break;
-                    }
-                    }
+                    animType_vector.push_back(anim);
                 }
 
-                auto animTypes = builder.CreateVector(animType_vector);
+                auto animTypes = builder.CreateVectorOfStrings(animType_vector);
 
                 // Create Animation table
                 auto animation = EntityBuffer::CreateAnimation(builder, animTypes, c->direction);

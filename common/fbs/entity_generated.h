@@ -109,57 +109,6 @@ inline const char *EnumNameColor(Color e) {
   return EnumNamesColor()[index];
 }
 
-enum AnimType {
-  AnimType_Idle = 0,
-  AnimType_Walk = 1,
-  AnimType_Attack = 2,
-  AnimType_WeaponIdle = 3,
-  AnimType_WeaponAttack = 4,
-  AnimType_MonsterIdle = 5,
-  AnimType_MonsterWalk = 6,
-  AnimType_MonsterHurt = 7,
-  AnimType_Fall = 8,
-  AnimType_MIN = AnimType_Idle,
-  AnimType_MAX = AnimType_Fall
-};
-
-inline const AnimType (&EnumValuesAnimType())[9] {
-  static const AnimType values[] = {
-    AnimType_Idle,
-    AnimType_Walk,
-    AnimType_Attack,
-    AnimType_WeaponIdle,
-    AnimType_WeaponAttack,
-    AnimType_MonsterIdle,
-    AnimType_MonsterWalk,
-    AnimType_MonsterHurt,
-    AnimType_Fall
-  };
-  return values;
-}
-
-inline const char * const *EnumNamesAnimType() {
-  static const char * const names[10] = {
-    "Idle",
-    "Walk",
-    "Attack",
-    "WeaponIdle",
-    "WeaponAttack",
-    "MonsterIdle",
-    "MonsterWalk",
-    "MonsterHurt",
-    "Fall",
-    nullptr
-  };
-  return names;
-}
-
-inline const char *EnumNameAnimType(AnimType e) {
-  if (flatbuffers::IsOutRange(e, AnimType_Idle, AnimType_Fall)) return "";
-  const size_t index = static_cast<size_t>(e);
-  return EnumNamesAnimType()[index];
-}
-
 enum Component {
   Component_NONE = 0,
   Component_Transform = 1,
@@ -603,19 +552,20 @@ inline flatbuffers::Offset<Outline> CreateOutline(
 struct Animation FLATBUFFERS_FINAL_CLASS : private flatbuffers::Table {
   typedef AnimationBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_ANIMTYPE = 4,
+    VT_NAMES = 4,
     VT_DIRECTION = 6
   };
-  const flatbuffers::Vector<int8_t> *animType() const {
-    return GetPointer<const flatbuffers::Vector<int8_t> *>(VT_ANIMTYPE);
+  const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>> *names() const {
+    return GetPointer<const flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>> *>(VT_NAMES);
   }
   bool direction() const {
     return GetField<uint8_t>(VT_DIRECTION, 0) != 0;
   }
   bool Verify(flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffset(verifier, VT_ANIMTYPE) &&
-           verifier.VerifyVector(animType()) &&
+           VerifyOffset(verifier, VT_NAMES) &&
+           verifier.VerifyVector(names()) &&
+           verifier.VerifyVectorOfStrings(names()) &&
            VerifyField<uint8_t>(verifier, VT_DIRECTION) &&
            verifier.EndTable();
   }
@@ -625,8 +575,8 @@ struct AnimationBuilder {
   typedef Animation Table;
   flatbuffers::FlatBufferBuilder &fbb_;
   flatbuffers::uoffset_t start_;
-  void add_animType(flatbuffers::Offset<flatbuffers::Vector<int8_t>> animType) {
-    fbb_.AddOffset(Animation::VT_ANIMTYPE, animType);
+  void add_names(flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> names) {
+    fbb_.AddOffset(Animation::VT_NAMES, names);
   }
   void add_direction(bool direction) {
     fbb_.AddElement<uint8_t>(Animation::VT_DIRECTION, static_cast<uint8_t>(direction), 0);
@@ -645,22 +595,22 @@ struct AnimationBuilder {
 
 inline flatbuffers::Offset<Animation> CreateAnimation(
     flatbuffers::FlatBufferBuilder &_fbb,
-    flatbuffers::Offset<flatbuffers::Vector<int8_t>> animType = 0,
+    flatbuffers::Offset<flatbuffers::Vector<flatbuffers::Offset<flatbuffers::String>>> names = 0,
     bool direction = false) {
   AnimationBuilder builder_(_fbb);
-  builder_.add_animType(animType);
+  builder_.add_names(names);
   builder_.add_direction(direction);
   return builder_.Finish();
 }
 
 inline flatbuffers::Offset<Animation> CreateAnimationDirect(
     flatbuffers::FlatBufferBuilder &_fbb,
-    const std::vector<int8_t> *animType = nullptr,
+    const std::vector<flatbuffers::Offset<flatbuffers::String>> *names = nullptr,
     bool direction = false) {
-  auto animType__ = animType ? _fbb.CreateVector<int8_t>(*animType) : 0;
+  auto names__ = names ? _fbb.CreateVector<flatbuffers::Offset<flatbuffers::String>>(*names) : 0;
   return EntityBuffer::CreateAnimation(
       _fbb,
-      animType__,
+      names__,
       direction);
 }
 

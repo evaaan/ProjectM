@@ -7,6 +7,7 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <string>
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
 #include <GameNetworkingSockets/steam/isteamnetworkingutils.h>
 #include <Windows.h>
@@ -151,9 +152,9 @@ struct Animation : public Component<Animation>
 /* Set of Animations */
 struct AnimationStore : public Component<AnimationStore>
 {
-    std::set<AnimType> store;  // Active animations
+    std::set<std::string> store;  // Active animations
     bool direction;  // true for left, false for right
-    std::map<AnimType, Animation> animations;  // ALL possible animations
+    std::map<std::string, Animation> animations;  // ALL possible animations
 };
 
 /* Has an outline (with color and width) */

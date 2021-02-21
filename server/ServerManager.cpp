@@ -124,7 +124,7 @@ int ServerManager::AddBox(int x, int y, int height, int width, Color color)
     return entity_id;
 }
 
-int ServerManager::AddMonster(int x, int y, AnimType animType)
+int ServerManager::AddMonster(int x, int y, std::string animType)
 {
     auto monster = m_world->createEntity();
     monster.addComponent(AnimationStore(), Transform(), Dynamic(), Outline());
@@ -177,9 +177,9 @@ void ServerManager::AddEntities()
     AddBox(900, 650, 50, 200, Color::red);
     AddBox(0, 700, 6000, 2000, Color::red);
 
-    AddMonster(200 + (rand() & 800), 200 + (rand() & 100), AnimType::MonsterIdle);
-    AddMonster(200 + (rand() & 800), 200 + (rand() & 100), AnimType::MonsterWalk);
-    AddMonster(200 + (rand() & 800), 200 + (rand() & 100), AnimType::MonsterHurt);
+    // AddMonster(200 + (rand() & 800), 200 + (rand() & 100), AnimType::MonsterIdle);
+    // AddMonster(200 + (rand() & 800), 200 + (rand() & 100), AnimType::MonsterWalk);
+    // AddMonster(200 + (rand() & 800), 200 + (rand() & 100), AnimType::MonsterHurt);
 }
 
 long numFrames = 0;

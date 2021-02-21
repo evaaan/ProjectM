@@ -1,12 +1,99 @@
-assets:
-- name: walk
-  path: assets/sprites/blueManWalk.png
+idle:
+  path: "assets/sprites/blue_man_idle.png"
+  startFrame: 0
   width: 64
   height: 64
-  fps: 3
+  fps: 2
   numberOfFrames: 4
   paddingWidth: 0
   paddingHeight: 0
   borderPaddingWidth: 0
   borderPaddingHeight: 0
- 
+walk:
+  path: "assets/sprites/blue_man_walk.png"
+  startFrame: 0
+  width: 64
+  height: 64
+  fps: 4
+  numberOfFrames: 4
+  paddingWidth: 0
+  paddingHeight: 0
+  borderPaddingWidth: 0
+  borderPaddingHeight: 0
+attack:
+  path: "assets/sprites/blue_man_attack.png"
+  startFrame: 0
+  width: 96
+  height: 64
+  fps: 10
+  numberOfFrames: 3
+  paddingWidth: 0
+  paddingHeight: 0
+  borderPaddingWidth: 0
+  borderPaddingHeight: 0
+weapon_idle:
+  path: "assets/sprites/weapon_idle.png"
+  startFrame: 0
+  width: 96
+  height: 64
+  fps: 2
+  numberOfFrames: 4
+  paddingWidth: 0
+  paddingHeight: 0
+  borderPaddingWidth: 0
+  borderPaddingHeight: 0
+weapon_walk:
+  path: "assets/sprites/weapon_walk.png"
+  startFrame: 0
+  width: 96
+  height: 64
+  fps: 4
+  numberOfFrames: 4
+  paddingWidth: 0
+  paddingHeight: 0
+  borderPaddingWidth: 0
+  borderPaddingHeight: 0
+weapon_attack:
+  path: "assets/sprites/weapon_attack.png"
+  startFrame: 0
+  width: 96
+  height: 64
+  fps: 10
+  numberOfFrames: 3
+  paddingWidth: 0
+  paddingHeight: 0
+  borderPaddingWidth: 0
+  borderPaddingHeight: 0
+monster_idle:
+  path: "assets/sprites/monster_idle.png"
+  startFrame: 0
+  width: 96
+  height: 96
+  fps: 2
+  numberOfFrames: 3
+  paddingWidth: 0
+  paddingHeight: 0
+  borderPaddingWidth: 0
+  borderPaddingHeight: 0
+monster_walk:
+  path: "assets/sprites/monster_walk.png"
+  startFrame: 0
+  width: 96
+  height: 96
+  fps: 4
+  numberOfFrames: 5
+  paddingWidth: 0
+  paddingHeight: 0
+  borderPaddingWidth: 0
+  borderPaddingHeight: 0
+monster_hurt:
+  path: "assets/sprites/monster_hurt.png"
+  startFrame: 0
+  width: 96
+  height: 96
+  fps: 6
+  numberOfFrames: 2
+  paddingWidth: 0
+  paddingHeight: 0
+  borderPaddingWidth: 0
+  borderPaddingHeight: 0

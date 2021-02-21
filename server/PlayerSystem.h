@@ -15,5 +15,4 @@ private:
     ComponentHandle<KeyStateSingleton> keys;
     void updatePlayerState();
     void updatePlayerAnimation();
-
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <string>
 #include <vector>
 #include <wrl/client.h> // Windows and COM
 #include <wincodec.h>  // Windows Imaging Component
@@ -42,6 +43,7 @@ public:
 	void Render(double update_time);
 	void Present();
     void loadAnimation(LPCWSTR spriteSheetFile, Animation &animation, int frameWidth, int frameHeight, int numFrames);
+    void loadAnimationFromYaml(Animation& animation, std::string name, std::string config_file);
     void registerWorld(World* world);
 
     void calculateFrameStatistics(double process_time);

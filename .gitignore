@@ -9,3 +9,4 @@ test/ServerTestVsProj/x64/*
 *.pfx
 packages/*
 x64/*
+scratch/*

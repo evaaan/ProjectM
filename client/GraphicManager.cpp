@@ -1,10 +1,12 @@
+#pragma comment(lib, "d2d1")
+#pragma comment(lib, "yaml-cppd.lib")
 #include <comdef.h>
 #include <d2d1.h>
 #include <sstream>
 #include <vector>
 #include <numeric>
 #include <random>
-#pragma comment(lib, "d2d1")
+#include <yaml-cpp/yaml.h>
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
@@ -19,6 +21,7 @@
 #include "World.h"
 #include "GraphicManager.h"
 #include "App.h"
+#include "Utilities.h"
 using namespace ComError;
 
 GraphicManager::GraphicManager(HWND hWindow, std::shared_ptr<Timer> timer) :
@@ -71,7 +74,85 @@ void GraphicManager::addBackground()
     cycle.borderPaddingWidth = 0;
     cycle.borderPaddingHeight = 0;
     bgAnimationsCycles.push_back(cycle);
+}
 
+/* convert string to wstring. Valid for single-byte encodings only (ASCII, etc). */
+void StringToWString(std::wstring& ws, const std::string& s)
+{
+    std::wstring wsTmp(s.begin(), s.end());
+    ws = wsTmp;
+}
+
+void GraphicManager::loadAnimationFromYaml(Animation& animation, std::string name, std::string config_file)
+{
+    HRESULT hr;
+    AnimationCycle cycle;
+
+    /* PARSE YAML */
+    YAML::Node config = YAML::LoadFile(config_file);
+    YAML::Node asset = config[name];
+    std::string path_to_asset = "../../" + asset["path"].as<std::string>();
+    std::wstring wpath_to_asset;
+    StringToWString(wpath_to_asset, path_to_asset);
+
+    /* CREATE SPRITE SHEET BITMAP */
+    // create decoder
+    Microsoft::WRL::ComPtr<IWICBitmapDecoder> bitmapDecoder;
+    hr = m_direct2D->WICFactory->CreateDecoderFromFilename(wpath_to_asset.c_str(), NULL,
+        GENERIC_READ, WICDecodeMetadataCacheOnLoad, bitmapDecoder.GetAddressOf());
+    if (FAILED(hr))
+        throwComError(hr, L"Failed to load BMP!");
+
+    // get correct frame
+    Microsoft::WRL::ComPtr<IWICBitmapFrameDecode> frame;
+    hr = bitmapDecoder->GetFrame(0, frame.ReleaseAndGetAddressOf());
+    if (FAILED(hr))
+        throwComError(hr, L"Failed to get bitmap frame!");
+
+    // create format converter
+    Microsoft::WRL::ComPtr<IWICFormatConverter> image;
+    hr = m_direct2D->WICFactory->CreateFormatConverter(image.ReleaseAndGetAddressOf());
+    if (FAILED(hr))
+        throwComError(hr, L"Failed to get bitmap format converter!");
+
+
+    // initialize WIC image
+    hr = image->Initialize(frame.Get(), GUID_WICPixelFormat32bppPBGRA,
+        WICBitmapDitherTypeNone, NULL, 0, WICBitmapPaletteTypeCustom);
+    if (FAILED(hr))
+        throwComError(hr, L"Failed to initialize WIC image!");
+
+    // create the bitmap and store in animation
+    hr = m_direct2D->deviceContext->CreateBitmapFromWicBitmap(image.Get(), animation.bitmap.ReleaseAndGetAddressOf());
+    if (FAILED(hr))
+        throwComError(hr, L"Failed to create the bitmap!");
+
+    /* BUILD COMPONENT */
+    animation.m_layer = Layer::Characters;
+    animation.drawOrder = 0;
+    animation.opacity = 1.0;
+    animation.interpol = D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR;
+    animation.activeAnimation = 0;
+    animation.activeAnimationFrame = 0;
+    animation.frameTime = 0.0;
+    animation.animationFPS =    asset["fps"].as<int>();
+
+    // man cycle
+    cycle.startFrame =          asset["startFrame"].as<int>();
+    cycle.width =               asset["width"].as<int>();
+    cycle.height =              asset["height"].as<int>();
+    cycle.destWidth =           cycle.width;
+    cycle.destHeight =          cycle.height;
+    cycle.paddingWidth =        asset["paddingWidth"].as<int>();
+    cycle.paddingHeight =       asset["paddingHeight"].as<int>();
+    cycle.borderPaddingWidth =  asset["borderPaddingWidth"].as<int>();
+    cycle.borderPaddingHeight = asset["borderPaddingHeight"].as<int>();
+    cycle.numberOfFrames =      asset["numberOfFrames"].as<int>();
+    animation.cyclesData[0] =   cycle;
+
+    /* Store bitmap pointer to release at GraphicManager destructor */
+    ID2D1Bitmap1* bitmapPtr = animation.bitmap.Get();
+    bitmaps.push_back(bitmapPtr);
 }
 
 /* Create an Animation Component */

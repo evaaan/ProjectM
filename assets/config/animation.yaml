@@ -1,0 +1,12 @@
+assets:
+- name: walk
+  path: assets/sprites/blueManWalk.png
+  width: 64
+  height: 64
+  fps: 3
+  numberOfFrames: 4
+  paddingWidth: 0
+  paddingHeight: 0
+  borderPaddingWidth: 0
+  borderPaddingHeight: 0
+ 

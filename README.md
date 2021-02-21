@@ -57,3 +57,16 @@ Visual Studio should recognize header includes for all vcpkg-installed projects 
 ```
 
 5. Install [Boost](https://www.boost.org/users/download/) and add to C/C++ > General > Additional Include Directories.
+
+6. Install [yaml-cpp](https://github.com/jbeder/yaml-cpp)
+
+[cmake](https://cmake.org/download/). is required.
+
+Generate build system, then run it. Add a path in Additional Directories to ``yaml-cpp/include/``, and verify the linker Additional Libraries has a path to ``yaml-cppd.lib``.
+
+```
+cd ./yaml-cpp/
+mkdir build
+cd build
+cmake ..
+```

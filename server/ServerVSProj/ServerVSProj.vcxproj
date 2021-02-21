@@ -121,11 +121,12 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\Evan\source\repos\GameNetworkingSockets\vcpkg\installed\x86-windows\include\GameNetworkingSockets;$(SolutionDir)server\$(ProjectName);$(SolutionDir)server;$(SolutionDir)common;C:\vcpkg\installed\x86-windows\include\;C:\boost\boost_1_75_0\;$(SolutionDir)lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\yaml-cpp\include\;$(SolutionDir)server\$(ProjectName);$(SolutionDir)server;$(SolutionDir)common;C:\vcpkg\installed\x86-windows\include\;C:\boost\boost_1_75_0\;$(SolutionDir)lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\evanr\ProjectM\lib\yaml-cpp\build\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Message>Compile flatbuffer</Message>

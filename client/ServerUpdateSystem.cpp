@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <yaml-cpp/yaml.h>
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
 #include "Animation.h"
 #include "EntityHandle.h"
@@ -29,6 +30,8 @@ void ServerUpdateSystem::init()
         /* Store a reference directly to the client singleton component. */
         client = client_component;
     }
+
+    //YAML::Node config = YAML::LoadFile("../../assets/config/animation.yaml");
 }
 
 /* Read and process server messages */
@@ -223,23 +226,24 @@ void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
             auto anims_size = animTypes->size();
             for (int num_anim=0; num_anim < anims_size; num_anim++)
             {
+                AnimType animType;
                 switch (animTypes->Get(num_anim))
                 {
-                case EntityBuffer::AnimType_Idle: animation->store.insert(AnimType::Idle); break;
-                case EntityBuffer::AnimType_Walk: animation->store.insert(AnimType::Walk); break;
-                case EntityBuffer::AnimType_Attack: animation->store.insert(AnimType::Attack); break;
-                case EntityBuffer::AnimType_WeaponAttack: animation->store.insert(AnimType::WeaponAttack); break;
-                case EntityBuffer::AnimType_Fall: animation->store.insert(AnimType::Fall); break;
-                case EntityBuffer::AnimType_MonsterIdle: animation->store.insert(AnimType::MonsterIdle); break;
-                case EntityBuffer::AnimType_MonsterWalk: animation->store.insert(AnimType::MonsterWalk); break;
-                case EntityBuffer::AnimType_MonsterHurt: animation->store.insert(AnimType::MonsterHurt); break;
-                default: animation->store.insert(AnimType::Idle); break;
+                case EntityBuffer::AnimType_Idle:         animType = AnimType::Idle; break;
+                case EntityBuffer::AnimType_Walk:         animType = AnimType::Walk; break;
+                case EntityBuffer::AnimType_Attack:       animType = AnimType::Attack; break;
+                case EntityBuffer::AnimType_WeaponAttack: animType = AnimType::WeaponAttack; break;
+                case EntityBuffer::AnimType_Fall:         animType = AnimType::Fall; break;
+                case EntityBuffer::AnimType_MonsterIdle:  animType = AnimType::MonsterIdle; break;
+                case EntityBuffer::AnimType_MonsterWalk:  animType = AnimType::MonsterWalk; break;
+                case EntityBuffer::AnimType_MonsterHurt:  animType = AnimType::MonsterHurt; break;
+                default: animType = AnimType::Idle; break;
                 }
+                animation->store.insert(animType);
+                // Reset to first frame
             }
 
-            // Load these from configs!
-
-            // Load animation if we haven't seen it already. Move this to the switch statement?
+            // Load animation if we haven't seen it already. Move this to configs!!
             if (animation->animations.find(AnimType::Idle) == animation->animations.end()) // not found
             {
 
@@ -299,6 +303,11 @@ void ServerUpdateSystem::updateEntity(const EntityBuffer::Entity* entity_buffer)
                 m_graphicManager->loadAnimation(L"../../assets/sprites/monsterHurt.png", weaponAnimation, 96, 96, 2);
                 animation->animations[AnimType::MonsterHurt] = weaponAnimation; // copy constructor
             }
+
+            // Reset all loaded animations to first frame
+            // for (auto& animType : animation->store)
+            //    animation->animations[animType].activeAnimationFrame = 0;
+
             break;
         }
         default:

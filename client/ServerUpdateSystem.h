@@ -1,4 +1,5 @@
 #pragma once
+#pragma comment (lib, "yaml-cppd.lib")
 #include "fbs/entity_generated.h"
 
 // Forward declarations

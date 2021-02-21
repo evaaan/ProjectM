@@ -351,7 +351,7 @@ int ClientConnectSystem::addClientEntity(const char* nick)
 
     // Encode animation data
     auto animation = client_entity.getComponent<AnimationStore>();
-    animation->store = { "idle" };
+    animation->store = { "idle", "weapon_idle"};
 
     // Set player nickname and entity ID
     auto player = client_entity.getComponent<Player>();

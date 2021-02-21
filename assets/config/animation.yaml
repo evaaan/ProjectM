@@ -34,7 +34,7 @@ attack:
 weapon_idle:
   path: "assets/sprites/weapon_idle.png"
   startFrame: 0
-  width: 96
+  width: 64
   height: 64
   fps: 2
   numberOfFrames: 4
@@ -45,7 +45,7 @@ weapon_idle:
 weapon_walk:
   path: "assets/sprites/weapon_walk.png"
   startFrame: 0
-  width: 96
+  width: 64
   height: 64
   fps: 4
   numberOfFrames: 4

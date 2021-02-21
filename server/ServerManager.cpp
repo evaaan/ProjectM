@@ -177,9 +177,9 @@ void ServerManager::AddEntities()
     AddBox(900, 650, 50, 200, Color::red);
     AddBox(0, 700, 6000, 2000, Color::red);
 
-    // AddMonster(200 + (rand() & 800), 200 + (rand() & 100), AnimType::MonsterIdle);
-    // AddMonster(200 + (rand() & 800), 200 + (rand() & 100), AnimType::MonsterWalk);
-    // AddMonster(200 + (rand() & 800), 200 + (rand() & 100), AnimType::MonsterHurt);
+    AddMonster(200 + (rand() & 800), 200 + (rand() & 100), "monster_idle");
+    AddMonster(200 + (rand() & 800), 200 + (rand() & 100), "monster_walk");
+    AddMonster(200 + (rand() & 800), 200 + (rand() & 100), "monster_hurt");
 }
 
 long numFrames = 0;

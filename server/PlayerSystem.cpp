@@ -57,12 +57,14 @@ void PlayerSystem::updatePlayerAnimation()
         {
             animationStore->store.clear();
             animationStore->store.insert("idle");
+            animationStore->store.insert("weapon_idle");
             worldDelta->state[entity.uuid].addComponent<AnimationStore>();
         } // If we started moving, play Walk animation
         else if (dynamic->start_move)
         {
             animationStore->store.clear();
             animationStore->store.insert("walk");
+            animationStore->store.insert("weapon_walk");
             worldDelta->state[entity.uuid].addComponent<AnimationStore>();
         }
     }

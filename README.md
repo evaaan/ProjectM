@@ -1,6 +1,8 @@
 # ProjectM
 
-ProjectM is a 2D multiplayer game work-in-progress.
+ProjectM is a 2D multiplayer game engine (WIP) with an Entity-Component-System framework. Clients send their keyboard inputs to the server, which processes the game world and responds to each client with a set of Entity-Component updates. Clients read these messages, update their world state, and render the world for the user. The core framework is inspired by the [Nomad Game Engine](https://savas.ca/nomad).
+
+This project is an exercise to learn game development and C++. For a current picture of things, check out [assets/screenshots/](assets/screenshots/).
 
 Directory structure is as follows:
 * The [client/](client/) folder has the Client code

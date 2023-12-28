@@ -15,37 +15,42 @@ Note: The client, server, and test folders have their own Visual Studio ``.vcxpr
 
 Tasks are tracked on a [Trello Board](https://trello.com/invite/b/cWteNm74/bf64646388becf6430bf7d5b8bd4df55/projectm).
 
-# Build Instructions (Windows / Visual Studio)
+# Install Prerequisites (Windows / Visual Studio)
 
-1. Clone this project and update submodules:
+1. Install [Visual Studio](https://visualstudio.microsoft.com/downloads/). In the Visual Studio Installer, select workloads for Desktop development with C++ and Game development with C++
+
+The project uses Visual Studio and the MSVC compiler due to Windows APIs used (Windows, DirectX, COM, user input, ..)
+
+2. Clone this project and update submodules:
 
 ```
 git clone https://github.com/evaaan/ProjectM.git
 cd ProjectM
 git submodule update --init lib/GameNetworkingSockets
 git submodule update --init lib/vcpkg
+git submodule update --init lib/yaml-cpp
 ```
 
-2. Change to the [lib/](lib/) directory:
+3. Change to the [lib/](lib/) directory:
 
 ```
 cd lib
 ```
 
-2. Install [Microsoft/vcpkg](https://github.com/Microsoft/vcpkg) with VS integration:
+4. Install [Microsoft/vcpkg](https://github.com/Microsoft/vcpkg) with VS integration:
 
 ```
 ./vcpkg/bootstrap-vcpkg.bat
 ./vcpkg/vcpkg integrate install
 ```
 
-3. Install [ValveSoftware/GameNetworkingSockets](https://github.com/ValveSoftware/GameNetworkingSockets):
+5. Install [ValveSoftware/GameNetworkingSockets](https://github.com/ValveSoftware/GameNetworkingSockets):
 
 ```
 ./vcpkg/vcpkg --overlay-ports=GameNetworkingSockets/vcpkg_ports --triplet x64-windows install gamenetworkingsockets
 ```
 
-4. Install [Google FlatBuffers](https://google.github.io/flatbuffers/index.html):
+6. Install [Google FlatBuffers](https://google.github.io/flatbuffers/index.html):
 
 ```
 ./vcpkg/vcpkg install --triplet x64-windows flatbuffers
@@ -58,17 +63,32 @@ Visual Studio should recognize header includes for all vcpkg-installed projects 
 #include <flatbuffers/flatbuffers.h>
 ```
 
-5. Install [Boost](https://www.boost.org/users/download/) and add to C/C++ > General > Additional Include Directories.
+May need to add flatc.exe from ``vcpkg\packages\flatbuffers_x64-windows\tools\flatbuffers\`` to your PATH.
 
-6. Install [yaml-cpp](https://github.com/jbeder/yaml-cpp)
+7. Install [Boost](https://www.boost.org/users/download/) and add to C/C++ > General > Additional Include Directories.
+
+8. Install [yaml-cpp](https://github.com/jbeder/yaml-cpp)
 
 [cmake](https://cmake.org/download/). is required.
 
-Generate build system, then run it. Add a path in Additional Directories to ``yaml-cpp/include/``, and verify the linker Additional Libraries has a path to ``yaml-cppd.lib``.
+Generate build system, then run it. Verify C/C++ > General > Additional Directories  and linker Additional Libraries has a link to ``$(SolutionDir)lib\yaml-cpp\include\`
 
 ```
 cd ./yaml-cpp/
 mkdir build
 cd build
 cmake ..
+cmake --build .
+```
+
+For some reason, installing [yaml-cpp](https://github.com/jbeder/yaml-cpp) with vcpkg does not generate the correct Debug lib file
+
+# Build Instructions
+
+Set Configuration to 'Debug'.
+
+Build the solution with F7. 
+
+```
+
 ```

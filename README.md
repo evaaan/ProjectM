@@ -1,6 +1,6 @@
 # ProjectM
 
-ProjectM is a 2D multiplayer game engine (WIP) with an Entity-Component-System framework. Clients send their keyboard inputs to the server, which processes the game world and responds to each client with a set of Entity-Component updates. Clients read these messages, update their world state, and render the world for the user. The core framework is inspired by the [Nomad Game Engine](https://savas.ca/nomad).
+ProjectM is a 2D multiplayer game engine with an Entity-Component-System framework. Clients send their keyboard inputs to the server, which processes the game world and responds to each client with a set of Entity-Component updates. Clients read these messages, update their world state, and render the world for the user. The core framework is inspired by the [Nomad Game Engine](https://savas.ca/nomad).
 
 This project is an exercise to learn game development and C++. For a current picture of things, check out [assets/screenshots/](assets/screenshots/).
 
@@ -28,7 +28,6 @@ git clone https://github.com/evaaan/ProjectM.git
 cd ProjectM
 git submodule update --init lib/GameNetworkingSockets
 git submodule update --init lib/vcpkg
-git submodule update --init lib/yaml-cpp
 ```
 
 3. Change to the [lib/](lib/) directory:
@@ -67,33 +66,39 @@ May need to add flatc.exe from ``vcpkg\packages\flatbuffers_x64-windows\tools\fl
 
 7. Install [Boost](https://www.boost.org/users/download/) and add to C/C++ > General > Additional Include Directories.
 
-8. Install [yaml-cpp](https://github.com/jbeder/yaml-cpp)
-
-[cmake](https://cmake.org/download/). is required.
-
-[PowerShell](https://github.com/PowerShell/PowerShell?tab=readme-ov-file) is required.
-
-Generate build system, then run it. Verify C/C++ > General > Additional Directories  and linker Additional Libraries has a link to ``$(SolutionDir)lib\yaml-cpp\include\`
-
+8. Install [yaml-cpp](https://github.com/jbeder/yaml-cpp)  with vcpkg:
+1. 
 ```
-cd ./yaml-cpp/
-mkdir build
-cd build
-cmake ..
-cmake --build .
-```
-
-For some reason, installing [yaml-cpp](https://github.com/jbeder/yaml-cpp) with vcpkg does not generate the correct Debug lib file
-```
-./vcpkg/vcpkg install --triplet x64-windows flatbuffers
+./vcpkg/vcpkg install yaml-cpp
 ```
 
 # Build Instructions
 
-Set Configuration to 'Debug'.
-
-Build the solution with F7. 
+Set Configuration to 'Debug' or 'Release' then build the solution (F7).
 
 ```
+Build started at 10:05 PM...
+1>------ Skipped Build: Project: ServerTestVSProj, Configuration: Debug x64 ------
+1>Project not selected to build for this solution configuration 
+2>------ Build started: Project: ServerVSProj, Configuration: Debug x64 ------
+3>------ Build started: Project: ClientVSProj, Configuration: Debug x64 ------
+2>Compile flatbuffer
+2>Component.cpp
+3>Component.cpp
+2>Entity.cpp
+3>Entity.cpp
+2>KeyMap.cpp
+3>KeyMap.cpp
+...
+========== Build: 2 succeeded, 0 failed, 0 up-to-date, 2 skipped ==========
+========== Build completed at 10:06 PM and took 29.751 seconds ==========
+```
 
+# Run Instructions
+
+Execute CLientVsProj.exe and ServerVSProj.exe, or run quick_start.bat to create a server and client.
+
+```
+start "client" "..\..\bin\client\x64\Debug\exe\ClientVsProj.exe"
+start "server" "..\..\bin\server\x64\Debug\exe\ServerVsProj.exe" "--port" "35656" "--tick" "15"
 ```

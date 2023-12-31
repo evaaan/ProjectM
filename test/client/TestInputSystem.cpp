@@ -22,7 +22,8 @@ protected:
 
         /* Build InputManager and pass to InputSystem */
         timer = std::make_shared<Timer>();
-        inputManager = std::make_unique<InputManager>(timer);
+        auto isActive = true;
+        inputManager = std::make_unique<InputManager>(timer, isActive);
         inputSystem = std::make_unique<InputSystem>(inputManager.get());
 
         /* Add System, Entity, and Component to World */

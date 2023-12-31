@@ -1,5 +1,8 @@
 // main.cpp : Defines the entry point for the application.
 #include <memory>
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #include <Windows.h>
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"

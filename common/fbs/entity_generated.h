@@ -3,7 +3,9 @@
 
 #ifndef FLATBUFFERS_GENERATED_ENTITY_ENTITYBUFFER_H_
 #define FLATBUFFERS_GENERATED_ENTITY_ENTITYBUFFER_H_
-
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #include "flatbuffers/flatbuffers.h"
 
 namespace EntityBuffer {

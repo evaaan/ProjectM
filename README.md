@@ -84,6 +84,9 @@ cmake --build .
 ```
 
 For some reason, installing [yaml-cpp](https://github.com/jbeder/yaml-cpp) with vcpkg does not generate the correct Debug lib file
+```
+./vcpkg/vcpkg install --triplet x64-windows flatbuffers
+```
 
 # Build Instructions
 

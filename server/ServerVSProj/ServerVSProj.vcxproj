@@ -109,7 +109,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\server\$(Platform)\$(Configuration)\exe\</OutDir>
     <IntDir>$(SolutionDir)bin\server\$(Platform)\$(Configuration)\obj\</IntDir>
-    <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath)</ExecutablePath>
+    <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath);$(SolutionDir)lib\vcpkg\installed\x64-windows\tools\flatbuffers</ExecutablePath>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">
@@ -122,6 +122,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\server\$(Platform)\$(Configuration)\exe\</OutDir>
     <IntDir>$(SolutionDir)bin\server\$(Platform)\$(Configuration)\obj\</IntDir>
+    <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath);$(SolutionDir)lib\vcpkg\installed\x64-windows\tools\flatbuffers</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
     <VcpkgEnableManifest>false</VcpkgEnableManifest>

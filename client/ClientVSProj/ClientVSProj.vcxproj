@@ -109,7 +109,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\client\$(Platform)\$(Configuration)\exe\</OutDir>
     <IntDir>$(SolutionDir)bin\client\$(Platform)\$(Configuration)\obj\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)lib\yaml-cpp\include\</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(VcpkgRoot)installed\x64-windows\include\;$(VC$(SolutionDir)lib\yaml-cpp\include\</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)lib\yaml-cpp\build\Debug\</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">

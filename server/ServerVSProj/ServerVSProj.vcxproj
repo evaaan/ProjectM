@@ -110,6 +110,7 @@
     <OutDir>$(SolutionDir)bin\server\$(Platform)\$(Configuration)\exe\</OutDir>
     <IntDir>$(SolutionDir)bin\server\$(Platform)\$(Configuration)\obj\</IntDir>
     <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath)</ExecutablePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -171,8 +172,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)lib\yaml-cpp\include\;$(SolutionDir)server\$(ProjectName);$(SolutionDir)server;$(SolutionDir)common;C:\vcpkg\installed\x86-windows\include\;C:\boost\boost_1_75_0\;$(SolutionDir)lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>Default</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)lib\yaml-cpp\include\;$(SolutionDir)server\$(ProjectName);$(SolutionDir)server;$(SolutionDir)common;C:\boost\boost_1_75_0\;$(SolutionDir)lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -56,7 +56,7 @@ cd lib
 ./vcpkg/vcpkg install --triplet x64-windows flatbuffers
 ```
 
-Visual Studio should recognize header includes for all vcpkg-installed projects (under ``/lib/vcpkg/installed/x86-windows/include/``).
+Visual Studio should recognize header includes for all vcpkg-installed projects (under ``/lib/vcpkg/installed/x64-windows/include/``).
 
 ```
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
@@ -70,6 +70,8 @@ May need to add flatc.exe from ``vcpkg\packages\flatbuffers_x64-windows\tools\fl
 8. Install [yaml-cpp](https://github.com/jbeder/yaml-cpp)
 
 [cmake](https://cmake.org/download/). is required.
+
+[PowerShell](https://github.com/PowerShell/PowerShell?tab=readme-ov-file) is required.
 
 Generate build system, then run it. Verify C/C++ > General > Additional Directories  and linker Additional Libraries has a link to ``$(SolutionDir)lib\yaml-cpp\include\`
 

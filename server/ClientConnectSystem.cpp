@@ -1,6 +1,3 @@
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
 #include <chrono>
 #include <random>
 #include <stdexcept>

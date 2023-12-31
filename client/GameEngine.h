@@ -1,8 +1,5 @@
 #pragma once
 #include <memory>
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
 #include <Windows.h>
 
 #include "InputManager.h"

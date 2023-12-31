@@ -1,8 +1,5 @@
 #pragma once
 #pragma comment(lib, "rpcrt4.lib")  // UuidCreate
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
 #include <Windows.h>
 
 struct Entity

@@ -3,9 +3,6 @@
 #include <stdexcept>
 #include <thread>
 #include <vector>
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
 #include <windows.h>
 #include <GameNetworkingSockets/steam/steamnetworkingsockets.h>
 
